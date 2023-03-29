@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "myfavor-final-backend"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{include = "myfavor_final_backend"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^4.1.7"
+djangorestframework = "^3.14.0"
+django-environ = "^0.10.0"
+decouple = "*"
+python-decouple = "^3.8"
+django-cors-headers = "^3.14.0"
+psycopg2-binary = "^2.9.5"
+user-manager = "^2.2"
+requests = "^2.28.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
