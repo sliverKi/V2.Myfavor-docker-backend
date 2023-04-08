@@ -3,7 +3,7 @@ from pathlib import Path
 import os
 import environ
 
-
+#>>4월 8일 db 연결, data 다시 넣어야 함. 
 env = environ.Env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
