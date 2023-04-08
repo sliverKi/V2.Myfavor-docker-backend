@@ -208,7 +208,7 @@ class AllReport(APIView):
                     owner=request.user,
                 )
                 whoes = request.data.get("whoes")
-      
+                print("whoes",whoes)
                 if request.user.pick.pk not in whoes:
                     raise ParseError("참여자는 본인의 아이돌만 선택 가능합니다.")
                 if not whoes:
@@ -264,8 +264,7 @@ class ReportDetail(APIView):
         if serializer.is_valid():
             updated_report = serializer.save()
             return Response(
-                ReportDetailSerializer(updated_report).data, status=HTTP_200_OK
-            )
+                ReportDetailSerializer(updated_report).data, status=HTTP_200_OK)
         else:
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 

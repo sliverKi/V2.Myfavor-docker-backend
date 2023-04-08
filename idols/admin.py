@@ -19,6 +19,7 @@ class Idols(admin.ModelAdmin):
         "Boy_group",
         #"idol_group",
     )
+    
 
 @admin.register(Schedule)
 class ScheduleAdmin(admin.ModelAdmin):

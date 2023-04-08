@@ -8,7 +8,8 @@ from categories.models import Category
 from datetime import datetime
 from .manager import CustomUserManager
 
-# user
+# superuser
+# myfavor@gmail.com / myfavor
 class User(AbstractUser):
     username = None
     name = models.CharField(

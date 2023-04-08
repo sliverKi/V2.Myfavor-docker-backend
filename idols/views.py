@@ -164,7 +164,7 @@ class IdolSchedule(APIView):
                         if idol_serializer.is_valid():
                             idol=idol_serializer.save()
                         else:
-                            return Response(idol_serializer.errors, status=HTTP_404_NOT_FOUND)
+                            return Response(idol_serializer.errors, status=HTTP_400_BAD_REQUEST)
                     idol.idol_schedules.add(schedule)
                 return Response(ScheduleSerializer(schedule).data, status=HTTP_201_CREATED)
             else:
