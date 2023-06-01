@@ -80,25 +80,14 @@ class Groups(models.Model):
         null=True,
         choices=SoloChoices.choices,
     )
-    idol_name_kr = models.ForeignKey(
+    idol_name= models.ManyToManyField(
         "idols.Idol",
-        on_delete=models.SET_NULL,
         null=True,
-        default="",
-        max_length=100,
-        related_name="groups_idol_kr"
-    )
-    idol_name_en = models.ForeignKey(
-        "idols.Idol",
-        on_delete=models.SET_NULL,
-        default="",
-        null=True,
-        max_length=100,
-        related_name="groups_idol_en"
-
+        related_name="groups_idol"
     )
     def __str__(self)->str:
-        return f"{self.idol_name_kr}"
+        return f"{self.idol_name}"
 
     class Meta:
         verbose_name_plural = "Idols_Group"
+

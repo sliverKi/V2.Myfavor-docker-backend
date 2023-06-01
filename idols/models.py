@@ -4,9 +4,8 @@ from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 from common.models import CommonModel
 import datetime
+from prizes.models import Prize
 # from times.models import TimeModel
-
-
 class Idol(models.Model):
     """Idol Model Definition"""
 
@@ -22,7 +21,7 @@ class Idol(models.Model):
         null=True,
         #validators=[URLValidator( "유효한 URL을 입력하세요. ")]
     )
-
+    idol_debut=models.DateField(default=datetime.date.today)
     idol_anniv = models.DateField(default=datetime.date.today)
     idol_birthday = models.DateField()
 
@@ -38,7 +37,7 @@ class Idol(models.Model):
     )
 
     def __str__(self)->str:
-        return f"{self.idol_name_kr}"
+        return f"{self.idol_name_kr} ( {self.idol_name_en} )"
 
     class Meta:
         verbose_name_plural = "Our_Idols"
@@ -69,8 +68,6 @@ class Schedule(CommonModel):
         blank=True,
         related_name="schedules",
     )
-    
-    
     when=models.DateTimeField(
         auto_now=False,
         auto_now_add=False,

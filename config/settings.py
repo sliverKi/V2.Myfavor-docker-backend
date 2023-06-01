@@ -28,6 +28,7 @@ CUSTOM_APPS = [
     "idols.apps.IdolsConfig",
     "categories.apps.CategoriesConfig",
     "groups.apps.GroupsConfig",
+    "prizes.apps.PrizesConfig",
 ]
 
 SYSTEM_APPS = [
