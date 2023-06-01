@@ -2,7 +2,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("", views.Idols.as_view()),  
+    path("", views.Idols.as_view()),  #등록된 idolList {GET, POST}
+    
+    
     path("<int:pk>/", views.IdolDetail.as_view()),  
     path("<int:pk>/schedules/", views.IdolSchedule.as_view()),  
     

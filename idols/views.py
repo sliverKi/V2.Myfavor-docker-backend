@@ -37,6 +37,14 @@ class Idols(APIView):
         else:
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
+# class IdolGroupName (APIView):
+    #1. 아이돌의 그룹으로 받기 
+    #1-1: 성별(idol_gender)
+    #1-2: 남자 -> 그룹(Boy_group), 솔로(Boy_solo) 인 경우 
+    #1-3: 여자 -> 그룹(Girl_group), 솔로(Girl_solo) 인 경우 
+    # def get(self, request, str):
+
+
 
 class IdolDetail(APIView): 
 
