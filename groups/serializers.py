@@ -8,35 +8,33 @@ from .models import Groups
 from idols.serializers import TinyIdolSerializer
 from idols.models import Idol
 from idols.serializers import IdolsListSerializer
+
 class groupSerializer(ModelSerializer):
+
+    class Meta:
+        model=Groups
+        fields=(
+            "enter",
+            "groupname",
+            "group_profile"
+        )
+
+
+class groupDetailSerializer(ModelSerializer):
     member=TinyIdolSerializer(many=True, read_only=True)
     class Meta:
         model=Groups
         fields=(
-            "belong",
-            "Girl_group",
-            "Boy_group",
-            "member",
+            "enter",
+            "groupname",
             "group_profile",
-            
+            "member", 
         )
-        read_only_fields=("is_solo",)
     def create(self, validated_data):
         members_data=validated_data.pop("member",None)
-        girls=validated_data.get("Girl_group", None)
-        print(girls)
-        boys=validated_data.get("Boy_group", None)
-        print(boys)
-        print("members_data: ", members_data)
-        # print(boys)
         
         try:
             with transaction.atomic():#roll-back
-                idol_gender = "Woman" if girls and not boys else "Man" if boys and not girls else "error"
-                print(idol_gender)
-            if idol_gender=="error":
-                raise ValidationError({"error":"잘못된 요청입니다."}) 
-            else:
                 group=Groups.objects.create(**validated_data)
             if members_data:
                 print(1)
@@ -46,13 +44,14 @@ class groupSerializer(ModelSerializer):
                         print(member_data)#유나(Yuna)
                 
                         name=member_data.split("(")
+                        print("name", name)
                         idol_name_kr=name[0].strip()
                         idol_name_en=name[1].replace(")","").strip()
                         idol, created= Idol.objects.get_or_create(
                             idol_name_kr=idol_name_kr, 
                             idol_name_en=idol_name_en,
-                            idol_gender=idol_gender
                         )
+                        print("idol, ",idol)
                         if created:
                             print(3)
                             group.member.add(idol)
@@ -76,10 +75,9 @@ class groupSerializer(ModelSerializer):
 """
 "create method input data"
 {
-    "belong": "JYP",
-    "Girl_group": "ITZY",
-    "Boy_group": null,
-    "member": ["예지(Yeji)", "유나(Yuna)", "류진(Ryujin)", "채령(Chaeryeong)", "리아(Lia)"],
-    "group_profile": "https://i.namu.wiki/i/KfffiUF2eqAwiloVp_lFRtnxrkHnoh1HwKywtJ0MM6bOncyetGT4qZyIWItH2rX-WcUOqM_kmQuKU2tfYXJiKg.webp"
+    "enter": "SMTOWN",
+    "groupname": "ASEPA",
+    "member": ["윈터(Winter)", "카리나(Karina)", "지젤(Giselle)", "닝닝(Ning Ning)"],
+    "group_profile": "https://i.namu.wiki/i/IDQUJdGfC8R290Ppttx1OxBiBeldm4_9mTZrwhEEbaHzsQ6Cai4RwO-nbcSBZwaBZQD187zUrVrc232UhkIcmx0DCyptVJRBiSqGQ-uvC9fk9rj8s0NQBLWZKkCZifGRnbXrDhAkzOocGXCmKcFTig.webp"
 }
 """

@@ -8,11 +8,6 @@ from prizes.models import Prize
 # from times.models import TimeModel
 class Idol(models.Model):
     """Idol Model Definition"""
-
-    class GenderChoices(models.TextChoices):
-        Woman = ("Woman", "Woman")
-        Man = ("Man", "Man")
-
     idol_name_kr = models.CharField(max_length=100, default="")
     idol_name_en = models.CharField(max_length=100, default="")
     idol_profile = models.URLField(
@@ -26,10 +21,6 @@ class Idol(models.Model):
     idol_anniv = models.DateField(default=datetime.date.today)
     idol_birthday = models.DateField(default=datetime.date.today)
 
-    idol_gender = models.CharField(
-        max_length=50,
-        choices=GenderChoices.choices
-        )
     has_scheduels=models.BooleanField(default=False)#true: 잇, False; 없
     idol_schedules = models.ManyToManyField(
         "idols.Schedule",
