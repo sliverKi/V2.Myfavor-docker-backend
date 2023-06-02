@@ -23,13 +23,20 @@ class groupSerializer(ModelSerializer):
         read_only_fields=("is_solo",)
     def create(self, validated_data):
         members_data=validated_data.pop("member",None)
-
+        girls=validated_data.get("Girl_group", None)
+        print(girls)
+        boys=validated_data.get("Boy_group", None)
+        print(boys)
         print("members_data: ", members_data)
         # print(boys)
         
         try:
             with transaction.atomic():#roll-back
-                
+                idol_gender = "Woman" if girls and not boys else "Man" if boys and not girls else "error"
+                print(idol_gender)
+            if idol_gender=="error":
+                raise ValidationError({"error":"잘못된 요청입니다."}) 
+            else:
                 group=Groups.objects.create(**validated_data)
             if members_data:
                 print(1)
@@ -43,9 +50,9 @@ class groupSerializer(ModelSerializer):
                         idol_name_en=name[1].replace(")","").strip()
                         idol, created= Idol.objects.get_or_create(
                             idol_name_kr=idol_name_kr, 
-                            idol_name_en=idol_name_en
+                            idol_name_en=idol_name_en,
+                            idol_gender=idol_gender
                         )
-                        
                         if created:
                             print(3)
                             group.member.add(idol)
