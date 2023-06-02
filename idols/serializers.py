@@ -6,22 +6,32 @@ from categories.serializers import CategorySerializer
 from rest_framework.status import HTTP_400_BAD_REQUEST
 
 
-class IdolSerializer(ModelSerializer):
+class TinyIdolSerializer(ModelSerializer):#groupList에서 사용
     class Meta:
         model=Idol
-        fields=("idol_name_kr","idol_name_en")
+        fields=( "idol_name_kr","idol_name_en", "idol_profile")
 
 
 
 class IdolsListSerializer(ModelSerializer):
     class Meta:
         model = Idol
-        fields = ("pk", "idol_name_kr","idol_name_en", "Girl_group","Boy_group","idol_solo", "idol_profile",)
+        fields = (
+            "pk", 
+            "idol_name_kr",
+            "idol_name_en", 
+            "idol_profile",
+            "idol_debut",
+            "idol_anniv", 
+            "idol_birthday", 
+            "idol_gender",
+            "has_scheduels"
+            )
 
 
 class ScheduleSerializer(ModelSerializer):
     ScheduleType = CategorySerializer(read_only=True)
-    participant = IdolSerializer(many=True, read_only=True) #읽기 전용 필드 
+    participant = TinyIdolSerializer(many=True, read_only=True) #읽기 전용 필드 
     when=serializers.DateTimeField()
 
     class Meta:

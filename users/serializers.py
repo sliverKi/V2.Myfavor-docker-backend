@@ -3,7 +3,7 @@ from rest_framework.exceptions import ParseError, ValidationError
 from rest_framework import serializers
 from .models import User, Report
 from idols.models import Idol
-from idols.serializers import IdolSerializer
+from idols.serializers import TinyIdolSerializer
 
 
 class HtmlSerializer(serializers.Serializer):
@@ -19,7 +19,7 @@ class PickSerializer(serializers.ModelSerializer):
 
 # 캘린더에서 사용할 유저 정보
 class CalendarSerializer(serializers.ModelSerializer):
-    pick = IdolSerializer(read_only=True)
+    pick = TinyIdolSerializer(read_only=True)
 
     class Meta:
         model = User
@@ -113,7 +113,7 @@ class PrivateUserSerializer(serializers.ModelSerializer):
 # admin이 유저 정보를 조회할 때 사용하는 정보
 class UserSerializer(serializers.ModelSerializer):
 
-    pick = IdolSerializer(read_only=True)
+    pick = TinyIdolSerializer(read_only=True)
     is_admin = serializers.SerializerMethodField()
 
     class Meta:
@@ -136,7 +136,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ReportDetailSerializer(serializers.ModelSerializer):
     owner = TinyUserSerializers(read_only=True)
-    whoes = IdolSerializer(many=True, read_only=True)
+    whoes = TinyIdolSerializer(many=True, read_only=True)
 
     class Meta:
         model = Report

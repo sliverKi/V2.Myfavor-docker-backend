@@ -43,10 +43,6 @@ class Groups(models.Model):
         EXO = "EXO", "EXO"
         HIGH_LIGHT= "HIGH_LIGHT", "HIGH_LIGHT"
 
-    class SoloChoices(models.TextChoices):
-        GirlSolo = ("GirlSolo", "GirlSolo")
-        BoySolo = ("BoySolo", "BoySolo")
-
     belong=models.CharField(#소속사
         max_length=40,
         blank=True,
@@ -74,19 +70,16 @@ class Groups(models.Model):
         null=True,
         #validators=[URLValidator( "유효한 URL을 입력하세요. ")]
     )
-    idol_solo = models.CharField(
-        max_length=40,
-        blank=True,
-        null=True,
-        choices=SoloChoices.choices,
-    )
-    idol_name= models.ManyToManyField(
+    
+    
+    member = models.ManyToManyField(
         "idols.Idol",
         null=True,
         related_name="groups_idol"
     )
+
     def __str__(self)->str:
-        return f"{self.idol_name}"
+        return f"{self.member}"
 
     class Meta:
         verbose_name_plural = "Idols_Group"
