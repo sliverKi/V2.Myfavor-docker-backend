@@ -56,7 +56,8 @@ class GroupDetail(APIView):
             return Response(groupDetailSerializer(updated_group).data, status=status.HTTP_202_ACCEPTED)
         
     def delete(self, request, groupname):
-        group=self.get_object(groupname).delete()
+        group=self.get_object(groupname)
+        group.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     
