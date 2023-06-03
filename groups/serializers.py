@@ -9,7 +9,7 @@ from idols.serializers import TinyIdolSerializer
 from idols.models import Idol
 from idols.serializers import IdolsListSerializer
 
-class groupSerializer(ModelSerializer):
+class groupSerializer(ModelSerializer):#groupList
 
     class Meta:
         model=Groups
@@ -41,23 +41,19 @@ class groupDetailSerializer(ModelSerializer):
                 if isinstance(members_data, list):
                     print(2)
                     for member_data in members_data:
-                        print(member_data)#유나(Yuna)
-                
-                        name=member_data.split("(")
-                        print("name", name)
-                        idol_name_kr=name[0].strip()
-                        idol_name_en=name[1].replace(")","").strip()
-                        idol, created= Idol.objects.get_or_create(
-                            idol_name_kr=idol_name_kr, 
-                            idol_name_en=idol_name_en,
-                        )
-                        print("idol, ",idol)
-                        if created:
-                            print(3)
+                        for name, profile in member_data.items():
+                            print("3",name)
+                            name=name.split("(")
+                            print(name)
+                            idol_name_kr = name[0]
+                            idol_name_en = name[1].replace(")", "").strip()  # 이 부분은 필요에 따라 영어 이름을 설정할 수 있습니다
+                            
+                            idol, created = Idol.objects.get_or_create(
+                                idol_name_kr=idol_name_kr,
+                                idol_name_en=idol_name_en,
+                                idol_profile=profile
+                            )
                             group.member.add(idol)
-                        else:
-                            print(4)
-                            group.member.add(idol.id)
                 else:
                     member_data=get_object_or_404(Idol, idol_name_kr=members_data)
                     group.member.add(member_data)
@@ -67,17 +63,21 @@ class groupDetailSerializer(ModelSerializer):
         except Exception as e:
             raise ValidationError({"error":str(e)})
         return group
-
-            
-
-
-
+    def update(self, instance, validated_data):
+        pass
 """
 "create method input data"
-{
+ {
     "enter": "SMTOWN",
     "groupname": "ASEPA",
-    "member": ["윈터(Winter)", "카리나(Karina)", "지젤(Giselle)", "닝닝(Ning Ning)"],
-    "group_profile": "https://i.namu.wiki/i/IDQUJdGfC8R290Ppttx1OxBiBeldm4_9mTZrwhEEbaHzsQ6Cai4RwO-nbcSBZwaBZQD187zUrVrc232UhkIcmx0DCyptVJRBiSqGQ-uvC9fk9rj8s0NQBLWZKkCZifGRnbXrDhAkzOocGXCmKcFTig.webp"
-}
+    "group_profile": "https://i.namu.wiki/i/IDQUJdGfC8R290Ppttx1OxBiBeldm4_9mTZrwhEEbaHzsQ6Cai4RwO-nbcSBZwaBZQD187zUrVrc232UhkIcmx0DCyptVJRBiSqGQ-uvC9fk9rj8s0NQBLWZKkCZifGRnbXrDhAkzOocGXCmKcFTig.webp",
+    "member": [
+        {
+            "윈터(Winter)":"https://talkimg.imbc.com/TVianUpload/tvian/TViews/image/2022/10/08/1fe0c521-2351-49ed-98c9-ffb6e9d6d53b.jpg"
+        },
+        {
+            "닝닝(Ning Ning)":"https://talkimg.imbc.com/TVianUpload/tvian/TViews/image/2022/10/08/1fe0c521-2351-49ed-98c9-ffb6e9d6d53b.jpg"
+        }
+    ]
+} 
 """

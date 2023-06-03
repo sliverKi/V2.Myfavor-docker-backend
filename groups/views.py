@@ -42,9 +42,10 @@ class GroupDetail(APIView):
     def get(self, request, groupname):
         group=self.get_object(groupname)
         serializer=groupDetailSerializer(group)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
-    def put(self, request, groupname):#idol_profile 수정 할 수 있게 할 것, 
+    def put(self, request, groupname):
+        # idol_profile 수정 할 수 있게 하고 싶어, 
         group=self.get_object(groupname)
         serializer=groupDetailSerializer(
             group,
@@ -54,7 +55,8 @@ class GroupDetail(APIView):
         if serializer.is_valid():
             updated_group=serializer.save()
             return Response(groupDetailSerializer(updated_group).data, status=status.HTTP_202_ACCEPTED)
-        
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     def delete(self, request, groupname):
         group=self.get_object(groupname)
         group.delete()
