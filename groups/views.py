@@ -47,16 +47,25 @@ class GroupDetail(APIView):
     def put(self, request, groupname):
         # idol_profile 수정 할 수 있게 하고 싶어, 
         group=self.get_object(groupname)
+        print(group)
         serializer=groupDetailSerializer(
             group,
             data=request.data,
             partial=True
         )
+        print("re: ", request.data)
         if serializer.is_valid():
-            updated_group=serializer.save()
+            print("v1")
+            updated_group=serializer.save(
+                groupname=request.data.get("groupname"),
+                member=request.data.get("member")
+            )
+            
             return Response(groupDetailSerializer(updated_group).data, status=status.HTTP_202_ACCEPTED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        
     def delete(self, request, groupname):
         group=self.get_object(groupname)
         group.delete()
