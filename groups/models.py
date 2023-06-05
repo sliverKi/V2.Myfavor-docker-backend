@@ -1,7 +1,7 @@
 from django.db import models
 from common.models import CommonModel
 
-class Groups(models.Model):
+class Group(models.Model):
  
     enter=models.CharField(#소속사
         max_length=40,
@@ -21,11 +21,11 @@ class Groups(models.Model):
     member = models.ManyToManyField(
         "idols.Idol",
         null=True,
-        related_name="groups_idol"
+        related_name="groups"
     )
     
     def __str__(self)->str:
-        return f"{self.member}"
+        return f"{self.groupname}"
 
     class Meta:
         verbose_name_plural = "Idols_Group"

@@ -3,14 +3,13 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, PermissionDenied
-from .models import Groups
+from .models import Group
 from .serializers import groupSerializer, groupDetailSerializer
 
-# Create your views here.
 class GroupList(APIView):
     
     def get(self, request):
-        all_groups = Groups.objects.all()
+        all_groups = Group.objects.all()
         serializer = groupSerializer(all_groups, many=True, context={'request':request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -35,8 +34,8 @@ class GroupList(APIView):
 class GroupDetail(APIView):
     def get_object(self, groupname):
         try:
-            return Groups.objects.get(groupname=groupname)
-        except Groups.DoesNotExist:
+            return Group.objects.get(groupname=groupname)
+        except Group.DoesNotExist:
             raise NotFound
             
     def get(self, request, groupname):
@@ -45,22 +44,17 @@ class GroupDetail(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def put(self, request, groupname):
-        # idol_profile 수정 할 수 있게 하고 싶어, 
         group=self.get_object(groupname)
-        print(group)
         serializer=groupDetailSerializer(
             group,
             data=request.data,
             partial=True
         )
-        print("re: ", request.data)
         if serializer.is_valid():
-            print("v1")
             updated_group=serializer.save(
                 groupname=request.data.get("groupname"),
                 member=request.data.get("member")
             )
-            
             return Response(groupDetailSerializer(updated_group).data, status=status.HTTP_202_ACCEPTED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

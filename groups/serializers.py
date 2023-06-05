@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status, serializers
 from rest_framework.serializers import ModelSerializer
 from rest_framework.exceptions import ParseError, ValidationError
-from .models import Groups
+from .models import Group
 from idols.serializers import TinyIdolSerializer
 from idols.models import Idol
 from idols.serializers import IdolsListSerializer
@@ -12,7 +12,7 @@ from idols.serializers import IdolsListSerializer
 class groupSerializer(ModelSerializer):#groupList
 
     class Meta:
-        model=Groups
+        model=Group
         fields=(
             "enter",
             "groupname",
@@ -23,7 +23,7 @@ class groupSerializer(ModelSerializer):#groupList
 class groupDetailSerializer(ModelSerializer):
     member=TinyIdolSerializer(many=True, read_only=True)
     class Meta:
-        model=Groups
+        model=Group
         fields=(
             "enter",
             "groupname",
@@ -34,7 +34,7 @@ class groupDetailSerializer(ModelSerializer):
         members_data=validated_data.pop("member",None)
         try:
             with transaction.atomic():#roll-back
-                group=Groups.objects.create(**validated_data)
+                group=Group.objects.create(**validated_data)
             if members_data:
                 if isinstance(members_data, list):
                     for member_data in members_data:
@@ -49,9 +49,11 @@ class groupDetailSerializer(ModelSerializer):
                                 idol_profile=profile
                             )
                             group.member.add(idol)
+                            idol.group.add(group)
                 else:
                     member_data=get_object_or_404(Idol, idol_name_kr=members_data)
                     group.member.add(member_data)
+                    
             else:
                 raise ParseError({"error":"잘못된 요청입니다."})  
         except Exception as e:
@@ -87,15 +89,14 @@ class groupDetailSerializer(ModelSerializer):
                         print(member.idol_profile)
 
                     except Idol.DoesNotExist:
-                        group=Groups.objects.get(groupname=groupname)
+                        group=Group.objects.get(groupname=groupname)
                         new_member=Idol.objects.create(
                             idol_name_kr=idol_name_kr,
                             idol_name_en=idol_name_en,
                             idol_profile=profile,
                         ) 
                         group.member.add(new_member)#추가가 안됌
-                        
-
+                        new_member.group.add(group)
         return instance
 
 """

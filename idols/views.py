@@ -37,39 +37,41 @@ class Idols(APIView):
         else:
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
-# class IdolGroupName (APIView):
-    #1. 아이돌의 그룹으로 받기 
-    #1-1: 성별(idol_gender)
-    #1-2: 남자 -> 그룹(Boy_group), 솔로(Boy_solo) 인 경우 
-    #1-3: 여자 -> 그룹(Girl_group), 솔로(Girl_solo) 인 경우 
-    # def get(self, request, str):
+
 
 
 
 class IdolDetail(APIView): 
 
-    def get_object(self, pk): 
+    def get_object(self, idol_name_kr): 
         
         try:
-            return Idol.objects.get(pk=pk)
+            return Idol.objects.get(idol_name_kr=idol_name_kr)
         except Idol.DoesNotExist:
             raise NotFound
 
-    def get(self, request, pk): 
+    def get(self, request, idol_name_kr): 
 
-        idol = self.get_object(pk)
+        idol = self.get_object(idol_name_kr)
         serializer = IdolDetailSerializer(
             idol,
             context={"request": request},
-            )
+        )
         return Response(serializer.data, status=HTTP_200_OK)
     
-    def put(self, request, pk): 
-
+    def put(self, request, idol_name_kr): 
+        """
+        {
+            "idol_name_en":"winter",
+            "idol_debut":"2020-11-17",
+            "idol_birthday":"2001-01-01", 
+            "idol_profile":"https://i.namu.wiki/i/j1mSQz1rUEGD8yslNgSdyWgHTaMeVMP0T6z45HuNUoKXSg3XZ92sQOeWKRI4bUEwCyy0YaI-tPrGEEhEIZlrSrZM4WA2qy0TvYL_TC6X6x79QowHTp8h6ECieB24d3TybWT5VZvF7X66cf86yI48gg.webp"
+        }
+        """
         if not request.user.is_admin:
             raise PermissionDenied
         
-        idol=self.get_object(pk)
+        idol=self.get_object(idol_name_kr)
         if request.user.is_admin:
             serializer=IdolDetailSerializer(
                 idol,  # user-data
@@ -94,9 +96,9 @@ class IdolDetail(APIView):
         else:
             return Response(status=HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk): 
+    def delete(self, request, idol_name_kr): 
         
-        idol=self.get_object(pk)
+        idol=self.get_object(idol_name_kr)
        
         if request.user.is_admin==False: 
             raise PermissionDenied
