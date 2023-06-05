@@ -71,6 +71,7 @@ class Schedule(CommonModel):
         blank=False,
         null=False,
         )
-
+    def __str__(self)->str:
+        return f"{self.ScheduleTitle}"
     class Meta:
         verbose_name_plural = "Idol-Schedules"

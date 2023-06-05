@@ -73,7 +73,7 @@ class User(AbstractUser):
 
 
 # 제보
-class Report(Category):
+class Report(Category):#상속..?
 
     owner = models.ForeignKey(  
         "users.User",

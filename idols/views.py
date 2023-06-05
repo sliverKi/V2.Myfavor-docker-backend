@@ -17,7 +17,7 @@ from categories.serializers import CategorySerializer
 from categories.models import Category
 from media.serializers import PhotoSerializer
 from groups.models import Group
-class Idols(APIView):
+class Idols(APIView): #[수정OK]
     
     def get(self, request):
 
@@ -50,7 +50,7 @@ class Idols(APIView):
 
 
 
-class IdolDetail(APIView): 
+class IdolDetail(APIView): #[수정OK]
 
     def get_object(self, idol_name_kr): 
         
@@ -79,21 +79,21 @@ class IdolDetail(APIView):
                 data=request.data,
                 partial=True,
             )
-            print("re : ", request.data)
+            # print("re : ", request.data)
         if serializer.is_valid():
             groups=request.data.get("group")
-            print("group: ", groups)
+            # print("group: ", groups)
             idol_schedules=request.data.get("idol_schedules")
             if groups:
                 if not isinstance(groups, list):
                     raise ParseError("Invalid group")
                 for group in groups:
-                    print(group)
-                    print(groups)
+                    # print(group)
+                    # print(groups)
                     try:
                         group=Group.objects.get(groupname=group)
                     except Group.DoesNotExist:
-                        raise ParseError({"message":"그룹을 먼저 생성해 주세요."})
+                        raise ParseError({"message": "그룹을 먼저 생성해 주세요."})
                     idol.group.add(group)
                     group.member.add(idol)
                     
@@ -134,16 +134,16 @@ class IdolDetail(APIView):
 
 class IdolSchedule(APIView):
 
-    def get_object(self, pk):
+    def get_object(self, idol_name_kr):
 
         try:
-            return Idol.objects.get(pk=pk)
+            return Idol.objects.get(idol_name_kr=idol_name_kr)
         except Idol.DoesNotExist:
             raise NotFound
 
-    def get(self, request, pk):
+    def get(self, request, idol_name_kr):
 
-        idol = self.get_object(pk)
+        idol = self.get_object(idol_name_kr)
         serializer = ScheduleSerializer(
             
             idol.idol_schedules.all(),

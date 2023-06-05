@@ -19,7 +19,7 @@ class Category(models.Model):
     content = models.TextField(max_length=500, default="")  # 카테고리에 대한 내용
 
     def __str__(self):
-        return self.type
+        return f"{self.type}-{self.content}"
 
     class Meta:
         verbose_name_plural = "Categories"
