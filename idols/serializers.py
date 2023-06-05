@@ -93,13 +93,9 @@ class IdolDetailSerializer(ModelSerializer):
     def get_group(self, obj):
         return obj.group.values_list('groupname', flat=True)
     
-    # def validate(self, attrs):
-    #     idol_name_kr=attrs.get('idol_name_kr')
-    #     idol_name_en=attrs.get('idol_name_en')
-
-    #     if idol_name_kr and not idol_name_en:
-    #         raise ParseError("영문 이름을 입력해 주세요.")
-    #     if not idol_name_kr and idol_name_en:
-    #         raise ParseError("국문 이름을 입력해 주세요.")
-    
-    #     return attrs    
+    # def update(self, instance, validated_data):
+    #     group_data=validated_data.pop("group", None)
+    #     print(group_data)
+    #     if group_data:
+    #         instance.group.set(group_data)
+    #     return instance

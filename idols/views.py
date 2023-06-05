@@ -16,7 +16,7 @@ from .serializers import  IdolsListSerializer, IdolDetailSerializer, ScheduleSer
 from categories.serializers import CategorySerializer
 from categories.models import Category
 from media.serializers import PhotoSerializer
-
+from groups.models import Group
 class Idols(APIView):
     
     def get(self, request):
@@ -37,7 +37,16 @@ class Idols(APIView):
         else:
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
-
+    """
+    post input data
+        {
+            "idol_name_kr":"카리나",
+            "idol_name_en":"Karina",
+            "idol_profile":"https://i.namu.wiki/i/OsLvNXbYOYIMIe8ttpDZn1jLL0JL3RFZmZcmAWXMvcg7hYvHtX8Np4njdPC5SVlugrL6fjRyLZd_Prk-h9BB2v13y-dtP7eQKaKkcWTXNq21M6m2D0rpYLTfW1NsYhVXFB5fyOF4XdqMtU4UWwxCiQ.webp",
+            "idol_birthday":"2000-04-11",
+            "idol_debut":"2020-11-17"
+        }
+    """
 
 
 
@@ -60,14 +69,6 @@ class IdolDetail(APIView):
         return Response(serializer.data, status=HTTP_200_OK)
     
     def put(self, request, idol_name_kr): 
-        """
-        {
-            "idol_name_en":"winter",
-            "idol_debut":"2020-11-17",
-            "idol_birthday":"2001-01-01", 
-            "idol_profile":"https://i.namu.wiki/i/j1mSQz1rUEGD8yslNgSdyWgHTaMeVMP0T6z45HuNUoKXSg3XZ92sQOeWKRI4bUEwCyy0YaI-tPrGEEhEIZlrSrZM4WA2qy0TvYL_TC6X6x79QowHTp8h6ECieB24d3TybWT5VZvF7X66cf86yI48gg.webp"
-        }
-        """
         if not request.user.is_admin:
             raise PermissionDenied
         
@@ -78,9 +79,24 @@ class IdolDetail(APIView):
                 data=request.data,
                 partial=True,
             )
-
+            print("re : ", request.data)
         if serializer.is_valid():
+            groups=request.data.get("group")
+            print("group: ", groups)
             idol_schedules=request.data.get("idol_schedules")
+            if groups:
+                if not isinstance(groups, list):
+                    raise ParseError("Invalid group")
+                for group in groups:
+                    print(group)
+                    print(groups)
+                    try:
+                        group=Group.objects.get(groupname=group)
+                    except Group.DoesNotExist:
+                        raise ParseError({"message":"그룹을 먼저 생성해 주세요."})
+                    idol.group.add(group)
+                    group.member.add(idol)
+                    
             if idol_schedules:
                 if not isinstance(idol_schedules, list):
                     raise ParseError("Invalid schedules")
@@ -95,6 +111,16 @@ class IdolDetail(APIView):
             return Response(IdolDetailSerializer(updated_idol_schedules).data, status=HTTP_202_ACCEPTED)
         else:
             return Response(status=HTTP_400_BAD_REQUEST)
+        """
+        put input data
+        {
+            "group":["ASEPA"],
+            "idol_name_en":"Winter",
+            "idol_debut":"2020-11-17",
+            "idol_birthday":"2001-01-01", 
+            "idol_profile":"https://i.namu.wiki/i/j1mSQz1rUEGD8yslNgSdyWgHTaMeVMP0T6z45HuNUoKXSg3XZ92sQOeWKRI4bUEwCyy0YaI-tPrGEEhEIZlrSrZM4WA2qy0TvYL_TC6X6x79QowHTp8h6ECieB24d3TybWT5VZvF7X66cf86yI48gg.webp"
+        }
+        """
 
     def delete(self, request, idol_name_kr): 
         
