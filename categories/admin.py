@@ -5,6 +5,6 @@ from .models import Category
 @admin.register(Category)
 class CategoriesAdmin(admin.ModelAdmin):
     list_display = ("pk", "type", "content")
-    list_display_links = ("pk", "type")
+    list_display_links = ("pk", "type", "content")
     search_fields = ("type",)
     list_filter = ("type",)

@@ -91,11 +91,9 @@ class CustomUserAdmin(UserAdmin):
 class ReportAdmin(admin.ModelAdmin):
     list_display = (
         "pk",
-        "type",
         "title",
     )
     list_display_links = (
         "pk",
-        "type",
         "title",
     )

@@ -4,13 +4,13 @@ from .models import UserCalendar
 @admin.register(UserCalendar)
 class UserCalendarAdmin(admin.ModelAdmin):
     list_display = (
-        "id",
+        "pk",
         "title",
         "owner",
         "when"
     )
     list_display_links = (
-        "id",
+        "pk",
         "title",
         "owner",
         "when"

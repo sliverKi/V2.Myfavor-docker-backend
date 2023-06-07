@@ -132,7 +132,7 @@ class IdolDetail(APIView): #[수정OK]
         if idol.DoesNotExist:
             return Response(status=HTTP_404_NOT_FOUND)    
 
-class IdolSchedule(APIView):
+class IdolSchedule(APIView): #수정[OK]
 
     def get_object(self, idol_name_kr):
 
@@ -152,8 +152,9 @@ class IdolSchedule(APIView):
         return Response(serializer.data, status=HTTP_200_OK)
 
     
-    def post(self, request,pk):
-        
+    def post(self, request, idol_name_kr):
+        #아이돌 스케줄이 등록되면 hasSchedule을 false에서 true로 변경 할 것 
+        idol=self.get_object(idol_name_kr)
         serializer=ScheduleSerializer(data=request.data)
         if not request.user.is_admin:
             raise PermissionDenied
@@ -162,13 +163,10 @@ class IdolSchedule(APIView):
             serializer = ScheduleSerializer(data=request.data)
             if serializer.is_valid():
                 schedule = serializer.save()
-        # 1. ScheduleType 에 있는 필드가 Category에 없는 경우, 유저가 입력한 내용을 새롭게 db에 생성(ok)   
-                
+        # 1. ScheduleType 에 있는 필드가 Category에 없는 경우, 유저가 입력한 내용을 새롭게 db에 생성(ok)     
                 try: 
-                    
                     ScheduleType_data=request.data.get("ScheduleType")
                     schedule_type=Category.objects.get(type=ScheduleType_data)
-                    
                     
                     if not schedule_content:
                         schedule_content=Category.objects.create(type=ScheduleType_data)
@@ -176,6 +174,7 @@ class IdolSchedule(APIView):
                     schedule.ScheduleContent = schedule_content
                     schedule.save()
                     
+                    # idol.idol_schedules.add(schedule)
                 except Category.DoesNotExist:
                     category_serializer=CategorySerializer(data=ScheduleType_data)
                     
@@ -184,8 +183,11 @@ class IdolSchedule(APIView):
                     else:
                         return Response(category_serializer.errors, status=HTTP_400_BAD_REQUEST)
                     schedule.ScheduleType=schedule_type
-                    schedule.save()  
-                   
+                    schedule.save()    
+                idol.idol_schedules.add(schedule)
+                if idol.idol_schedules:
+                    idol.has_schedules=True  
+                idol.save()
         
         # 2. participant 에 있는 idol의 idol_schedules 필드에 자동으로 schedule추가(OK)
         # 3. particioant에 아이돌 이름을 입력하면, 해당하는 아이돌들이 participant field에  자동으로 선택되어 질 것(ok)
@@ -202,10 +204,35 @@ class IdolSchedule(APIView):
                         else:
                             return Response(idol_serializer.errors, status=HTTP_400_BAD_REQUEST)
                     idol.idol_schedules.add(schedule)
+                
+                if idol.idol_schedules:
+                    idol.has_schedules=True  
+                idol.save()
                 return Response(ScheduleSerializer(schedule).data, status=HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-    
+    """
+  {
+
+        "ScheduleTitle": "아는 형님 녹화",
+        "ScheduleType": {
+            "type": "broadcast",
+            "content":"지젤 건강문제로 녹화 불참"(optional)
+        },
+        "location": "여의도 일산",
+        "when": "2023-06-30T18:00:00",
+        "participant": [
+            {
+                "idol_name_kr": "닝닝",
+                "idol_name_en": "Ning Ning"
+            },
+            {
+                "idol_name_kr": "윈터",
+                "idol_name_en": "Winter"
+            }
+        ]
+    }
+    """
 class IdolSchedulesCategories(APIView):
     
     def get_object(self, pk):

@@ -3,7 +3,7 @@ from . import views
 
 
 urlpatterns = [
-   
+   #[보류]
     path("", views.MyCalendar.as_view()), # 내 일정 전체 조회
     path("<int:year>/", views.YearView.as_view()), # 내 일정 연도별 조회
     path("<int:year>/<int:month>/", views.MonthView.as_view()), # 내 일정 연도 - 월별 조회    

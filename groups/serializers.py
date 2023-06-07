@@ -122,9 +122,4 @@ class groupDetailSerializer(ModelSerializer):
         }
     ]
 } 
-
-
-{"enter":"SmTOWN", "groupname":"asepa","member":[{"윈터(Winter)": 
-"https://i.namu.wiki/i/5WmvTTY-p-I_6KjWkmGtrl7ZEpyu2bnHXAo4ZQSXO5N1DCwXQPPTwBQXryg7cfbJDvwV6AskBG1W0uBVh-LSoX5qIMff7jh1OmFkmoN6qbXi38IJwq53uiZ5cSl3erR-hs2cmfRC2mdlc-6d909QEA.webp"}]}
-
 """
