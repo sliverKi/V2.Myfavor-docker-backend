@@ -29,6 +29,7 @@ CUSTOM_APPS = [
     "categories.apps.CategoriesConfig",
     "groups.apps.GroupsConfig",
     "prizes.apps.PrizesConfig",
+    "schedules.apps.SchedulesConfig",
 ]
 
 SYSTEM_APPS = [

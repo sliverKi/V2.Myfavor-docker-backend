@@ -83,9 +83,12 @@ class groupDetailSerializer(ModelSerializer):
                     print("en-name", idol_name_en)
                     try:
                         member=Idol.objects.get(idol_name_kr=idol_name_kr)
-                        member.idol_profile=profile
-                        member.save()
-                        #error: "str' object has no attribute 'save'
+                        group=Group.objects.get(groupname=groupname)
+                        if member not in group.member.all():
+                            member.idol_profile=profile
+                            member.save()
+                            group.member.add(member)
+                            member.group.add(group)
                         print(member.idol_profile)
 
                     except Idol.DoesNotExist:

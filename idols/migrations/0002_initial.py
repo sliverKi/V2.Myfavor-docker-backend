@@ -8,14 +8,14 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('groups', '0001_initial'),
+        ('schedules', '0001_initial'),
         ('idols', '0001_initial'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='group',
-            name='member',
-            field=models.ManyToManyField(null=True, related_name='groups', to='idols.idol'),
+            model_name='idol',
+            name='idol_schedules',
+            field=models.ManyToManyField(blank=True, related_name='idols', to='schedules.schedule'),
         ),
     ]

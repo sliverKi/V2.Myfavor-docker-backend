@@ -14,8 +14,8 @@ class GroupList(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):#관리자만이 아이돌 등록 가능 
-        if not request.user.is_admin:
-            raise PermissionError
+        # if not request.user.is_admin:
+        #     raise PermissionError
         serializer=groupDetailSerializer(data=request.data)
         print("re: ", request.data)
         if serializer.is_valid():

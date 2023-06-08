@@ -29,7 +29,7 @@ class Idol(models.Model):
 
     has_schedules=models.BooleanField(default=False)#true: 잇, False; 없
     idol_schedules = models.ManyToManyField(
-        "idols.Schedule",
+        "schedules.Schedule",
         blank=True,
         related_name="idols",
     )
@@ -40,38 +40,4 @@ class Idol(models.Model):
         verbose_name_plural = "Our_Idols"
 
 
-class Schedule(CommonModel):
-    """Schedule Model Definition"""
 
-    ScheduleTitle = models.CharField(
-        max_length=150,
-        default="",
-    )
-    ScheduleType = models.ForeignKey(
-        "categories.Category",
-        max_length=150,
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-        related_name="schedules",
-    )
-    location=models.CharField(
-        max_length=150,
-        default=""
-    )
-    participant = models.ManyToManyField(
-        "idols.Idol",
-        max_length=150,
-        blank=True,
-        related_name="schedules",
-    )
-    when=models.DateTimeField(
-        auto_now=False,
-        auto_now_add=False,
-        blank=False,
-        null=False,
-        )
-    def __str__(self)->str:
-        return f"{self.ScheduleType}"
-    class Meta:
-        verbose_name_plural = "Idol-Schedules"

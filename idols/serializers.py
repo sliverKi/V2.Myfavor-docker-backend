@@ -1,10 +1,11 @@
+
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import ParseError
-from .models import Idol, Schedule
-from categories.serializers import CategorySerializer
-
 from rest_framework.status import HTTP_400_BAD_REQUEST
+from .models import Idol
+from categories.serializers import CategorySerializer
+from schedules.models import Schedule
 
 
 class TinyIdolSerializer(ModelSerializer):#groupList에서 사용
@@ -27,22 +28,6 @@ class IdolsListSerializer(ModelSerializer):
             "has_schedules"
             )
 
-
-class ScheduleSerializer(ModelSerializer):
-    ScheduleType = CategorySerializer(read_only=True)
-    participant = TinyIdolSerializer(many=True, read_only=True) #읽기 전용 필드 
-    when=serializers.DateTimeField()
-
-    class Meta:
-        model = Schedule
-        fields = (
-            "pk",
-            "ScheduleTitle",
-            "ScheduleType",
-            "location",
-            "when",
-            "participant",
-        )
 
 class DateScheduleSerializer(ModelSerializer):
     ScheduleType = CategorySerializer(read_only=True)
@@ -72,7 +57,7 @@ class DateScheduleSerializer(ModelSerializer):
 class IdolDetailSerializer(ModelSerializer):
     # fullname=serializers.SerializerMethodField()
     group=serializers.SerializerMethodField()
-    idol_schedules = ScheduleSerializer(many=True, read_only=True)  # 스케줄을 필수 항목으로 인식하지 않음
+    # idol_schedules = ScheduleSerializer(many=True, read_only=True)  # 스케줄을 필수 항목으로 인식하지 않음
     class Meta:
         model = Idol
         fields = (
@@ -85,7 +70,7 @@ class IdolDetailSerializer(ModelSerializer):
             "idol_debut",
             "idol_birthday",
             "has_schedules",
-            "idol_schedules",
+            # "idol_schedules",
         )
     # def get_fullname(self,obj):
     #     return f"{obj.idol_name_kr}({obj.idol_name_en})"

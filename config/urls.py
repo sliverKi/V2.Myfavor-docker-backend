@@ -11,5 +11,7 @@ urlpatterns = [
     path("api/v2/media/", include("media.urls")),
     path("api/v2/users/", include("users.urls")),
     path("api/v2/users_calendar/", include("usersCalendar.urls")),
-    path("api/v2/groups/", include("groups.urls"))
+    path("api/v2/groups/", include("groups.urls")),
+    path("api/v2/schedules/", include("schedules.urls")),
+    
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
