@@ -27,29 +27,21 @@ class ScheduleSerializer(ModelSerializer):
     def update(self, instance, validated_data):
         ScheduleType_data=validated_data.pop("ScheduleType", None)
         participant_data=validated_data.pop("participant", None)
-        print(1)
-        print(Category.objects.all())
-        if ScheduleType_data:
 
+        if ScheduleType_data:
             schedule_type = instance.ScheduleType
             new_type = ScheduleType_data.get('type')
             if new_type not in Category.objects.values_list('type', flat=True):
                 raise ParseError("Invalid Category.")
             schedule_type.type = new_type
             schedule_type.content = ScheduleType_data.get('content', schedule_type.content)
-            # for attr, value in ScheduleType_data.items():
-                # print("attrs: ", attr)#type, content
-                # setattr(schedule_type, attr, value)#schedule_type이라는 객체에, attr이라는 이름의 속성에 value 값을 할당
             schedule_type.save()
 
         if participant_data:
-            # instance.participant.clear()
+            print("1", participant_data)
             for data in participant_data:
                 idol, _ = Idol.objects.get_or_create(idol_name_kr=data["idol_name_kr"])
                 instance.participant.add(idol)
-
-        # for attr, value in validated_data.items():
-        #     setattr(instance, attr, value)
         instance.save()
         return instance
 
@@ -61,4 +53,32 @@ class ScheduleSerializer(ModelSerializer):
         "content": "지젤 건강문제로 녹화 불참"
     }
 }
+or 
+{
+    "participant": [(수정 전 )
+        {
+            "idol_name_kr": "윈터",
+            "idol_name_en": "Winter",
+            "idol_profile": "https://newsimg.sedaily.com/2022/08/26/269Y4OKML1_1.jpg"
+        }
+    ]
+}
+{#수정 후 
+    "participant": [{"닝닝"}]
+}
+or
+{
+    "ScheduleType": {
+        "type": "broadcast",
+        "content": "지젤 건강문제로 녹화 불참"
+    },
+    "participant": [
+        {
+            "idol_name_kr": "닝닝",
+            "idol_name_en": "Ning Ning",
+            "idol_profile": "https://newsimg.sedaily.com/2022/08/26/269Y4OKML1_1.jpg"
+        }
+    ]
+}
+
 """
