@@ -140,8 +140,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "users.User"
 
 # MEDIA_ROOT = "uploads"
-MEDIA_URL = "/user-uploads/"
-MEDIA_ROOT= os.path.join(BASE_DIR, 'user-uploads')
+
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -179,5 +178,8 @@ AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
 AWS_S3_FILE_OVERWRITE=False
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'path/to/store/my/files/')
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+DEFAULT_FILE_STORAGE = 'config.utils.CustomS3Boto3Storage'
+MEDIA_URL = "/media/"
+MEDIA_ROOT= os.path.join(BASE_DIR, 'media')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'path/to/store/my/files/')
