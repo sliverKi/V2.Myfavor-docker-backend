@@ -27,7 +27,7 @@ from .serializers import (
     UserSerializer,
     PickSerializer,
 )
-from media.serializers import UserProfileSerializer
+from medias.serializers import UserProfileSerializer
 from idols.models import Idol
 
 class NewUsers(APIView):

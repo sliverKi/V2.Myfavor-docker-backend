@@ -18,7 +18,7 @@ from categories.serializers import CategorySerializer
 from categories.models import Category
 from schedules.serializers import ScheduleSerializer
 from schedules.models import Schedule
-from media.serializers import PhotoSerializer
+from medias.serializers import PhotoSerializer
 from groups.models import Group
 class Idols(APIView): #[수정OK]
     

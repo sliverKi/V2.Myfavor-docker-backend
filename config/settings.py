@@ -31,7 +31,7 @@ CUSTOM_APPS = [
     "users.apps.UsersConfig",
     "usersCalendar.apps.UserscalendarConfig",
     "common.apps.CommonConfig",
-    "media.apps.MediaConfig",
+    "medias.apps.MediasConfig",
     "idols.apps.IdolsConfig",
     "categories.apps.CategoriesConfig",
     "groups.apps.GroupsConfig",
@@ -139,8 +139,9 @@ if not DEBUG:
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "users.User"
 
-# MEDIA_ROOT = "uploads"
 
+MEDIA_ROOT = "uploads"
+MEDIA_URL = "user-uploads/"
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -167,19 +168,18 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 #AWS-S3-storage
 
-AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID") # .csv 파일에 있는 내용을 입력 Access key ID
-AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY") # .csv 파일에 있는 내용을 입력 Secret access key
-AWS_REGION = env("AWS_REGION")
+# AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID") # .csv 파일에 있는 내용을 입력 Access key ID
+# AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY") # .csv 파일에 있는 내용을 입력 Secret access key
+# AWS_REGION = env("AWS_REGION")
 
 ###S3 Storages
-AWS_STORAGE_BUCKET_NAME =env("AWS_STORAGE_BUCKET_NAME")  # 설정한 버킷 이름
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME,AWS_REGION)#img upload endpoint
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
-}
-AWS_S3_FILE_OVERWRITE=False
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-DEFAULT_FILE_STORAGE = 'config.utils.CustomS3Boto3Storage'
-MEDIA_URL = "/media/"
-MEDIA_ROOT= os.path.join(BASE_DIR, 'media')
+# AWS_STORAGE_BUCKET_NAME =env("AWS_STORAGE_BUCKET_NAME")  # 설정한 버킷 이름
+# AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME,AWS_REGION)#img upload endpoint
+# AWS_S3_OBJECT_PARAMETERS = {
+#     'CacheControl': 'max-age=86400',
+# }
+# AWS_S3_FILE_OVERWRITE=False
+
+# DEFAULT_FILE_STORAGE = 'config.utils.CustomS3Boto3Storage'
+
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'path/to/store/my/files/')
