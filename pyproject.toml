@@ -8,11 +8,11 @@ packages = [{include = "myfavor_final_backend"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-django = "~4.0"
+django = "^4.1.7"
 djangorestframework = "^3.14.0"
 django-environ = "^0.10.0"
 decouple = "*"
-python-decouple = "^3.8"
+
 django-cors-headers = "^3.14.0"
 psycopg2-binary = "^2.9.5"
 user-manager = "^2.2"
