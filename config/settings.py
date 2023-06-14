@@ -4,7 +4,7 @@ import os
 import environ
 import dj_database_url
 #>>4월 8일 db 연결, data 다시 넣어야 함. 
-#poetry downgrade
+
 env = environ.Env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
