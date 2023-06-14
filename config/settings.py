@@ -139,9 +139,9 @@ if not DEBUG:
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "users.User"
 
-MEDIA_ROOT = "uploads"
-
-MEDIA_URL = "user-uploads/"
+# MEDIA_ROOT = "uploads"
+MEDIA_URL = "/user-uploads/"
+MEDIA_ROOT= os.path.join(BASE_DIR, 'user-uploads')
 
 CORS_ALLOW_CREDENTIALS = True
 
