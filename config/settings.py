@@ -2,7 +2,7 @@
 from pathlib import Path
 import os
 import environ
-
+import dj_database_url
 #>>4월 8일 db 연결, data 다시 넣어야 함. 
 env = environ.Env()
 
@@ -45,6 +45,7 @@ INSTALLED_APPS = SYSTEM_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -75,12 +76,26 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 DEBUG = True
-DATABASES = {
-        'default': {
-                'ENGINE': 'django.db.backends.sqlite3',
-                'NAME': BASE_DIR/ 'db.sqlite3',
-            }
+if DEBUG:
+    STATIC_ROOT=os.path.join(BASE_DIR,'static')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+    DATABASES = {
+            'default': {
+                    'ENGINE': 'django.db.backends.sqlite3',
+                    'NAME': BASE_DIR/ 'db.sqlite3',
+                }
+        }
+else:
+    DATABASES = {
+        'default': dj_database_url.config(
+            conn_max_age=600,
+        )
+                    
     }
+if not DEBUG:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 AUTH_PASSWORD_VALIDATORS = [
     {

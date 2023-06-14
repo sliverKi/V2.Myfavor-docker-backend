@@ -1,0 +1,22 @@
+databases:
+  - name: v2MyFavor_back_seed_db
+    databaseName: v2MyFavor_back_seed_db
+    user: v2MyFavor_back_seed_db
+    region: singapore
+
+services:
+  - type: web
+    name: v2MyFavor_back_seed_db
+    env: python
+    region: singapore
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn config.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: v2MyFavor_back_seed_db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
