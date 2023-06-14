@@ -8,6 +8,8 @@ urlpatterns = [
     
     #[보류]
     path("<str:idol_name_kr>/schedules/<str:type>/",views.IdolSchedulesCategories.as_view()), #GET 수정OK
+    
+    
     path("<int:pk>/schedules/<str:type>/<str:year>/", views.IdolSchedulesYear.as_view()), 
     path("<int:pk>/schedules/<str:type>/<str:year>/<str:month>/", views.IdolSchedulesMonth.as_view()),  
     path("<int:pk>/schedules/<str:type>/<str:year>/<str:month>/<str:day>/", views.IdolScheduelsDay.as_view()), 
