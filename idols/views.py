@@ -56,14 +56,12 @@ class Idols(APIView): #[수정OK]
 class IdolDetail(APIView): #[수정OK]
 
     def get_object(self, idol_name_kr): 
-        
         try:
             return Idol.objects.get(idol_name_kr=idol_name_kr)
         except Idol.DoesNotExist:
             raise NotFound
 
     def get(self, request, idol_name_kr): 
-
         idol = self.get_object(idol_name_kr)
         serializer = IdolDetailSerializer(
             idol,
@@ -74,7 +72,7 @@ class IdolDetail(APIView): #[수정OK]
     def put(self, request, idol_name_kr): 
         if not request.user.is_admin:
             raise PermissionDenied
-        
+
         idol=self.get_object(idol_name_kr)
         if request.user.is_admin:
             serializer=IdolDetailSerializer(
@@ -126,14 +124,13 @@ class IdolDetail(APIView): #[수정OK]
         """
 
     def delete(self, request, idol_name_kr): 
-        
         idol=self.get_object(idol_name_kr)
        
         if request.user.is_admin==False: 
             raise PermissionDenied
         idol.delete()
         if idol.DoesNotExist:
-            return Response(status=HTTP_404_NOT_FOUND)    
+            return Response(status=HTTP_204_NO_CONTENT)    
 
 class IdolSchedule(APIView): #수정[OK]
 

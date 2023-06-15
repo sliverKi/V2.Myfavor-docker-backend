@@ -78,6 +78,7 @@ class PrivateUserSerializer(serializers.ModelSerializer):
             "nickname",
             "pick",
             "email",
+            "phone",
             "age",
         )
 
@@ -107,7 +108,7 @@ class PrivateUserSerializer(serializers.ModelSerializer):
         else:
             raise ParseError("비밀번호를 입력하세요.")
         return password
-
+    
 
 
 # admin이 유저 정보를 조회할 때 사용하는 정보
@@ -143,15 +144,4 @@ class ReportDetailSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class FindPasswordSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField()
 
-    def validate_email(self, value):
-        """
-        Check that the email belongs to an existing user
-        """
-        try:
-            user = User.objects.get(email=value)
-        except User.DoesNotExist:
-            raise serializers.ValidationError('No user with this email.')
-        return value

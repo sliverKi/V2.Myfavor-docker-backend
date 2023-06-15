@@ -15,13 +15,13 @@ class User(AbstractUser):
     name = models.CharField(
         max_length=100,
         blank=False,
-        validators=[MinLengthValidator(2, "이름은 2자 이상이어야합니다.")],
+        validators=[MinLengthValidator(2, "이름은 2자 이상이어야 합니다.")],
     )
     nickname = models.CharField(
         max_length=100,
         unique=True,
         blank=False,
-        validators=[MinLengthValidator(3, "닉네임은 3자 이상이어야합니다.")],
+        validators=[MinLengthValidator(3, "닉네임은 3자 이상이어야 합니다.")],
     )
     email = models.EmailField(
         blank=False,
@@ -48,6 +48,7 @@ class User(AbstractUser):
             MinValueValidator(15, "15세 이상부터 가입이 가능합니다."),
         ],
     )
+    phone = models.CharField(max_length=13, null=True, blank=True)
 
     is_admin = models.BooleanField(default=False)  
 

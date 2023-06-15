@@ -25,6 +25,7 @@ class CustomUserAdmin(UserAdmin):
                     "profileImg",
                     "nickname",
                     "email",
+                    "phone",
                     "pick",
                     "age",
                     "is_admin",
@@ -59,11 +60,13 @@ class CustomUserAdmin(UserAdmin):
         "name",
         "nickname",
         "email",
+        "phone",
         "pick",
         "is_admin",
     )
     list_display_links = (
         "email",
+        "phone",
         "nickname",
         "name",
         "pick",

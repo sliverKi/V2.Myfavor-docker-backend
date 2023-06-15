@@ -32,7 +32,7 @@ from idols.models import Idol
 
 class NewUsers(APIView):
     def get(self, request):
-        return Response({"email, password, nickname, age, pick 을 입력해주세요."})
+        return Response({"email, password, nickname, age, pick, phone 을 입력해주세요."})
 
     def post(self, request):
 
@@ -129,32 +129,7 @@ class UserDetail(APIView):
         return Response({"message": "계정이 삭제되었습니다."}, status=HTTP_204_NO_CONTENT)
 
 
-
-class EditPassword(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def put(self, request):
-        user = request.user
-        old_password = request.data.get("old_password")
-        new_password = request.data.get("new_password")
-
-        if not old_password or not new_password:
-            raise ParseError
-
-        if user.check_password(old_password):
-            if old_password != new_password:
-                user.set_password(new_password)
-                user.save()
-                return Response({"비밀번호가 성공적으로 변경되었습니다."})
-            else:
-                return Response({"변경 될 비밀번호가 기존 비밀번호와 동일합니다."})
-        else:
-            raise ParseError("비밀번호를 다시 확인해주세요.")
-
-
-
 class EditPick(APIView):
-
     permission_classes = [IsAuthenticated]
 
     def get_object(self, pk):
@@ -279,33 +254,7 @@ class ReportDetail(APIView):
         return Response(status=HTTP_204_NO_CONTENT)
 
 
-class Login(APIView):  
-    def post(self, request, format=None):
-        email = request.data.get("email")
-        password = request.data.get("password")
-        
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            raise NotFound
-        
-        if not email or not password:
-            raise ParseError("잘못된 정보를 입력하였습니다.")
-        
-        if user.check_password(password):
-            login(request, user)
-            serializer = TinyUserSerializers(user)
-            return Response(serializer.data, status=HTTP_200_OK)
-        return Response({"error": "Invalid credentials"}, status=HTTP_400_BAD_REQUEST)
 
-
-
-class Logout(APIView):  
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        logout(request)
-        return Response({"message": "See You Again~"}, status=HTTP_200_OK)
 
 class UserPhotos(APIView):
     def get_object(self, pk):

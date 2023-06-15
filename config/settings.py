@@ -37,6 +37,7 @@ CUSTOM_APPS = [
     "groups.apps.GroupsConfig",
     "prizes.apps.PrizesConfig",
     "schedules.apps.SchedulesConfig",
+    "oauth.apps.OauthConfig",
 ]
 
 SYSTEM_APPS = [
@@ -165,6 +166,8 @@ ACCOUNT_PASSWORD_INPUT_RENDER_VALUE = True
 ACCOUNT_SESSION_REMEMBER = True  
 SESSION_COOKIE_AGE = 3600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+
 
 #AWS-S3-storage
 
