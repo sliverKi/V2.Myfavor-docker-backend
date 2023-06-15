@@ -10,16 +10,16 @@ import requests
 from .models import Photo
 from rest_framework import status 
 
-import boto3
-from uuid import uuid4
-from datetime import datetime
-from config.settings import (
-    AWS_ACCESS_KEY_ID,
-    AWS_SECRET_ACCESS_KEY,
-    AWS_STORAGE_BUCKET_NAME,
-    AWS_S3_CUSTOM_DOMAIN
+# import boto3
+# from uuid import uuid4
+# from datetime import datetime
+# from config.settings import (
+#     AWS_ACCESS_KEY_ID,
+#     AWS_SECRET_ACCESS_KEY,
+#     AWS_STORAGE_BUCKET_NAME,
+#     AWS_S3_CUSTOM_DOMAIN
 
-)
+# )
 
 class PhotoDetail(APIView):
     def get_object(self, pk):
