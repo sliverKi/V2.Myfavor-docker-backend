@@ -10,16 +10,16 @@ import requests
 from .models import Photo
 from rest_framework import status 
 
-# import boto3
-# from uuid import uuid4
-# from datetime import datetime
-# from config.settings import (
-#     AWS_ACCESS_KEY_ID,
-#     AWS_SECRET_ACCESS_KEY,
-#     AWS_STORAGE_BUCKET_NAME,
-#     AWS_S3_CUSTOM_DOMAIN
+import boto3
+from uuid import uuid4
+from datetime import datetime
+from config.settings import (
+    AWS_ACCESS_KEY_ID,
+    AWS_SECRET_ACCESS_KEY,
+    AWS_STORAGE_BUCKET_NAME,
+    AWS_S3_CUSTOM_DOMAIN
 
-# )
+)
 
 class PhotoDetail(APIView):
     def get_object(self, pk):
@@ -46,7 +46,7 @@ class GetUploadURL(APIView):
         return Response({"id":result.get("id"), "uploadURL": result.get('uploadURL')})
     
 
-# class GetS3URL(APIView):
+# class GetS3URL(APIView): #[공지]aws credit 받을수 있다고 하심-> 버킷, iam 삭제함 크레딧 받은 후에 연결할 것 
 #     def post(self, request):
 #         file=request.data.get('filename')
 #         user=request.user

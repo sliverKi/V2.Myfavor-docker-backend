@@ -168,18 +168,17 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 #AWS-S3-storage
 
-# AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID") # .csv 파일에 있는 내용을 입력 Access key ID
-# AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY") # .csv 파일에 있는 내용을 입력 Secret access key
+#AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID") # .csv 파일에 있는 내용을 입력 Access key ID
+#AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY") # .csv 파일에 있는 내용을 입력 Secret access key
 # AWS_REGION = env("AWS_REGION")
 
-###S3 Storages
+#S3 Storages
 # AWS_STORAGE_BUCKET_NAME =env("AWS_STORAGE_BUCKET_NAME")  # 설정한 버킷 이름
 # AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME,AWS_REGION)#img upload endpoint
 # AWS_S3_OBJECT_PARAMETERS = {
 #     'CacheControl': 'max-age=86400',
 # }
 # AWS_S3_FILE_OVERWRITE=False
-
 # DEFAULT_FILE_STORAGE = 'config.utils.CustomS3Boto3Storage'
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'path/to/store/my/files/')
