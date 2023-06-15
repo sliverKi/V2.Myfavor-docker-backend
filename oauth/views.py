@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth import login, logout
-
+from django.core.mail import send_mail
+from django.conf import settings
+from django.urls import reverse
+from django.contrib.auth.tokens import default_token_generator
 from rest_framework import status 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -13,7 +16,7 @@ from users.models import User
 from users.serializers import (
     TinyUserSerializers
 )
-from .serializers import FindIDSerializer
+
 
 class Login(APIView):  
     def post(self, request, format=None):
@@ -60,24 +63,49 @@ class FindID(APIView):
             return Response({"error": "This information does not exist. Are you our member?"}, status=status.HTTP_404_NOT_FOUND)
 
 class FindPW(APIView):
-
+# {"nickname":"관리자", "email":"myfavor@gmail.com", "phone":"010-3578-8072"}
     def post(self, request):#닉네임 이메일 전화번호
         nickname=request.data.get("nickname")
         email=request.data.get("email")
-        phone=request.data.get("phone")
+        # phone=request.data.get("phone")
 
-        if not nickname or not email or not phone:
+        if not nickname or not email:
             raise ParseError("Please, insert data.")
         try:
-            user=User.objects.get(nickname=nickname, email=email, phone=phone)
-            print("User: ", user)
+            user = User.objects.get(nickname=nickname, email=email,)
+        except User.DoesNotExist:
+            return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Generate token for password reset link
+        token_generator = default_token_generator
+        token = token_generator.make_token(user)
+
+        # Build password reset URL
+        reset_url = request.build_absolute_uri(
+            reverse("password_reset_confirm", kwargs={"uidb64": user.pk, "token": token})
+        )
+
+        # Email subject and message
+        subject = "Password Reset"
+        message = f"Please click the link below to reset your password:\n\n{reset_url}"
+        # Send email
+        send_mail(
+            subject,
+            message,
+            "myfavor86@gmail.com",
+            ["lovee2756@naver.com"],
+            fail_silently=False,
+        )
+
+        return Response({"detail": "Password reset email sent."}, status=status.HTTP_200_OK)
+
+
             
-            
 
 
 
 
-class EditPassword(APIView):
+class ChangePW(APIView):
     permission_classes = [IsAuthenticated]
 
     def put(self, request):
