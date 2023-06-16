@@ -14,6 +14,7 @@ class groupSerializer(ModelSerializer):#groupList
     class Meta:
         model=Group
         fields=(
+            "pk",
             "enter",
             "groupname",
             "group_profile"
@@ -25,6 +26,7 @@ class groupDetailSerializer(ModelSerializer):
     class Meta:
         model=Group
         fields=(
+            "pk",
             "enter",
             "groupname",
             "group_profile",

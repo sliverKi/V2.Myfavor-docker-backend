@@ -30,6 +30,9 @@ from .serializers import (
 from medias.serializers import UserProfileSerializer
 from idols.models import Idol
 
+# class ME(APIView):
+#     def get()
+
 class NewUsers(APIView):
     def get(self, request):
         return Response({"email, password, nickname, age, pick, phone 을 입력해주세요."})
