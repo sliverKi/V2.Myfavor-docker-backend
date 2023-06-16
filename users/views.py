@@ -33,9 +33,9 @@ from idols.models import Idol
 
 class LoginUser(APIView):
     permission_classes = [IsAuthenticated]
-    
     def get(self, request):
         user=request.user
+        print("user: ", user)
         serializer=TinyUserSerializers(user)
         return Response(serializer.data, status=HTTP_200_OK)
 
