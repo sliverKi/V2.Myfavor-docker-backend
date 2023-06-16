@@ -148,8 +148,8 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_ALLOW = True
 CORS_ALLOWED_ORIGINS_ALL = True
-CORS_ALLOWED_ORIGINS = ["http://127.0.0.1:3000"]
-CSRF_TRUSTED_ORIGINS =["http://127.0.0.1:3000"]
+CORS_ALLOWED_ORIGINS = ["http://127.0.0.1:3000", "http://localhost:3000"]
+CSRF_TRUSTED_ORIGINS =["http://127.0.0.1:3000", "http://localhost:3000"]
 
 
 
@@ -167,6 +167,8 @@ ACCOUNT_SESSION_REMEMBER = True
 SESSION_COOKIE_AGE = 3600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
+SESSION_COOKIE_DOMAIN=".localhost"
+CSRF_COOKIE_DOMAIN=".localhost"
 #gmail SMTP
 # EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_HOST="smtp.gmail.com"

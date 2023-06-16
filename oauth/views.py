@@ -32,7 +32,7 @@ class Login(APIView):
             raise ParseError("잘못된 정보를 입력하였습니다.")
         
         if user.check_password(password):
-            # request.session['user'] = user.id
+            request.session['user'] = user.id
             login(request, user)
             # serializer = TinyUserSerializers(user)
             return Response(status=status.HTTP_200_OK)
