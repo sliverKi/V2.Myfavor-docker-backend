@@ -30,8 +30,12 @@ from .serializers import (
 from medias.serializers import UserProfileSerializer
 from idols.models import Idol
 
-# class ME(APIView):
-#     def get()
+# class LoginUser(APIView):
+#     def get(self, request):
+#         user=request.user
+#         serializer=SimpleUserSerializers(user)
+#         return Response(serializer.data, status=status.HTTP_200_ㅒㅏ)
+
 
 class NewUsers(APIView):
     def get(self, request):
