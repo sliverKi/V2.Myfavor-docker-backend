@@ -14,3 +14,4 @@ urlpatterns = [
     path("reports/<int:pk>/", views.ReportDetail.as_view()),
     
 ]
+
