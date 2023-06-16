@@ -11,6 +11,8 @@ from rest_framework.status import (
     HTTP_403_FORBIDDEN, 
     HTTP_404_NOT_FOUND 
 )
+from rest_framework.filters import SearchFilter
+
 from .models import Idol
 from .serializers import  IdolsListSerializer, IdolDetailSerializer, DateScheduleSerializer
 
@@ -228,12 +230,24 @@ class IdolSchedule(APIView): #수정[OK]
                 "idol_name_en": "Ning Ning"
             },
             {
-                "idol_name_kr": "윈터",
-                "idol_name_en": "Winter"
+                "idol_name_kr": "카리나",
+                "idol_name_en": "Karina"
             }
         ]
     }
     """
+
+
+
+class SearchIdol(APIView):
+    def get(self, request):
+        queryset=Idol.objects.all()
+        filter_backends=[SearchFilter]  
+
+
+
+        
+          
 class IdolSchedulesCategories(APIView):#[수정(OK)]
     
     def get_object(self, idol_name_kr):

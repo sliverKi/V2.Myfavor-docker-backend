@@ -32,11 +32,12 @@ from medias.serializers import UserProfileSerializer
 from idols.models import Idol
 
 class LoginUser(APIView):
+    permission_classes = [IsAuthenticated]
+    
     def get(self, request):
         user=request.user
         serializer=TinyUserSerializers(user)
         return Response(serializer.data, status=HTTP_200_OK)
-
 
 class NewUsers(APIView):
     def get(self, request):

@@ -109,6 +109,12 @@ class PrivateUserSerializer(serializers.ModelSerializer):
             raise ParseError("비밀번호를 입력하세요.")
         return password
     
+    def validated_phone(self, phone):
+        phone = re.compile(r"^010\d{4}\d{4}$")
+        data = data.replace("-", "")
+        if not phone.match(data):
+            raise serializers.ValidationError("유효한 형식을 입력하세요.")
+        return data
 
 
 # admin이 유저 정보를 조회할 때 사용하는 정보

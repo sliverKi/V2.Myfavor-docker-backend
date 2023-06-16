@@ -19,3 +19,4 @@ urlpatterns = [
 
 #{"email":"myfavor@gmail.com","passsword":"myfavor"}
 #{"email":"test123@gmail.com","password":"test123@E"}
+#{"email":"test123@gmail.com", "password":"test123@E", "age":"30", "pick":1, "name":"md", "phone":"010-1234-5678", "nickname":"test"}
