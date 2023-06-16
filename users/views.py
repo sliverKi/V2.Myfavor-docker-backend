@@ -21,6 +21,7 @@ from rest_framework.permissions import (
 )
 from .models import User, Report
 from .serializers import (
+    SimpleUserSerializers,
     TinyUserSerializers,
     PrivateUserSerializer,
     ReportDetailSerializer,
@@ -30,11 +31,11 @@ from .serializers import (
 from medias.serializers import UserProfileSerializer
 from idols.models import Idol
 
-# class LoginUser(APIView):
-#     def get(self, request):
-#         user=request.user
-#         serializer=SimpleUserSerializers(user)
-#         return Response(serializer.data, status=status.HTTP_200_ㅒㅏ)
+class LoginUser(APIView):
+    def get(self, request):
+        user=request.user
+        serializer=TinyUserSerializers(user)
+        return Response(serializer.data, status=HTTP_200_OK)
 
 
 class NewUsers(APIView):
