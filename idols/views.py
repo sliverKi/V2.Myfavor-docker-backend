@@ -14,7 +14,7 @@ from rest_framework.status import (
 from rest_framework.filters import SearchFilter
 
 from .models import Idol
-from .serializers import  IdolsListSerializer, IdolDetailSerializer, DateScheduleSerializer
+from .serializers import  TinyIdolSerializer, IdolsListSerializer, IdolDetailSerializer, DateScheduleSerializer
 
 from categories.serializers import CategorySerializer
 from categories.models import Category
@@ -241,8 +241,13 @@ class IdolSchedule(APIView): #수정[OK]
 
 class SearchIdol(APIView):
     def get(self, request):
-        queryset=Idol.objects.all()
-        filter_backends=[SearchFilter]  
+        idol_name=request.GET.get('idol_name')
+        if idol_name:
+            idols=Idol.objects.filter(idol_name_kr__icontains=idol_name) 
+        else:
+            return Response({"message":"해당 아이돌이 존재하지 않습니다."})
+        serializer=TinyIdolSerializer(idols, many=True)
+        return Response(serializer.data, status=HTTP_200_OK)
 
 
 
