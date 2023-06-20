@@ -29,6 +29,7 @@ THIRD_PARTY_APPS = [
 ]
 
 CUSTOM_APPS = [
+    "boards.apps.BoardsConfig",
     "users.apps.UsersConfig",
     "usersCalendar.apps.UserscalendarConfig",
     "common.apps.CommonConfig",
@@ -40,7 +41,7 @@ CUSTOM_APPS = [
     "schedules.apps.SchedulesConfig",
     "oauth.apps.OauthConfig",
     "search.apps.SearchConfig",
-    "boards.apps.BoardsConfig",
+    
 ]
 
 SYSTEM_APPS = [
