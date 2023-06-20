@@ -12,15 +12,14 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Group',
+            name='Board',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('enter', models.CharField(blank=True, max_length=40, null=True)),
-                ('groupname', models.CharField(blank=True, max_length=40, null=True)),
-                ('group_profile', models.URLField(blank=True, max_length=10000, null=True)),
+                ('type', models.CharField(blank=True, choices=[('broadcast', 'BROADCASTS'), ('event', 'EVENTS'), ('release', 'RELEASES'), ('congrats', 'CONGRATS'), ('buy', 'BUY')], default='', max_length=15)),
+                ('content', models.TextField(blank=True, default='', max_length=500, null=True)),
             ],
             options={
-                'verbose_name_plural': 'Idols_Group',
+                'verbose_name_plural': 'BoardType',
             },
         ),
     ]

@@ -3,13 +3,13 @@ from rest_framework import serializers
 from rest_framework.exceptions import ParseError
 from .models import Schedule
 from categories.models import Category
-from categories.serializers import CategorySerializer
+from boards.serializers import BoardSerializer
 from idols.serializers import TinyIdolSerializer
 from idols.models import Idol
 
 class ScheduleSerializer(ModelSerializer):
 
-    ScheduleType = CategorySerializer(read_only=True)
+    ScheduleType = BoardSerializer(read_only=True)
     participant = TinyIdolSerializer(many=True, read_only=True) #읽기 전용 필드 
     when=serializers.DateTimeField()
 

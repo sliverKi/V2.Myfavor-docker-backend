@@ -6,7 +6,7 @@ from django.conf import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/v2/categories/", include("categories.urls")),
+    # path("api/v2/categories/", include("categories.urls")),
     path("api/v2/idols/", include("idols.urls")),
     path("api/v2/medias/", include("medias.urls")),
     path("api/v2/users/", include("users.urls")),
@@ -15,4 +15,5 @@ urlpatterns = [
     path("api/v2/schedules/", include("schedules.urls")),
     path("api/v2/oauth/", include("oauth.urls")),
     path("api/v2/search/", include("search.urls")),
+    path("api/v2/board/", include("boards.urls")),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

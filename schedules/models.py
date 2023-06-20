@@ -9,7 +9,7 @@ class Schedule(CommonModel):
         default="",
     )
     ScheduleType = models.ForeignKey(
-        "categories.Category",
+        "boards.Board",
         max_length=150,
         blank=True,
         null=True,

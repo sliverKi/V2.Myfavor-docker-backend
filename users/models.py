@@ -74,7 +74,7 @@ class User(AbstractUser):
 
 
 # 제보
-class Report(Category):#상속..?
+class Report(Category):
 
     owner = models.ForeignKey(  
         "users.User",

@@ -1,13 +1,10 @@
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.views import APIView
-
 from rest_framework.response import Response
-from rest_framework.exceptions import NotFound, ValidationError
-from rest_framework.filters import SearchFilter
 from idols.models import Idol
 from idols.serializers import TinyIdolSerializer
-from groups.models import Group
+
 class SearchView(APIView):
 #http://127.0.0.1:8000/api/v2/search/?q=winter
     def get(self, request):  

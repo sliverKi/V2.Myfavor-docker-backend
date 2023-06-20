@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ParseError
 from rest_framework.status import HTTP_400_BAD_REQUEST
 from .models import Idol
-from categories.serializers import CategorySerializer
+from boards.serializers import BoardSerializer
 from schedules.models import Schedule
 
 
@@ -30,7 +30,7 @@ class IdolsListSerializer(ModelSerializer):
 
 
 class DateScheduleSerializer(ModelSerializer):
-    ScheduleType = CategorySerializer(read_only=True)
+    ScheduleType = BoardSerializer(read_only=True)
 
     year=serializers.SerializerMethodField()
     month=serializers.SerializerMethodField()

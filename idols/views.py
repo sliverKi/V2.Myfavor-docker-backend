@@ -16,7 +16,7 @@ from rest_framework.filters import SearchFilter
 from .models import Idol
 from .serializers import  TinyIdolSerializer, IdolsListSerializer, IdolDetailSerializer, DateScheduleSerializer
 
-from categories.serializers import CategorySerializer
+from boards.serializers import BoardSerializer
 from categories.models import Category
 from schedules.serializers import ScheduleSerializer
 from schedules.models import Schedule

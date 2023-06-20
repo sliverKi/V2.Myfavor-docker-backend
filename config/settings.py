@@ -39,6 +39,7 @@ CUSTOM_APPS = [
     "schedules.apps.SchedulesConfig",
     "oauth.apps.OauthConfig",
     "search.apps.SearchConfig",
+    "boards.apps.BoardsConfig",
 ]
 
 SYSTEM_APPS = [
