@@ -15,9 +15,8 @@ from rest_framework.filters import SearchFilter
 
 from .models import Idol
 from .serializers import  TinyIdolSerializer, IdolsListSerializer, IdolDetailSerializer, DateScheduleSerializer
-
+from boards.models import Board
 from boards.serializers import BoardSerializer
-# from categories.models import Category
 from schedules.serializers import ScheduleSerializer
 from schedules.models import Schedule
 from medias.serializers import PhotoSerializer
@@ -168,17 +167,17 @@ class IdolSchedule(APIView): #수정[OK]
         # 1. ScheduleType 에 있는 필드가 Category에 없는 경우, 유저가 입력한 내용을 새롭게 db에 생성(ok)     
                 try: 
                     ScheduleType_data=request.data.get("ScheduleType")
-                    schedule_type=Category.objects.get(type=ScheduleType_data)
+                    schedule_type=Board.objects.get(type=ScheduleType_data)
                     
                     if not schedule_content:
-                        schedule_content=Category.objects.create(type=ScheduleType_data)
+                        schedule_content=Board.objects.create(type=ScheduleType_data)
                     schedule.ScheduleType = schedule_type
                     schedule.ScheduleContent = schedule_content
                     schedule.save()
                     
                     # idol.idol_schedules.add(schedule)
-                except Category.DoesNotExist:
-                    category_serializer=CategorySerializer(data=ScheduleType_data)
+                except Board.DoesNotExist:
+                    category_serializer=BoardSerializer(data=ScheduleType_data)
                     
                     if category_serializer.is_valid():
                         schedule_type=category_serializer.save()
