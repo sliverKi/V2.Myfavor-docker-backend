@@ -2,7 +2,7 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import ParseError
 from .models import Schedule
-from categories.models import Category
+from boards.models import Board
 from boards.serializers import BoardSerializer
 from idols.serializers import TinyIdolSerializer
 from idols.models import Idol
@@ -31,7 +31,7 @@ class ScheduleSerializer(ModelSerializer):
         if ScheduleType_data:
             schedule_type = instance.ScheduleType
             new_type = ScheduleType_data.get('type')
-            if new_type not in Category.objects.values_list('type', flat=True):
+            if new_type not in Board.objects.values_list('type', flat=True):
                 raise ParseError("Invalid Category.")
             schedule_type.type = new_type
             schedule_type.content = ScheduleType_data.get('content', schedule_type.content)
