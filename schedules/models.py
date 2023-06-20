@@ -1,6 +1,6 @@
 from django.db import models
 from common.models import CommonModel
-
+# from categories.models import Category
 class Schedule(CommonModel):
     """Schedule Model Definition"""
 

@@ -134,7 +134,7 @@ class groupDetailSerializer(ModelSerializer):
     "member": [
         {
             "청하(ChungHa)":"https://i.namu.wiki/i/_D2zSthxis8R5R4-4DinkWsh88WqYBeCMaOCaKtAlekPemFVXx8tPgeznpfLmsgvaZMtWVjFuZBvfEDYFEphX72s61psT77X_WBRPT_nvyw-eZDXaXt5SDNeBhl8HnQC1HroPZZIYxbI8PxcsOrndw.webp"
-}
+        }
     ]
 } 
 """
