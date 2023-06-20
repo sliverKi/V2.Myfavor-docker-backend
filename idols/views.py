@@ -17,7 +17,7 @@ from .models import Idol
 from .serializers import  TinyIdolSerializer, IdolsListSerializer, IdolDetailSerializer, DateScheduleSerializer
 
 from boards.serializers import BoardSerializer
-from categories.models import Category
+# from categories.models import Category
 from schedules.serializers import ScheduleSerializer
 from schedules.models import Schedule
 from medias.serializers import PhotoSerializer

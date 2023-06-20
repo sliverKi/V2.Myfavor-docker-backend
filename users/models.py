@@ -4,10 +4,10 @@ from django.contrib.auth.models import (
     AbstractUser,
 )
 
-from categories.models import Category
+# from categories.models import Category
 from datetime import datetime
 from .manager import CustomUserManager
-
+from common.models import CommonModel
 # superuser
 # myfavor@gmail.com / myfavor
 class User(AbstractUser):
@@ -74,7 +74,7 @@ class User(AbstractUser):
 
 
 # 제보
-class Report(Category):
+class Report(CommonModel):
 
     owner = models.ForeignKey(  
         "users.User",
