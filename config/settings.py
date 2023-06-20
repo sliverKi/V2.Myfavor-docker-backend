@@ -4,6 +4,7 @@ import os
 import environ
 import dj_database_url
 #>>4월 8일 db 연결, data 다시 넣어야 함. 
+#migrations 순서 변경 
 
 env = environ.Env()
 
