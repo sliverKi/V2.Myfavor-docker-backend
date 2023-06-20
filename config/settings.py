@@ -35,7 +35,7 @@ CUSTOM_APPS = [
     "common.apps.CommonConfig",
     "medias.apps.MediasConfig",
     "idols.apps.IdolsConfig",
-    "categories.apps.CategoriesConfig",
+    # "categories.apps.CategoriesConfig",
     "groups.apps.GroupsConfig",
     "prizes.apps.PrizesConfig",
     "schedules.apps.SchedulesConfig",
