@@ -120,10 +120,10 @@ class groupDetailSerializer(ModelSerializer):
     "group_profile": "https://i.namu.wiki/i/IDQUJdGfC8R290Ppttx1OxBiBeldm4_9mTZrwhEEbaHzsQ6Cai4RwO-nbcSBZwaBZQD187zUrVrc232UhkIcmx0DCyptVJRBiSqGQ-uvC9fk9rj8s0NQBLWZKkCZifGRnbXrDhAkzOocGXCmKcFTig.webp",
     "member": [
         {
-            "윈터(Winter)":"https://talkimg.imbc.com/TVianUpload/tvian/TViews/image/2022/10/08/1fe0c521-2351-49ed-98c9-ffb6e9d6d53b.jpg"
+            "윈터(Winter)":"https://i.namu.wiki/i/n2bBqRKGHFAG2eWbrtPRrGnBqM7YAKMTL_zZ78NxJkxqjb6QfIMr4FZB-6cHcBacMBcoU_I352gSjLgnE4HgTpU2IWhpsmG8xMGhAta6rj_Rb2WQgPeCZRHnjsuP5kaUlDh2qT5JKB0Mjf35-YrMxw.webp"
         },
         {
-            "닝닝(Ning Ning)":"https://talkimg.imbc.com/TVianUpload/tvian/TViews/image/2022/10/08/1fe0c521-2351-49ed-98c9-ffb6e9d6d53b.jpg"
+            "닝닝(Ning Ning)":"https://i.namu.wiki/i/ZRswRpuOodo9by665gyfpVJtWZc1a-BuWNS1U8RAEgFDAYQ_2prBV9WLp0ycbFRtvB58alUMvs5oyyWfHIGojgKCKJSn4jYvtAcAYp-iCCY-LaE-Te1t5OFpSnvOi9Ix6k0Fv5IB0Reh95Xd0GSfxg.webp"
         }
     ]
 } 
