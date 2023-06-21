@@ -238,40 +238,15 @@ class IdolSchedule(APIView): #수정[OK]
 
 
 
-class SearchIdol(APIView):
-    def get(self, request):
-        idol_name=request.GET.get('idol_name')
-        if idol_name:
-            idols=Idol.objects.filter(idol_name_kr__icontains=idol_name) 
-        else:
-            return Response({"message":"해당 아이돌이 존재하지 않습니다."})
-        serializer=TinyIdolSerializer(idols, many=True)
-        return Response(serializer.data, status=HTTP_200_OK)
-
 
 
         
           
 class IdolSchedulesCategories(APIView):#[수정(OK)]
-    
-    def get_object(self, idol_name_kr):
-        
-        try:
-            return Idol.objects.get(idol_name_kr=idol_name_kr)        
-        except Idol.DoesNotExist:
-            raise NotFound
-        
-    def get(self, request, idol_name_kr,  type):
-        
-        idol=self.get_object(idol_name_kr)
-        schedules=idol.idol_schedules.filter(ScheduleType__type=type).order_by("when")
-        
-        filter_schedules=[]
-        for s in schedules:
-            if s.ScheduleType and s.ScheduleType.type==type:
-                filter_schedules.append(s)
-
-        serializer=ScheduleSerializer(filter_schedules, many=True)
+    def get(self, request, idol_name_kr):
+        types = request.GET.getlist('type') 
+        schedules = Schedule.objects.filter(ScheduleType__type__in=types)
+        serializer=ScheduleSerializer(schedules, many=True)
 
         return Response(serializer.data, status=HTTP_200_OK)
 

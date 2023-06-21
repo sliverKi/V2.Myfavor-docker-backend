@@ -86,7 +86,7 @@ class Report(CommonModel):
 
     title = models.CharField(max_length=100, default="")
     location = models.CharField(max_length=100, default="")
-    time = models.DateTimeField(default=datetime.now)
+    time = models.DateTimeField(default=datetime.now)#스케쥴 일자 
     whoes = models.ManyToManyField(  
         "idols.Idol",
         null=True,

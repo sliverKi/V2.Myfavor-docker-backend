@@ -142,12 +142,19 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ReportDetailSerializer(serializers.ModelSerializer):
-    owner = TinyUserSerializers(read_only=True)
-    whoes = TinyIdolSerializer(many=True, read_only=True)
+    owner = serializers.CharField(source='owner.nickname', read_only=True)
+    whoes = serializers.SerializerMethodField()
 
     class Meta:
         model = Report
-        fields = "__all__"
-
+        fields = ("pk","owner","title","location","time","whoes")
+    
+    def get_whoes(self, instance):
+        whoes = instance.whoes.all()
+        return [
+            f"{idol.idol_name_kr}({idol.idol_name_en})"
+            for idol in whoes
+        ]
+ 
 
 

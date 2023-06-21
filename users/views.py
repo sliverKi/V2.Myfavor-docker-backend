@@ -1,6 +1,8 @@
 from tokenize import generate_tokens
 from django.conf import settings
 from django.db import transaction
+from django.db.models import Q
+
 from django.contrib.auth import login, logout
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -176,29 +178,37 @@ class AllReport(APIView):
         except User.DoesNotExist:
             raise NotFound
 
-    def get(self, request):
+    def get(self, request):#[수정 ok]
 
         all_reports = Report.objects.all()
         serializer = ReportDetailSerializer(all_reports, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
 
-    def post(self,request):
+    def post(self,request):#[수정 ok]
 
-        serializer = ReportDetailSerializer(data=request.data)
+        serializer = ReportDetailSerializer(
+            data=request.data,
+            
+        )
         if serializer.is_valid():
             with transaction.atomic():
-
-                report = serializer.save(
-                    owner=request.user,
-                )
-                whoes = request.data.get("whoes")
+                owner_nickname = request.user.nickname
+                owner = User.objects.get(nickname=owner_nickname)
+                report = serializer.save(owner=owner)
+                whoes = request.data.get("whoes", [])
+                
                 print("whoes",whoes)
-                if request.user.pick.pk not in whoes:
-                    raise ParseError("참여자는 본인의 아이돌만 선택 가능합니다.")
+                print(request.user.pick.idol_name_en)
                 if not whoes:
                     raise ParseError("제보할 아이돌을 알려 주세요.")
                 if len(set(whoes)) != 1:
                     raise ParseError("한명의 아이돌만 제보가 가능합니다.")
+                if not any(
+                    request.user.pick.idol_name_kr in whoes_item or
+                    request.user.pick.idol_name_en in whoes_item
+                    for whoes_item in whoes
+                    ):
+                    raise ParseError("참여자는 본인의 아이돌만 선택 가능합니다.")
                 if not isinstance(whoes, list):
                     if whoes:
                         raise ParseError("who_pk must be a list")
@@ -206,8 +216,10 @@ class AllReport(APIView):
                         raise ParseError(
                             "whoes report? Who should be required. not null"
                         )
+                idol_name = whoes[0].split("(")[0].strip()
+               
                 try:
-                    idol = Idol.objects.get(pk=whoes[0])
+                    idol = Idol.objects.get(Q(idol_name_kr=idol_name) | Q(idol_name_en=idol_name))
                     report.whoes.add(idol)
 
                 except Idol.DoesNotExist:
@@ -220,7 +232,16 @@ class AllReport(APIView):
                 return Response(serializer.data, status=HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-
+"""
+{
+    "whoes": ["Winter"], ["윈터(Winter)"], ["윈터"]
+    "type": "broadcast",
+    "content": "Billboard Show Case2",
+    "title": "2227",
+    "location": "USA",
+    "time": "2023-03-12T15:34:03+09:00"
+}
+"""
 
 class ReportDetail(APIView):
     def get_object(self, pk):
