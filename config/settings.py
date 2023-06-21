@@ -85,7 +85,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-DEBUG = True
+#DEBUG = True
 if DEBUG:
     STATIC_ROOT=os.path.join(BASE_DIR,'static')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -162,7 +162,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 # AUTH_COOKIE_DOMAIN="127.0.0.1"
 CSRF_USE_SESSIONS = True #csrf token을 session을 이용하여 관리 
-# CSRF_COOKIE_SAMESITE = "None"#모든 사이트와의 요청에서 쿠키가 전송되도록 허용
+CSRF_COOKIE_SAMESITE = "None"#모든 사이트와의 요청에서 쿠키가 전송되도록 허용
 # SESSION_COOKIE_SAMESITE = "None"#모든 사이트와의 요청에서 세션 쿠키가 전송되도록 허용~> 주석 풀면, 로그인이 안됌
 
 
