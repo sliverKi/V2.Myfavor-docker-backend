@@ -18,7 +18,7 @@ from users.serializers import (
 )
 
 from django.contrib.auth import login, authenticate
-
+"""
 class Login(APIView):
     def post(self, request, format=None):
         email = request.data.get("email")
@@ -65,7 +65,7 @@ class Login(APIView):
             # serializer = TinyUserSerializers(user)
             return Response(status=status.HTTP_200_OK)
         return Response({"error": "비밀번호가 잘못되었습니다."}, status=status.HTTP_400_BAD_REQUEST)
-    """
+    
 #접속한 사용자의 정보를 불러와야 함.
 #{"email":"myfavor@gmail.com", "password":"myfavor"}
 
