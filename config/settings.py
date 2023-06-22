@@ -149,10 +149,10 @@ MEDIA_ROOT = "uploads"
 MEDIA_URL = "user-uploads/"
 
 CORS_ALLOW_CREDENTIALS = True
-
 CORS_ORIGIN_ALLOW = True
 CORS_ALLOWED_ORIGINS_ALL = True
-# CORS_ALLOWED_ORIGINS = ["http://127.0.0.1:3000", "http://localhost:3000"]
+
+CORS_ALLOWED_ORIGINS = ["http://127.0.0.1:3000", "http://localhost:3000"]
 CSRF_TRUSTED_ORIGINS =["http://127.0.0.1:3000", "http://localhost:3000"]
 
 ACCOUNT_PASSWORD_INPUT_RENDER_VALUE = True  
