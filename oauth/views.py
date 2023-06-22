@@ -65,7 +65,7 @@ class Login(APIView):
             login(request, user)
             # serializer = TinyUserSerializers(user)
             res=HttpResponse(status=status.HTTP_200_OK)
-            res.set_cookie('sessionid', request.session.session_key, secure=True, samesite='None')
+            res.set_cookie('sessionid', request.session.session_key, secure=True, samesite='Lax')
             return res
             # return Response(status=status.HTTP_200_OK)
         return Response({"error": "비밀번호가 잘못되었습니다."}, status=status.HTTP_400_BAD_REQUEST)
