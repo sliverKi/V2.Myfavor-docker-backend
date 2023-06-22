@@ -17,7 +17,30 @@ from users.serializers import (
     TinyUserSerializers
 )
 
+from django.contrib.auth import login, authenticate
 
+class Login(APIView):
+    def post(self, request, format=None):
+        email = request.data.get("email")
+        password = request.data.get("password")
+        
+        try:
+            user = User.objects.get(email=email)
+            user = authenticate(request, email=email, password=password)
+            
+            if user is not None:
+                login(request, user)  # 로그인 성공 시 세션 쿠키 설정
+                return Response(status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "로그인에 실패하였습니다."}, status=status.HTTP_401_UNAUTHORIZED)
+        except User.DoesNotExist:
+            raise NotFound
+        
+        if not email or not password:
+            raise ParseError("잘못된 정보를 입력하였습니다.")
+        
+        return Response({"error": "비밀번호가 잘못되었습니다."}, status=status.HTTP_400_BAD_REQUEST)
+"""
 class Login(APIView):  
     def post(self, request, format=None):
         email = request.data.get("email")
@@ -42,6 +65,7 @@ class Login(APIView):
             # serializer = TinyUserSerializers(user)
             return Response(status=status.HTTP_200_OK)
         return Response({"error": "비밀번호가 잘못되었습니다."}, status=status.HTTP_400_BAD_REQUEST)
+    """
 #접속한 사용자의 정보를 불러와야 함.
 #{"email":"myfavor@gmail.com", "password":"myfavor"}
 
