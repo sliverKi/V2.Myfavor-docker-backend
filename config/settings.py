@@ -15,8 +15,8 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 SECRET_KEY = env("SECRET_KEY")
 DEBUG = 'RENDER' not in os.environ
 
-#ALLOWED_HOSTS = ["*"]
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", ]
+ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
@@ -150,7 +150,7 @@ MEDIA_URL = "user-uploads/"
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW = True
-# CORS_ALLOWED_ORIGINS_ALL = True#모든 호스트 허용
+CORS_ALLOWED_ORIGINS_ALL = True#모든 호스트 허용
 
 CORS_ALLOWED_ORIGINS = ["http://127.0.0.1:3000", "http://localhost:3000"]
 CORS_ALLOW_HEADERS = [
@@ -172,14 +172,14 @@ ACCOUNT_SESSION_REMEMBER = True
 SESSION_COOKIE_AGE = 3600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
-# AUTH_COOKIE_DOMAIN="127.0.0.1"
+AUTH_COOKIE_DOMAIN="127.0.0.1"
 CSRF_COOKIE_SECURE=True
-SESSION_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
 AUTH_COOKIE_SECURE = True
 CSRF_USE_SESSIONS = True #csrf token을 session을 이용하여 관리 
 CSRF_COOKIE_SAMESITE = "Lax"#모든 사이트와의 요청에서 쿠키가 전송되도록 허용
-SESSION_COOKIE_SAMESITE = "Lax"#모든 사이트와의 요청에서 세션 쿠키가 전송되도록 허용
-SESSION_COOKIE_DOMAIN=".onrender.com"
+# SESSION_COOKIE_SAMESITE = "Lax"#모든 사이트와의 요청에서 세션 쿠키가 전송되도록 허용
+# SESSION_COOKIE_DOMAIN="."
 
 #SESSION_COOKIE_SECURE, AUTH_COOKIE_SECURE 쿠키가 HTTP와 HTTPS 연결 모두에서 전송되도록 허용[주의 : 개발 환경에서만 사용할 것.]
 
