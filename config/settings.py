@@ -165,7 +165,7 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-CSRF_TRUSTED_ORIGINS =["*"]
+CSRF_TRUSTED_ORIGINS =["http://127.0.0.1:3000", "http://localhost:3000"]
 
 ACCOUNT_PASSWORD_INPUT_RENDER_VALUE = True  
 ACCOUNT_SESSION_REMEMBER = True  
