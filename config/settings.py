@@ -41,6 +41,7 @@ CUSTOM_APPS = [
     "schedules.apps.SchedulesConfig",
     "oauth.apps.OauthConfig",
     "search.apps.SearchConfig",
+    "likes.apps.LikesConfig",
     
 ]
 
