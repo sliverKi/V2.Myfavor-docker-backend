@@ -33,12 +33,12 @@ class Idol(models.Model):
         blank=True,
         related_name="idols",
     )  
-    viewCount=models.PositiveBigIntegerField(
+    viewCount=models.PositiveBigIntegerField(#조회수
         default=0,
         editable=False,
     )
     @property
-    def likeCount(self):
+    def likeCount(self):#쫗아요->pick 수가 좋아요 수가 돼는게 낫지 않나? 그럼 회원가입할때 처음부터 pick을 입력받는것과 로그인 후에 받는게 더 낫나?
         return self.idolLike.count()
     
     def __str__(self)->str:

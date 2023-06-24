@@ -17,7 +17,7 @@ class SimpleIdolInfoSerializer(ModelSerializer):#groupIdol에서 사용
     group=serializers.SerializerMethodField()
     class Meta:
         model=Idol
-        fields=("is_solo", "group", "idol_debut","idol_birthday","has_schedules")
+        fields=("is_solo", "group", "idol_debut","idol_birthday","has_schedules", "viewCount")
     def get_group(self, obj):
         return obj.group.values_list('groupname', flat=True)
 
@@ -32,7 +32,7 @@ class IdolsListSerializer(ModelSerializer):
             "idol_debut",
             "idol_birthday", 
             "has_schedules"
-            )
+        )
 
 
 class DateScheduleSerializer(ModelSerializer):

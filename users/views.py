@@ -79,7 +79,6 @@ class AllUsers(APIView):
 class MyPage(APIView):  
     permission_classes = [IsAuthenticated]
 
-
     def get(self, request):
         user = request.user
         serializer = TinyUserSerializers(user)
@@ -105,11 +104,14 @@ class MyPage(APIView):
         user.delete()
         return Response({"message": "계정이 삭제되었습니다."}, status=HTTP_204_NO_CONTENT)
 
+class MyReport(APIView):#내가 제보한 글 도 볼 수 있게 
+    permission_classes = [IsAuthenticated]
+    def get(self, pk):
+        pass
 
 class UserDetail(APIView):  
     permission_classes = [IsAdminUser]  
 
-    
     def get(self, request, pk):
         try:
             user = User.objects.get(pk=pk)

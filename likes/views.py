@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.views import APIView
-# from rest_framework.exception
+from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
-# Create your views here.
+from idols.models import Idol
 class IdolLike(APIView):
-    pass
+    def post(self, request,idol_name_kr):
+        pass
