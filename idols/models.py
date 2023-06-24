@@ -33,9 +33,6 @@ class Idol(models.Model):
         blank=True,
         related_name="idols",
     )
-  
-    
-
     def __str__(self)->str:
         return f"{self.idol_name_kr} ( {self.idol_name_en} )"
 
