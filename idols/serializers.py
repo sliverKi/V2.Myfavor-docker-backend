@@ -13,7 +13,13 @@ class TinyIdolSerializer(ModelSerializer):#groupList에서 사용
         model=Idol
         fields=( "idol_name_kr","idol_name_en", "idol_profile")
 
-
+class SimpleIdolInfoSerializer(ModelSerializer):#groupIdol에서 사용
+    group=serializers.SerializerMethodField()
+    class Meta:
+        model=Idol
+        fields=("is_solo", "group", "idol_debut","idol_birthday","has_schedules")
+    def get_group(self, obj):
+        return obj.group.values_list('groupname', flat=True)
 
 class IdolsListSerializer(ModelSerializer):
     class Meta:
