@@ -236,12 +236,7 @@ class IdolSchedule(APIView): #수정[OK]
     }
     """
 
-
-
-
-
-        
-          
+                  
 class IdolSchedulesCategories(APIView):#[수정(OK)]
     def get(self, request, idol_name_kr):
         types = request.GET.getlist('type') 

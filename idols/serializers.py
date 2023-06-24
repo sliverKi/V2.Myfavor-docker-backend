@@ -84,3 +84,4 @@ class IdolDetailSerializer(ModelSerializer):
     #     if group_data:
     #         instance.group.set(group_data)
     #     return instance
+

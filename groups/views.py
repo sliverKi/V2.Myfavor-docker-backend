@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, PermissionDenied
 from .models import Group
 from .serializers import groupSerializer, groupDetailSerializer
+from idols.models import Idol
+from idols.serializers import IdolDetailSerializer
 
 class GroupList(APIView):
     
@@ -66,7 +68,28 @@ class GroupDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     
-
+class GroupIdol(APIView):
+    def get_group(self, groupname):
+        try:
+            return Group.objects.get(groupname=groupname)
+        except Group.DoesNotExist:
+            raise NotFound
+    
+    def get_idol(self, group,idol_name_kr):
+        try:
+            return group.member.get(idol_name_kr=idol_name_kr)
+        except Idol.DoesNotExist:
+            raise NotFound
+        
+    def get(self, request, groupname, idol_name_kr):
+        group=self.get_group(groupname)
+        try:
+            idol = self.get_idol(group, idol_name_kr)
+        except NotFound:
+            return Response({"message": "Idol not found in the group."}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = IdolDetailSerializer(idol)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
 
 
         

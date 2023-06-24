@@ -12,7 +12,7 @@ urlpatterns = [
     path("<int:pk>/", views.UserDetail.as_view()),  
     path("edit/pick/", views.EditPick.as_view()),  
     path("reports/", views.AllReport.as_view()),
-    path("reports/<int:pk>/", views.ReportDetail.as_view()),#필요가 있나? 관리자는 필요할 지도 ..
+    path("reports/<int:pk>/", views.ReportDetail.as_view()),
 
     
 ]
