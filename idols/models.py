@@ -32,7 +32,15 @@ class Idol(models.Model):
         "schedules.Schedule",
         blank=True,
         related_name="idols",
+    )  
+    viewCount=models.PositiveBigIntegerField(
+        default=0,
+        editable=False,
     )
+    @property
+    def likeCount(self):
+        return self.idolLike.count()
+    
     def __str__(self)->str:
         return f"{self.idol_name_kr} ( {self.idol_name_en} )"
 
