@@ -1,6 +1,6 @@
 from django.db import models
 from common.models import CommonModel
-
+import datetime
 class Group(models.Model):
  
     enter=models.CharField(#소속사
@@ -23,7 +23,17 @@ class Group(models.Model):
         null=True,
         related_name="groups"
     )
-    
+    group_debut=models.DateField(default=datetime.date.today)
+    group_insta=models.URLField( 
+        max_length=10000, 
+        blank=True, 
+        null=True,
+    )
+    group_youtube=models.URLField(
+        max_length=10000, 
+        blank=True, 
+        null=True,
+    )
     def __str__(self)->str:
         return f"{self.groupname}"
 

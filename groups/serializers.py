@@ -17,7 +17,10 @@ class groupSerializer(ModelSerializer):#groupList
             "pk",
             "enter",
             "groupname",
-            "group_profile"
+            "group_profile",
+            "group_debut",
+            "group_insta",
+            "group_youtube",
         )
 
 

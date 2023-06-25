@@ -22,9 +22,10 @@ class Idol(models.Model):
 
     group=models.ManyToManyField(
         "groups.Group",
+        blank=True,
+        null=True,
         related_name="idols"
     )
-    idol_debut=models.DateField(default=datetime.date.today)
     idol_birthday = models.DateField(default=datetime.date.today)
 
     has_schedules=models.BooleanField(default=False)#true: 잇, False; 없
@@ -36,11 +37,7 @@ class Idol(models.Model):
     viewCount=models.PositiveBigIntegerField(#조회수
         default=0,
         editable=False,
-    )
-    @property
-    def likeCount(self):#쫗아요->pick 수가 좋아요 수가 돼는게 낫지 않나? 그럼 회원가입할때 처음부터 pick을 입력받는것과 로그인 후에 받는게 더 낫나?
-        return self.idolLike.count()
-    
+    )   
     def __str__(self)->str:
         return f"{self.idol_name_kr} ( {self.idol_name_en} )"
 
