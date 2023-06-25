@@ -25,6 +25,9 @@ class GroupList(APIView):
                 enter=request.data.get("enter"),
                 groupname=request.data.get("groupname"),
                 member=request.data.get("member"),
+                group_debut=request.data.get("group_debut"),
+                group_insta=request.data.get("group_insta"),
+                group_youtube=request.data.get("group_youtube"),
             )
             serializer=groupDetailSerializer(
                 group, context={'request':request}

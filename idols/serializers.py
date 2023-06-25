@@ -11,7 +11,7 @@ from schedules.models import Schedule
 class TinyIdolSerializer(ModelSerializer):#groupList에서 사용
     class Meta:
         model=Idol
-        fields=( "idol_name_kr","idol_name_en", "idol_profile")
+        fields=( "idol_name_kr","idol_name_en", "idol_profile", "idol_birthday")
 
 class SimpleIdolInfoSerializer(ModelSerializer):#groupIdol에서 사용
     group=serializers.SerializerMethodField()
