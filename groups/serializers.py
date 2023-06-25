@@ -120,13 +120,30 @@ class groupDetailSerializer(ModelSerializer):
  {
     "enter": "SMTOWN",
     "groupname": "ASEPA",
-    "group_profile": "https://i.namu.wiki/i/IDQUJdGfC8R290Ppttx1OxBiBeldm4_9mTZrwhEEbaHzsQ6Cai4RwO-nbcSBZwaBZQD187zUrVrc232UhkIcmx0DCyptVJRBiSqGQ-uvC9fk9rj8s0NQBLWZKkCZifGRnbXrDhAkzOocGXCmKcFTig.webp",
+    "group_profile": "https://images8.alphacoders.com/118/1183043.jpg",
+    "group_debut": "2020-11-17",
+    "group_insta": "https://www.instagram.com/aespa_official/",
+    "group_youtube": "https://www.youtube.com/channel/UC9GtSLeksfK4yuJ_g1lgQbg"
     "member": [
         {
-            "윈터(Winter)":"https://i.namu.wiki/i/n2bBqRKGHFAG2eWbrtPRrGnBqM7YAKMTL_zZ78NxJkxqjb6QfIMr4FZB-6cHcBacMBcoU_I352gSjLgnE4HgTpU2IWhpsmG8xMGhAta6rj_Rb2WQgPeCZRHnjsuP5kaUlDh2qT5JKB0Mjf35-YrMxw.webp"
+            "idol_name_kr": "카리나",
+            "idol_name_en": "Karina",
+            "idol_profile": "https://i.namu.wiki/i/D8-LCYRc64tRedl74xk-IpVK2x7FyLnDUV8-ZRUgNdfi80miyGP0ItlcTJsjRJ_t81lvr2u1E8p6PW1LY2GyT8YEFOnTxw3sggQQ5zZ2U0DlgPPFlUsjHnDWn5W68wKlqcznasxRnw-OXIWP9LbYJw.webp"
         },
         {
-            "닝닝(Ning Ning)":"https://i.namu.wiki/i/ZRswRpuOodo9by665gyfpVJtWZc1a-BuWNS1U8RAEgFDAYQ_2prBV9WLp0ycbFRtvB58alUMvs5oyyWfHIGojgKCKJSn4jYvtAcAYp-iCCY-LaE-Te1t5OFpSnvOi9Ix6k0Fv5IB0Reh95Xd0GSfxg.webp"
+            "idol_name_kr": "윈터",
+            "idol_name_en": "Winter",
+            "idol_profile": "https://i.namu.wiki/i/WAHQwL9akfInav0ir6owCGKMzX_9xCfrG615LM0qCYyzeFRXmLDl-_X-SPmGpirUCzgLPkKtKVaRQ45jRv97GqX_ZF-WwcXelqoTBHkGx_nF2sN50cPemD3XEwtLAwGInvsbMNt0O52l0qp_bIgbJw.webp"
+        },
+        {
+            "idol_name_kr": "지젤",
+            "idol_name_en": "Giselle",
+            "idol_profile": "https://i.namu.wiki/i/bnB3M2qsxdKBrBJHZqohQ5JWZd2SUs0XIxh77FxlRyOaKKfkemB5VrCgmCKGXLHJSC0_XrDFtxitrY6nYrO_syKj93Ulvn06pHNRw3LG8s0Cjcm1hTFapxOoPj-LfLPE0cgtfDzjnAuKT146ZVfmQQ.webp"
+        },
+        {
+            "idol_name_kr": "닝닝",
+            "idol_name_en": "NingNing",
+            "idol_profile": "https://i.namu.wiki/i/3jncwW5iYaKCVKZ1Dr1e0lwF-Z1LPlNI-ez9Telnwi0coltxCyFWfrTA_PZlhPgytySkzDoPO5VQBNWN2n6Vd6v5UsLF9-IjeV1AvV0CIdYiJoYM1uN1Obb82acAbe4RiqJ0JPLuT83CSuhihGefww.webp"
         }
     ]
 } 
@@ -141,3 +158,4 @@ class groupDetailSerializer(ModelSerializer):
     ]
 } 
 """
+
