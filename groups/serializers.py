@@ -15,7 +15,6 @@ class groupSerializer(ModelSerializer):#groupList
         model=Group
         fields=(
             "pk",
-            "enter",
             "groupname",
             "group_profile",
             "group_debut",
@@ -38,18 +37,15 @@ class groupDetailSerializer(ModelSerializer):
             "group_youtube",
             "member", 
         )
-    def create(self, validated_data):
+    def create(self, validated_data):#아이돌 생일도 받을것 
         members_data=validated_data.pop("member",None)
         try:
             with transaction.atomic():#roll-back
                 group=Group.objects.create(**validated_data)
             if members_data:
-                print(1)
                 if isinstance(members_data, list):
                     for member_data in members_data:
                         for name, profile in member_data.items():
-                            print("name", name)
-                            print("profile",profile)
                             name=name.split("(")
                             
                             idol_name_kr = name[0]
@@ -73,7 +69,7 @@ class groupDetailSerializer(ModelSerializer):
             raise ValidationError({"error":str(e)})
         return group
     
-    def update(self, instance, validated_data):
+    def update(self, instance, validated_data):#idol_birthday도 수정이 가능하게 할 것 
         # enter=validated_data.get("enter", None)
         # groupname=validated_data.get("groupname", None)
         # print(groupname)
@@ -82,13 +78,15 @@ class groupDetailSerializer(ModelSerializer):
         groupname=validated_data.pop("groupname", None)
         print("groupname: ", groupname)
         members_data=validated_data.pop("member", None)#멤버  리스트 
-        # print("members_data",members_data)
+        print("members_data",members_data)
         if members_data:
             for member_data in members_data:
                 print("member_data", member_data)
+                
                 for name, profile in member_data.items():
                     print("name", name)
                     print("profile", profile)
+                   
                     name=name.split("(")
                     idol_name_kr=name[0].strip()
                     print("kr-name", idol_name_kr)
@@ -99,6 +97,7 @@ class groupDetailSerializer(ModelSerializer):
                         group=Group.objects.get(groupname=groupname)
                         if member not in group.member.all():
                             member.idol_profile=profile
+                           
                             member.save()
                             group.member.add(member)
                             member.group.add(group)
@@ -109,7 +108,7 @@ class groupDetailSerializer(ModelSerializer):
                         new_member=Idol.objects.create(
                             idol_name_kr=idol_name_kr,
                             idol_name_en=idol_name_en,
-                            idol_profile=profile,
+                            idol_profile=profile
                         ) 
                         group.member.add(new_member)#추가가 안됌
                         new_member.group.add(group)
