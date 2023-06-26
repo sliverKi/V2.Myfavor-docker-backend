@@ -19,7 +19,8 @@ class SoloList(APIView):
             solo=serializer.save(
                 enter=request.data.get("enter"),
                 solo_profile=request.data.get("solo_profile"),
-                member=request.data.get("member")
+                member=request.data.get("member"),
+                idol_birthday=request.data.get("idol_birthday")
             )
             serializer=soloSerializer(
                 solo, context={"request":request}
