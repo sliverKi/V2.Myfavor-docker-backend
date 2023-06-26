@@ -16,8 +16,8 @@ class GroupList(APIView):#[OK]
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):#관리자만이 아이돌 등록 가능 
-        # if not request.user.is_admin:
-        #     raise PermissionError
+        if not request.user.is_admin:
+            raise PermissionError
         serializer=groupDetailSerializer(data=request.data)
         print("re: ", request.data)
         if serializer.is_valid():
@@ -49,6 +49,8 @@ class GroupDetail(APIView):#[OK]
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def put(self, request, groupname):
+        if not request.user.is_admin:
+            raise PermissionError
         group=self.get_object(groupname)
         print(group)
         serializer=groupDetailSerializer(
@@ -69,6 +71,8 @@ class GroupDetail(APIView):#[OK]
         
     def delete(self, request, groupname):
         group=self.get_object(groupname)
+        if not request.user.is_admin:
+            raise PermissionError
         group.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -88,7 +92,6 @@ class GroupIdol(APIView):
         
     def get(self, request, groupname, idol_name_kr):
         group=self.get_group(groupname)
-        
         try:
             idol = self.get_idol(group, idol_name_kr)
             idol.viewCount+=1
@@ -97,8 +100,12 @@ class GroupIdol(APIView):
             return Response({"message": "Idol not found in the group."}, status=status.HTTP_400_BAD_REQUEST)
         serializer = SimpleIdolInfoSerializer(idol)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
 
-
+    def delete(self, request, group, idol_name_kr):
+        idol=self.get_idol(group, idol_name_kr)
+        if not request.user.is_admin: 
+            raise PermissionDenied
+        idol.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
         
 

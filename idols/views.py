@@ -120,7 +120,6 @@ class IdolDetail(APIView): #[수정OK]
         {
             "group":["ASEPA"],
             "idol_name_en":"Winter",
-            "idol_debut":"2020-11-17",
             "idol_birthday":"2001-01-01", 
             "idol_profile":"https://i.namu.wiki/i/j1mSQz1rUEGD8yslNgSdyWgHTaMeVMP0T6z45HuNUoKXSg3XZ92sQOeWKRI4bUEwCyy0YaI-tPrGEEhEIZlrSrZM4WA2qy0TvYL_TC6X6x79QowHTp8h6ECieB24d3TybWT5VZvF7X66cf86yI48gg.webp"
         }
