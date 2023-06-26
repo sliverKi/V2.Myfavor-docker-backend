@@ -8,7 +8,7 @@ from .serializers import groupSerializer, groupDetailSerializer
 from idols.models import Idol
 from idols.serializers import SimpleIdolInfoSerializer
 
-class GroupList(APIView):
+class GroupList(APIView):#[OK]
     
     def get(self, request):
         all_groups = Group.objects.all()
@@ -36,7 +36,7 @@ class GroupList(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-class GroupDetail(APIView):
+class GroupDetail(APIView):#[OK]
     def get_object(self, groupname):
         try:
             return Group.objects.get(groupname=groupname)
@@ -50,15 +50,17 @@ class GroupDetail(APIView):
     
     def put(self, request, groupname):
         group=self.get_object(groupname)
+        print(group)
         serializer=groupDetailSerializer(
             group,
             data=request.data,
             partial=True
         )
+        print(request.data)
         if serializer.is_valid():
-            updated_group=serializer.save(
-                groupname=request.data.get("groupname"),
-                member=request.data.get("member")
+            updated_group=serializer.save(   
+            groupname=request.data.get("groupname"),
+            member=request.data.get("member"), 
             )
             return Response(groupDetailSerializer(updated_group).data, status=status.HTTP_202_ACCEPTED)
         else:
