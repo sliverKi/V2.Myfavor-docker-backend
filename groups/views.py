@@ -88,8 +88,11 @@ class GroupIdol(APIView):
         
     def get(self, request, groupname, idol_name_kr):
         group=self.get_group(groupname)
+        
         try:
             idol = self.get_idol(group, idol_name_kr)
+            idol.viewCount+=1
+            idol.save()
         except NotFound:
             return Response({"message": "Idol not found in the group."}, status=status.HTTP_400_BAD_REQUEST)
         serializer = SimpleIdolInfoSerializer(idol)
