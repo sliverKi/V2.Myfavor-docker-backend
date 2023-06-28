@@ -117,7 +117,7 @@ else:#베포환경에서의 설정
         'NAME': 'v2_myfavor_back',
         'USER': 'v2_myfavor_back',
         'PASSWORD': 'kQsbr9rG3y8vdHaoIWXoccRn3vub9rJb',
-        'HOST': 'dpg-ciap5ad9aq007takp4rg-a.singapore-postgres.render.com',
+        'HOST': 'localhost',
         'PORT':'5432',
 
     }
