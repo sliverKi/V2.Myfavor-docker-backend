@@ -59,6 +59,13 @@ class soloSerializer(ModelSerializer):
   "member": "청하(ChungHa)",
   "idol_birthday":"2016-05-04"
 }
+
+{
+"enter":"EDAM",
+"solo_profile":"https://i.namu.wiki/i/rxr3lZaCg4MuwLMhdC2dbWIWTT1bX_0OCKyHCg1Fl0JzWf9R0eugLqSVOFuYXi7a_Egp7KCuXK8gWrKIL4edb1A88QuunSCdVNzsH9nvRbJg6Ae8l8V4WICBQ-0rxNvBcqeVC8WPsLkH4aaM0cwP6g.webp",
+"member":"아아유(IU)",
+"idol_birthday":"1993-05-16",
+}
 """
 
 

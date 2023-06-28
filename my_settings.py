@@ -2,15 +2,14 @@
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'myfavor',
-        'USER': 'myfavor',
-        'PASSWORD': 'rhdmsrl98~!',
-        'HOST': 'myfavor2-instance-1.ck09gu2by087.ap-northeast-2.rds.amazonaws.com',
+        'NAME': 'v2myfavor',
+        'USER': 'v2myfavor',
+        'PASSWORD': 'UgpIedoEFFeDpankgy94s8lZLcFQkHSQ',
+        'HOST': 'postgres://v2myfavor:UgpIedoEFFeDpankgy94s8lZLcFQkHSQ@dpg-cidv9l59aq0ce38tdmm0-a.singapore-postgres.render.com/v2myfavor',
         'PORT':'5432',
 
     }
 }
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
