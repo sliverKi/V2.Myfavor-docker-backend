@@ -16,9 +16,9 @@ SECRET_KEY = env("SECRET_KEY")
 ALLOWED_HOSTS = ["*"]
 # ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
-# RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-# if RENDER_EXTERNAL_HOSTNAME:
-#     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 THIRD_PARTY_APPS = [
     "rest_framework",
@@ -89,33 +89,33 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # DEBUG = 'RENDER' not in os.environ  #딕셔너리 key에 RENDER라는 환경변수가 설정되어 있지 않은경우(=개발환경인 경우)에만 True 반환
 DEBUG = True
-if DEBUG:#개발 환경에서의 설정
-    STATIC_ROOT=os.path.join(BASE_DIR,'static')
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-    DATABASES = {
+DATABASES = {
             'default': {
                     'ENGINE': 'django.db.backends.sqlite3',
                     'NAME': BASE_DIR/ 'db.sqlite3',
                 }
         }
-else:#베포환경에서의 설정
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# if DEBUG:#개발 환경에서의 설정
+#     STATIC_ROOT=os.path.join(BASE_DIR,'static')
+#     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-    DATABASES = {
-            'default': {
-                    'ENGINE': 'django.db.backends.sqlite3',
-                    'NAME': BASE_DIR/ 'db.sqlite3',
-                }
-        }
-    # DATABASES = {
-    #     'default': dj_database_url.config(
-    #         conn_max_age=600,
-    #     )
+#     DATABASES = {
+#             'default': {
+#                     'ENGINE': 'django.db.backends.sqlite3',
+#                     'NAME': BASE_DIR/ 'db.sqlite3',
+#                 }
+#         }
+# else:#베포환경에서의 설정
+#     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+#     DATABASES = {
+#         'default': dj_database_url.config(
+#             conn_max_age=600,
+#         )
                     
-    #  }
-if not DEBUG:
+#      }
+if DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
