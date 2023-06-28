@@ -90,7 +90,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 # DEBUG = True
 
 
-if not DEBUG:
+if DEBUG:
     STATIC_ROOT=os.path.join(BASE_DIR,'static')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
@@ -107,7 +107,7 @@ else:
         )
                     
      }
-if DEBUG:
+if not DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
