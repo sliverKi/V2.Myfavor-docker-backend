@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 SECRET_KEY = env("SECRET_KEY")
-# DEBUG = 'RENDER' not in os.environ
+DEBUG = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = ["*"]
 # ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
@@ -87,10 +87,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-DEBUG = True
+# DEBUG = True
 
 
-if DEBUG:
+if not DEBUG:
     STATIC_ROOT=os.path.join(BASE_DIR,'static')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
@@ -107,15 +107,10 @@ else:
         )
                     
      }
-if not DEBUG:
+if DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-    DATABASES = {
-            'default': {
-                    'ENGINE': 'django.db.backends.sqlite3',
-                    'NAME': BASE_DIR/ 'db.sqlite3',
-                }
-        }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
