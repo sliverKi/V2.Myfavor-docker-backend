@@ -89,6 +89,8 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 DEBUG = True
+STATIC_ROOT=os.path.join(BASE_DIR,'static')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DATABASES = {
             'default': {
                     'ENGINE': 'django.db.backends.sqlite3',
@@ -112,9 +114,9 @@ DATABASES = {
 #         )
                     
 #     }
-if not DEBUG:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# if not DEBUG:
+    # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 AUTH_PASSWORD_VALIDATORS = [
