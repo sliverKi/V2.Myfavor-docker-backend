@@ -104,24 +104,12 @@ else:#베포환경에서의 설정
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-    # DATABASES = {
-    #     'default': dj_database_url.config(
-    #         conn_max_age=600,
-    #     )
-                    
-    #  }
-    
     DATABASES = {
-    "default": {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'v2_myfavor_back_wesj',
-        'USER': 'v2_myfavor_back',
-        'PASSWORD': 'kQsbr9rG3y8vdHaoIWXoccRn3vub9rJb',
-        'HOST': 'localhost',
-        'PORT':'5432',
-
+        'default': dj_database_url.config(
+            conn_max_age=600,
+        )
+                    
     }
-}
 if not DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
