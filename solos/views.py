@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import  status
 from rest_framework.views import APIView
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import PermissionDenied, NotFound
 from rest_framework.response import Response
 
 from .models import Solo
@@ -52,4 +52,9 @@ class SoloDetail(APIView):
         response_data["viewCount"] = idol.viewCount #해당 필드의 값을 Idol 모델의 viewCount 값으로 설정
         return Response(response_data, status=status.HTTP_200_OK)#Solo 모델의 정보와 viewCount 값을 함께 반환
     
-    
+    def delete(self, request, idol_name_kr):
+        solo=self.get_object(idol_name_kr)
+        if not request.user.is_admin: 
+            raise PermissionDenied
+        solo.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
