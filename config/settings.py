@@ -114,7 +114,7 @@ else:#베포환경에서의 설정
     DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'v2_myfavor_back',
+        'NAME': 'v2_myfavor_back_wesj',
         'USER': 'v2_myfavor_back',
         'PASSWORD': 'kQsbr9rG3y8vdHaoIWXoccRn3vub9rJb',
         'HOST': 'localhost',
