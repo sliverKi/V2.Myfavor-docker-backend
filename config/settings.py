@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 SECRET_KEY = env("SECRET_KEY")
-DEBUG = 'RENDER' not in os.environ
+# DEBUG = 'RENDER' not in os.environ  #딕셔너리 key에 RENDER라는 환경변수가 설정되어 있지 않은경우에만 True 반환
 
 ALLOWED_HOSTS = ["*"]
 # ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
@@ -87,29 +87,35 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-# DEBUG = True
 
 
-if DEBUG:
-    STATIC_ROOT=os.path.join(BASE_DIR,'static')
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-    DATABASES = {
-            'default': {
-                    'ENGINE': 'django.db.backends.sqlite3',
-                    'NAME': BASE_DIR/ 'db.sqlite3',
-                }
+DEBUG = True
+DATABASES = {
+             'default': {
+                     'ENGINE': 'django.db.backends.sqlite3',
+                     'NAME': BASE_DIR/ 'db.sqlite3',
+                 }
         }
-else:
-    DATABASES = {
-        'default': dj_database_url.config(
-            conn_max_age=600,
-        )
+# if DEBUG:
+#     STATIC_ROOT=os.path.join(BASE_DIR,'static')
+#     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+#     DATABASES = {
+#             'default': {
+#                     'ENGINE': 'django.db.backends.sqlite3',
+#                     'NAME': BASE_DIR/ 'db.sqlite3',
+#                 }
+#         }
+# else:
+#     DATABASES = {
+#         'default': dj_database_url.config(
+#             conn_max_age=600,
+#         )
                     
-     }
-if not DEBUG:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+#      }
+# if not DEBUG:
+#     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 AUTH_PASSWORD_VALIDATORS = [
