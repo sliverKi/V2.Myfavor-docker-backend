@@ -13,11 +13,11 @@ class soloSerializer(ModelSerializer):
     # member=soloSerializer(read_only=True)
     idol_name_kr=serializers.CharField(source="member.idol_name_kr", read_only=True)
     idol_name_en=serializers.CharField(source="member.idol_name_en", read_only=True)
-    idol_birthday=serializers.DateField(source="member.idol_birthday", write_only=True)
+    idol_birthday=serializers.DateField(source="member.idol_birthday")
     
     class Meta:
         model=Solo
-        fields=("pk", "solo_profile", "idol_name_kr", "idol_name_en", "idol_birthday", "enter")
+        fields=("pk", "solo_profile", "idol_name_kr", "idol_name_en", "idol_birthday", "enter",)
     
     def create(self, validated_data):
         solo_profile=validated_data.get("solo_profile", None)

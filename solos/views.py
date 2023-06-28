@@ -33,10 +33,23 @@ class SoloList(APIView):
 class SoloDetail(APIView):
     def get_object(self, idol_name_kr):
         try:
-            return Solo.objects.get(idol_name_kr=idol_name_kr)
-        
+            return Solo.objects.get(member__idol_name_kr=idol_name_kr)
         except Solo.DoesNotExist:
             raise NotFound
-    # def get(self, request, idol_name_kr):
-    #     solo=self.get_object(idol_name_kr)
-    #     serializer=
+        
+    def get(self, request, idol_name_kr):
+        solo=self.get_object(idol_name_kr)
+        idol=solo.member
+        # print("idol", idol)
+        idol.viewCount+=1
+        # print(idol.viewCount)
+        idol.save()
+        serializer=soloSerializer(
+            solo,
+            context={"request": request},
+        )
+        response_data = serializer.data#response_data 딕셔너리에 "viewCount" 필드를 추가, 
+        response_data["viewCount"] = idol.viewCount #해당 필드의 값을 Idol 모델의 viewCount 값으로 설정
+        return Response(response_data, status=status.HTTP_200_OK)#Solo 모델의 정보와 viewCount 값을 함께 반환
+    
+    
