@@ -90,12 +90,15 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 
 DEBUG = True
-DATABASES = {
-             'default': {
-                     'ENGINE': 'django.db.backends.sqlite3',
-                     'NAME': BASE_DIR/ 'db.sqlite3',
-                 }
-        }
+if  DEBUG:
+    STATIC_ROOT=os.path.join(BASE_DIR, 'staticfiles')
+    STATICFILES_STORAGE="whitenoise.storage.CompressedManifestStaticFilesStorage"
+    DATABASES = {
+                'default': {
+                        'ENGINE': 'django.db.backends.sqlite3',
+                        'NAME': BASE_DIR/ 'db.sqlite3',
+                    }
+            }
 # if DEBUG:
 #     STATIC_ROOT=os.path.join(BASE_DIR,'static')
 #     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
