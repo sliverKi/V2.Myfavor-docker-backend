@@ -27,6 +27,7 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     'storages',
     "corsheaders",
+    'debug_toolbar',
 ]
 
 CUSTOM_APPS = [
@@ -42,8 +43,6 @@ CUSTOM_APPS = [
     "oauth.apps.OauthConfig",
     "search.apps.SearchConfig",
     "solos.apps.SolosConfig",
-    
-    
 ]
 
 SYSTEM_APPS = [
@@ -66,6 +65,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -109,6 +109,7 @@ else:
 if not DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -201,7 +202,10 @@ REST_FRAMEWORK = {
     ]
 }
 
-
+#debug tool-bar        
+INTERNAL_IPS=[
+    '127.0.0.1',
+]
 
 # SESSION_COOKIE_DOMAIN="127.0.0.1"
 # CSRF_COOKIE_DOMAIN="127.0.0.1"
