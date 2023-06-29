@@ -21,5 +21,15 @@ class Solo(CommonModel):
         related_name="idol_solo"
     )
     solo_debut=models.DateField(default=datetime.date.today)
+    solo_insta=models.URLField(
+        max_length=10000, 
+        blank=True, 
+        null=True,
+    )
+    solo_youtube=models.URLField(
+        max_length=10000, 
+        blank=True, 
+        null=True,
+    )
     def __str__(self) -> str:
         return f"{self.member}"

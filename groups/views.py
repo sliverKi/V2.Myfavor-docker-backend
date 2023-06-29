@@ -11,7 +11,7 @@ from idols.serializers import SimpleIdolInfoSerializer
 class GroupList(APIView):#[OK]
     
     def get(self, request):
-        all_groups = Group.objects.all()
+        all_groups = Group.objects.all().order_by("pk")
         serializer = groupSerializer(all_groups, many=True, context={'request':request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -49,9 +49,9 @@ class GroupDetail(APIView):#[OK]
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def put(self, request, groupname):
+        group=self.get_object(groupname)
         if not request.user.is_admin:
             raise PermissionError
-        group=self.get_object(groupname)
         print(group)
         serializer=groupDetailSerializer(
             group,
