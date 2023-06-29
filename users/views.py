@@ -43,7 +43,7 @@ class LoginUser(APIView):
 
 class NewUsers(APIView):
     def get(self, request):
-        return Response({"email, password, nickname, age, pick, phone 을 입력해주세요."})
+        return Response({"email, password, nickname, name, age, pick, phone 을 입력해주세요."})
 
     def post(self, request):
 
@@ -258,7 +258,6 @@ class ReportDetail(APIView):
         return Response(serializer.data, status=HTTP_200_OK)
 
     def put(self, request, pk):
-
         if not request.user.is_admin:
             raise PermissionDenied("권한 없음")
         else:

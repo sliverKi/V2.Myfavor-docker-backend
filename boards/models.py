@@ -3,9 +3,9 @@ from django.db import models
 class Board(models.Model):
     
     class BoardKinddChoices(models.TextChoices):
-        BROADCAST = "broadcast", "BROADCASTS"  # 방송
-        EVENT = "event", "EVENTS"  # 행사
-        RELEASE = "release", "RELEASES"  # 발매
+        BROADCAST = "broadcast", "BROADCAST"  # 방송
+        EVENT = "event", "EVENT"  # 행사
+        RELEASE = "release", "RELEASE"  # 발매
         CONGRAT = "congrats", "CONGRATS"  # 축하
         SNS = "buy", "BUY"  # 구매
       

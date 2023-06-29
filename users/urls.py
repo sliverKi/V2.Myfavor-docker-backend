@@ -12,8 +12,8 @@ urlpatterns = [
     #path("mypage/myreport", views.NyReport.as_view()), [GET]
     path("<int:pk>/", views.UserDetail.as_view()),  
     path("edit/pick/", views.EditPick.as_view()),  
-    path("reports/", views.AllReport.as_view()),
-    path("reports/<int:pk>/", views.ReportDetail.as_view()),
+    path("reports/", views.AllReport.as_view()),#[get, post]
+    path("reports/<int:pk>/", views.ReportDetail.as_view()),#[get, put, delete]
 
     
 ]

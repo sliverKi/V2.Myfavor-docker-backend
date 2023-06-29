@@ -12,14 +12,12 @@ from rest_framework.status import (
     HTTP_403_FORBIDDEN, 
     HTTP_404_NOT_FOUND 
 )
-from .serializers import ScheduleSerializer
+from .serializers import ScheduleSerializer, ScheduleDetailSerializer
 
-# Create your views here.
 class Schedules(APIView): 
     
     def get(self, request):
-        print(0)
-        all_schedules = Schedule.objects.all()
+        all_schedules = Schedule.objects.all().order_by("pk")
         print(all_schedules)
         serializer = ScheduleSerializer(all_schedules, many=True)
         return Response(serializer.data)
@@ -29,10 +27,18 @@ class Schedules(APIView):
         if not request.user.is_admin:
             raise PermissionDenied
         else:
-            serializer = ScheduleSerializer(data=request.data)
+            serializer = ScheduleDetailSerializer(data=request.data)
+            print("re",request.data)
             if serializer.is_valid():
-                schedule = serializer.save()
-                return Response(ScheduleSerializer(schedule).data, HTTP_201_CREATED )
+                schedule = serializer.save(
+                    ScheduleType=request.data.get("ScheduleType"),
+                    participant=request.data.get("participant")
+                )
+                serializer=ScheduleDetailSerializer(
+                    schedule,
+                    context={'request':request}
+                )
+                return Response(serializer.data, HTTP_201_CREATED )
             else:
                 return Response(serializer.errors, HTTP_403_FORBIDDEN)
 
@@ -49,7 +55,7 @@ class ScheduleDetail(APIView):
     def get(self, request, pk):
 
         schedule = self.get_object(pk)
-        serializer = ScheduleSerializer(schedule)
+        serializer = ScheduleDetailSerializer(schedule)
         return Response(serializer.data, status=HTTP_200_OK)
 
     def put(self, request, pk):#type, participant도 변경할 수 있게 해야함
@@ -59,17 +65,21 @@ class ScheduleDetail(APIView):
         
         if request.user.is_admin:
             schedule = self.get_object(pk)
-            serializer = ScheduleSerializer(
+            serializer = ScheduleDetailSerializer(
                 schedule,
                 data=request.data,
                 partial=True,
             )
+            print("re",request.data)
             if serializer.is_valid():
                 updated_schedule = serializer.save(
+                    ScheduleTitle=request.data.get("ScheduleTitle"),
                     ScheduleType=request.data.get("ScheduleType"),
+                    location=request.data.get("location"),
+                    when=request.data.get("when"),
                     participant=request.data.get("participant")
                 )
-                return Response(ScheduleSerializer(updated_schedule).data, status=HTTP_202_ACCEPTED)
+                return Response(ScheduleDetailSerializer(updated_schedule).data, status=HTTP_202_ACCEPTED)
             else:
                 return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 

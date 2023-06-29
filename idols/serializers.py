@@ -12,7 +12,7 @@ class soloSerializer(ModelSerializer):
     class Meta:
         model=Idol
         fields=("idol_name_kr","idol_name_en")
-class TinyIdolSerializer(ModelSerializer):#groupList에서 사용
+class TinyIdolSerializer(ModelSerializer):#groupDetail에서 사용
     class Meta:
         model=Idol
         fields=( "idol_name_kr","idol_name_en", "idol_profile", "idol_birthday")
