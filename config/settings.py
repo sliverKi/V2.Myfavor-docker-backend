@@ -103,10 +103,10 @@ if DEBUG:#개발 환경에서의 설정
     # DATABASES = {
     #     'default': {
     #             'ENGINE': 'django.db.backends.postgresql',
-    #             'NAME': 'v2test',
-    #             'USER': 'postgres',
-    #             'PASSWORD': 'admin1234',
-    #             'HOST': 'localhost',
+    #             'NAME': 'v2mf',
+    #             'USER': 'v2mf_user',
+    #             'PASSWORD': 'lP5MWBdkSi4qbJFPOeHhpMB0zUFdbT1U',
+    #             'HOST': 'dpg-cif98lp8g3n3ipqoi7bg-a.singapore-postgres.render.com',
     #             'PORT':'5432',
     #         }
     #      }
