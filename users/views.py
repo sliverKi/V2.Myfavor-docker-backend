@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
+    HTTP_202_ACCEPTED,
     HTTP_204_NO_CONTENT,
     HTTP_400_BAD_REQUEST,
 )
@@ -82,7 +83,7 @@ class MyPage(APIView):
     def get(self, request):
         user = request.user
         serializer = TinyUserSerializers(user)
-        return Response(serializer.data)
+        return Response(serializer.data, status=HTTP_200_OK)
 
     
     def put(self, request):
@@ -95,7 +96,7 @@ class MyPage(APIView):
         if serializer.is_valid():
             user = serializer.save()
             serializer = TinyUserSerializers(user)
-            return Response(serializer.data)
+            return Response(serializer.data, status=HTTP_202_ACCEPTED)
         else:
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
@@ -111,7 +112,7 @@ class MyReport(APIView):#내가 제보한 글
 
         user_report=Report.objects.filter(owner=user).order_by('-created_at')
         serializer=ReportDetailSerializer(user_report, many=True)
-        return Response(serializer.data, HTTP_200_OK)
+        return Response(serializer.data, status=HTTP_200_OK)
 
 
 class UserDetail(APIView):  
@@ -136,7 +137,7 @@ class UserDetail(APIView):
         if serializer.is_valid():
             user = serializer.save()
             serializer = TinyUserSerializers(user)
-            return Response(serializer.data, status=HTTP_200_OK)
+            return Response(serializer.data, status=HTTP_202_ACCEPTED)
         else:
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
@@ -159,7 +160,7 @@ class EditPick(APIView):
     def get(self, request):
         pick = request.user
         serializer = PickSerializer(pick)
-        return Response(serializer.data)
+        return Response(serializer.dat, status=HTTP_200_OK)
 
 
     def put(self, request):
@@ -173,7 +174,7 @@ class EditPick(APIView):
 
         if serializer.is_valid():
             updated_pick = serializer.save()
-            return Response(PickSerializer(updated_pick).data)
+            return Response(PickSerializer(updated_pick).data, status=HTTP_202_ACCEPTED)
 
 
 
