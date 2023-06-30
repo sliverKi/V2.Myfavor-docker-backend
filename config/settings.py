@@ -116,7 +116,6 @@ else:#베포환경에서의 설정
 
     DATABASES = {
         'default': dj_database_url.config(
-            default='postgres://postgres:admin1234@localhost:5432/v2test',
             conn_max_age=600,
         )
     }
