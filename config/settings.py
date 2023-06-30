@@ -95,11 +95,11 @@ if DEBUG:#개발 환경에서의 설정
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
     DATABASES = {
-            'default': {
-                    'ENGINE': 'django.db.backends.sqlite3',
-                    'NAME': BASE_DIR/ 'db.sqlite3',
-                }
-        }
+             'default': {
+                     'ENGINE': 'django.db.backends.sqlite3',
+                     'NAME': BASE_DIR/ 'db.sqlite3',
+                 }
+         }
     # DATABASES = {
     #     'default': {
     #             'ENGINE': 'django.db.backends.postgresql',
@@ -116,10 +116,11 @@ else:#베포환경에서의 설정
 
     DATABASES = {
         'default': dj_database_url.config(
+            default='postgres://v2_myfavor_back:kQsbr9rG3y8vdHaoIWXoccRn3vub9rJb@dpg-ciap5ad9aq007takp4rg-a.singapore-postgres.render.com/v2_myfavor_back_wesj',
             conn_max_age=600,
         )
-                    
     }
+
 if not DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
