@@ -3,8 +3,6 @@ from django.core.validators import MinLengthValidator, MinValueValidator
 from django.contrib.auth.models import (
     AbstractUser,
 )
-
-# from categories.models import Category
 from datetime import datetime
 from .manager import CustomUserManager
 from common.models import CommonModel

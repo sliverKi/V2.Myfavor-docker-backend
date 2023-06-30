@@ -46,20 +46,17 @@ class Schedules(APIView):
 class ScheduleDetail(APIView): 
 
     def get_object(self, pk):
-
         try:
             return Schedule.objects.get(pk=pk)
         except Schedule.DoesNotExist:
             raise NotFound
 
     def get(self, request, pk):
-
         schedule = self.get_object(pk)
         serializer = ScheduleDetailSerializer(schedule)
         return Response(serializer.data, status=HTTP_200_OK)
 
     def put(self, request, pk):#type, participant도 변경할 수 있게 해야함
-        
         if not request.user.is_admin:
             raise PermissionDenied
         
@@ -84,7 +81,6 @@ class ScheduleDetail(APIView):
                 return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
-
         schedule = self.get_object(pk)
         if not request.user.is_admin:
             return PermissionDenied

@@ -104,10 +104,15 @@ class MyPage(APIView):
         user.delete()
         return Response({"message": "계정이 삭제되었습니다."}, status=HTTP_204_NO_CONTENT)
 
-class MyReport(APIView):#내가 제보한 글 도 볼 수 있게 
+class MyReport(APIView):#내가 제보한 글
     permission_classes = [IsAuthenticated]
-    def get(self, pk):
-        pass
+    def get(self, request):
+        user=request.user
+
+        user_report=Report.objects.filter(owner=user).order_by('-created_at')
+        serializer=ReportDetailSerializer(user_report, many=True)
+        return Response(serializer.data, HTTP_200_OK)
+
 
 class UserDetail(APIView):  
     permission_classes = [IsAdminUser]  
