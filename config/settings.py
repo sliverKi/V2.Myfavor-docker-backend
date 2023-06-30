@@ -116,7 +116,7 @@ else:#베포환경에서의 설정
 
     DATABASES = {
         'default': dj_database_url.config(
-            default='postgres://v2_myfavor_back:kQsbr9rG3y8vdHaoIWXoccRn3vub9rJb@dpg-ciap5ad9aq007takp4rg-a.singapore-postgres.render.com/v2_myfavor_back_wesj',
+            default='postgres://postgres:admin1234@localhost:5432/v2test',
             conn_max_age=600,
         )
     }
