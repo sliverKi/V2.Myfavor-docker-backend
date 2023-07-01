@@ -241,14 +241,20 @@ class IdolSchedule(APIView): #수정[OK]
 
                   
 class IdolSchedulesCategories(APIView):#[수정(OK)]
-    def get(self, request, idol_name_kr, types):
-        category_list = types.split(",")  # 다중 카테고리를 콤마로 분리
+    def get(self, request, idol_name_kr):
+        print(1)
+        types = request.GET.getlist('types')#our_idol 모델에서 idol-schedule field 참조
+        if not types:
+            print(2)
+        print("types", types)
+        # category_list = types.split(",")  # 다중 카테고리를 콤마로 분리<단점: url로 받음 >>쿼리 매계변수로 수정
         schedules = Schedule.objects.filter(
             participant__idol_name_kr=idol_name_kr,
-            ScheduleType__type__in=category_list).order_by("ScheduleType")
+            type__in=types).order_by("when")#일자별 정렬
         serializer = ScheduleSerializer(schedules, many=True)
-
         return Response(serializer.data, status=HTTP_200_OK)
+    def post(self, request):
+        pass#필요하나..?? >> 현우한테 물어보기 >< 
 
 
 
