@@ -94,22 +94,22 @@ if DEBUG:#개발 환경에서의 설정
     STATIC_ROOT=os.path.join(BASE_DIR,'static')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-    DATABASES = {
-             'default': {
-                     'ENGINE': 'django.db.backends.sqlite3',
-                     'NAME': BASE_DIR/ 'db.sqlite3',
-                 }
-         }
     # DATABASES = {
-    #     'default': {
-    #             'ENGINE': 'django.db.backends.postgresql',
-    #             'NAME': 'v2mf',
-    #             'USER': 'v2mf_user',
-    #             'PASSWORD': 'lP5MWBdkSi4qbJFPOeHhpMB0zUFdbT1U',
-    #             'HOST': 'dpg-cif98lp8g3n3ipqoi7bg-a.singapore-postgres.render.com',
-    #             'PORT':'5432',
-    #         }
+    #          'default': {
+    #                  'ENGINE': 'django.db.backends.sqlite3',
+    #                  'NAME': BASE_DIR/ 'db.sqlite3',
+    #              }
     #      }
+    DATABASES = {
+        'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': 'v2test',
+                'USER': 'postgres',
+                'PASSWORD': 'admin1234',
+                'HOST': 'localhost',
+                'PORT':'5432',
+            }
+         }
 else:#베포환경에서의 설정
     # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
