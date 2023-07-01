@@ -78,6 +78,7 @@ class IdolDetailSerializer(ModelSerializer):
             "group",
             "idol_birthday",
             "has_schedules",
+            "viewCount",
             # "idol_schedules",
         )
     # def get_fullname(self,obj):
@@ -93,3 +94,11 @@ class IdolDetailSerializer(ModelSerializer):
     #         instance.group.set(group_data)
     #     return instance
 
+class IdolsViewSerializer(ModelSerializer):
+    fullname=serializers.SerializerMethodField()
+    class Meta:
+        model=Idol
+        fields=("pk", "fullname", "idol_profile", "viewCount")
+
+    def get_fullname(self, obj):
+        return f"{obj.idol_name_kr} ({obj.idol_name_en})"

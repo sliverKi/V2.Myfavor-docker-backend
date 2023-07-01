@@ -41,6 +41,7 @@ CUSTOM_APPS = [
     "oauth.apps.OauthConfig",
     "search.apps.SearchConfig",
     "solos.apps.SolosConfig",
+    "hits.apps.HitsConfig",
 ]
 
 SYSTEM_APPS = [

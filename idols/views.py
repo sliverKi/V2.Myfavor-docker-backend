@@ -14,13 +14,15 @@ from rest_framework.status import (
 from rest_framework.filters import SearchFilter
 
 from .models import Idol
-from .serializers import  TinyIdolSerializer, IdolsListSerializer, IdolDetailSerializer, DateScheduleSerializer
+from .serializers import  TinyIdolSerializer, IdolsListSerializer, IdolDetailSerializer, DateScheduleSerializer, IdolsViewSerializer
 from boards.models import Board
 from boards.serializers import BoardSerializer
 from schedules.serializers import ScheduleSerializer
 from schedules.models import Schedule
 from medias.serializers import PhotoSerializer
 from groups.models import Group
+
+
 class Idols(APIView): #[수정OK]
     
     def get(self, request):
