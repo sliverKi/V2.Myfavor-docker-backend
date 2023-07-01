@@ -241,12 +241,15 @@ class IdolSchedule(APIView): #수정[OK]
 
                   
 class IdolSchedulesCategories(APIView):#[수정(OK)]
-    def get(self, request, idol_name_kr):
-        types = request.GET.getlist('type') 
-        schedules = Schedule.objects.filter(ScheduleType__type__in=types)
-        serializer=ScheduleSerializer(schedules, many=True)
+    def get(self, request, idol_name_kr, types):
+        category_list = types.split(",")  # 다중 카테고리를 콤마로 분리
+        schedules = Schedule.objects.filter(
+            participant__idol_name_kr=idol_name_kr,
+            ScheduleType__type__in=category_list).order_by("ScheduleType")
+        serializer = ScheduleSerializer(schedules, many=True)
 
         return Response(serializer.data, status=HTTP_200_OK)
+
 
 
 class IdolSchedulesYear(APIView):
