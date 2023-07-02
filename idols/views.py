@@ -241,21 +241,35 @@ class IdolSchedule(APIView): #수정[OK]
 
                   
 class IdolSchedulesCategories(APIView):#[수정(OK)]
-    def get(self, request, idol_name_kr):
-        print(1)
-        types = request.GET.getlist('types')#our_idol 모델에서 idol-schedule field 참조
-        if not types:
-            print(2)
-        print("types", types)
-        # category_list = types.split(",")  # 다중 카테고리를 콤마로 분리<단점: url로 받음 >>쿼리 매계변수로 수정
-        schedules = Schedule.objects.filter(
-            participant__idol_name_kr=idol_name_kr,
-            type__in=types).order_by("when")#일자별 정렬
+    
+    # def get(self, request, idol_name_kr, categories):
+    def post(self, request, idol_name_kr):
+        # category_list = categories.split(",")  # 다중 카테고리를 콤마로 분리
+        
+        all_categories = ["broadcast", "event", "release", "buy", "congrats"]
+        category_list = request.data.get("categories", all_categories)  
+        #client에서 아무런 카테고리를 선택하지 않은경우 ~> 모든 카테고리 활성상태
+        # print(category_list)
+        
+        if len(category_list)==0:#아아돌이 참여하는 모든 스케쥴 받아옴
+            schedules = Schedule.objects.filter(participant__idol_name_kr=idol_name_kr)
+        else:
+            schedules = Schedule.objects.filter(
+                ScheduleType__type__in=category_list,
+                participant__idol_name_kr=idol_name_kr,
+            )
+        if not schedules.exists():#참여하고 있는 스케줄이 없는 경우 
+            return Response([], status=HTTP_404_NOT_FOUND)
+        
         serializer = ScheduleSerializer(schedules, many=True)
-        return Response(serializer.data, status=HTTP_200_OK)
-    def post(self, request):
-        pass#필요하나..?? >> 현우한테 물어보기 >< 
 
+        return Response(serializer.data, status=HTTP_200_OK)
+
+"""
+{
+  "categories": ["congrats", "broadcast"]
+}
+"""
 
 
 class IdolSchedulesYear(APIView):
