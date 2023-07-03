@@ -252,8 +252,10 @@ class IdolSchedulesCategories(APIView):#[수정(OK)]
         # print(category_list)
         
         if len(category_list)==0:#아아돌이 참여하는 모든 스케쥴 받아옴
-            schedules = Schedule.objects.filter(participant__idol_name_kr=idol_name_kr)
-        else:
+            schedules = Schedule.objects.filter(
+                participant__idol_name_kr=idol_name_kr
+            )
+        else:#검색
             schedules = Schedule.objects.filter(
                 ScheduleType__type__in=category_list,
                 participant__idol_name_kr=idol_name_kr,
@@ -268,7 +270,8 @@ class IdolSchedulesCategories(APIView):#[수정(OK)]
 """
 {
   "categories": ["congrats", "broadcast"]
-}
+} or
+{"categories":[]}
 """
 
 
