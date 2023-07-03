@@ -2,7 +2,8 @@ from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 from .models import Album
 from groups.models import Group
-
+import datetime
+# from datetime import date
 
 class GroupAlbumSerializer(ModelSerializer):
     # groupname=serializers.CharField(source="group_artists.groupname", read_only=True)
@@ -14,6 +15,25 @@ class GroupAlbumSerializer(ModelSerializer):
         group = self.context["group"]  #context에서 group 객체를 가져옴.
         album = Album.objects.create(group_artists=group,**validated_data)
         return album
+    
+    def update(self, instance, validated_data):
+        album_name = validated_data.get("album_name", instance.album_name)
+        album_cover = validated_data.get("album_cover", instance.album_cover)
+        
+        release_date = validated_data.get("release_date", instance.release_date)
+        instance.album_name = album_name
+        instance.album_cover = album_cover
+        
+        if release_date is not None: 
+            release_date = datetime.datetime.strptime(release_date, "%Y-%m-%d").date()  # release_date 필드가 입력되었을 경우에만 처리
+            if release_date > datetime.date.today():  # 오늘 날짜보다 미래인 경우
+                raise serializers.ValidationError("Invalid release date.")
+            instance.release_date = release_date
+        
+        instance.save()
+        return instance
+
+
 """
 {
   "album_name": "Black Mamba - The 1st Single",
@@ -32,4 +52,7 @@ class GroupAlbumSerializer(ModelSerializer):
   "release_date": "2021-05-17",
   "album_cover": "https://a5.mzstatic.com/us/r1000/0/Music125/v4/60/8d/ac/608dacc2-d6d6-462d-26f0-d693e4364751/artwork.jpg"
 } 
+"""
+"""update input data
+{  "album_name": "NextLevel- The 3rd Single"}
 """
