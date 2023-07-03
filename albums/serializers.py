@@ -4,12 +4,23 @@ from .models import Album
 from groups.models import Group
 import datetime
 # from datetime import date
-
+import requests
+from PIL import Image
+from io import BytesIO
+import base64
+import os
+from django.conf import settings
 class GroupAlbumSerializer(ModelSerializer):
     # groupname=serializers.CharField(source="group_artists.groupname", read_only=True)
     class Meta:
         model=Album
         fields=("pk","album_name", "release_date", "album_cover")
+    
+    def resize_img():
+        pass
+
+    def upload_img_url():
+        pass
     
     def create(self, validated_data):
         group = self.context["group"]  #context에서 group 객체를 가져옴.
@@ -19,11 +30,11 @@ class GroupAlbumSerializer(ModelSerializer):
     def update(self, instance, validated_data):
         album_name = validated_data.get("album_name", instance.album_name)
         album_cover = validated_data.get("album_cover", instance.album_cover)
-        
         release_date = validated_data.get("release_date", instance.release_date)
+        
         instance.album_name = album_name
         instance.album_cover = album_cover
-        
+        #img resize : 700*700
         if release_date is not None: 
             release_date = datetime.datetime.strptime(release_date, "%Y-%m-%d").date()  # release_date 필드가 입력되었을 경우에만 처리
             if release_date > datetime.date.today():  # 오늘 날짜보다 미래인 경우
@@ -32,6 +43,9 @@ class GroupAlbumSerializer(ModelSerializer):
         
         instance.save()
         return instance
+    
+        
+
 
 
 """
