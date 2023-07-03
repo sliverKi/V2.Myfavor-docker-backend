@@ -7,14 +7,14 @@ class Album(models.Model):
         blank=True,
         null=True,
         on_delete=models.CASCADE,
-        related_name="albums"
+        related_name="albums_solo"
     )
     group_artists=models.ForeignKey(
         "groups.Group",
         blank=True,
         null=True,
         on_delete=models.CASCADE,
-        related_name="albums"
+        related_name="albums_group"
     )
     album_name=models.CharField(
         max_length=100,

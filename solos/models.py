@@ -33,3 +33,6 @@ class Solo(CommonModel):
     )
     def __str__(self) -> str:
         return f"{self.member}"
+    
+    class Meta:
+        verbose_name_plural = "Idols_Solo"
