@@ -26,6 +26,7 @@ THIRD_PARTY_APPS = [
     'storages',
     "corsheaders",
     'debug_toolbar',
+    'django_seed',
 ]
 
 CUSTOM_APPS = [
