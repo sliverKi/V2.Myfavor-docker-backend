@@ -34,10 +34,7 @@ class GroupAlbumSerializer(ModelSerializer):
             album_cover=album_cover_url,
             release_date=validated_data.get("release_date")
         )
-
         return album
-
-    
     def update(self, instance, validated_data):
         album_name = validated_data.get("album_name", instance.album_name)
         album_cover = validated_data.get("album_cover", instance.album_cover)
