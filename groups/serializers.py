@@ -149,32 +149,32 @@ class groupDetailSerializer(ModelSerializer):
 {
     "enter": "YG",
     "groupname": "BLACKPINK",
-    "group_profile": "https://i.namu.wiki/i/zBNk9zoI0abohwJWv7LeQ1zdHzWO0Vkk47GSxBbVHZXTW92nj9AtWB0oU9s3wGsd9NcBbZimA0M8RpE1YqhO6aJUfSIqvnmZ8KGoaQOoqencv8lgtpMqgNqYASckrST0O6MLhIBqWNSN8_vcA7SHyQ.webp",
+    "group_profile": "https://image.kpopmap.com/2019/03/BLACKPINK-082322.jpg",
     "group_debut": "2016-08-08",
     "group_insta": "https://www.instagram.com/blackpinkofficial/",
     "group_youtube": "https://www.youtube.com/@BLACKPINK",
     "member": [
         {
             "지수(Jisu)": {
-                "profile": "https://i.namu.wiki/i/Itq95nAIdZejMHvJN9ilVWqKbOOsLq2XbR9H5UAd2W2bHa9nniY8cw3ajId7UsebjEVp9bW-bfrsEXsmS5MFoD2jvfdM5oPAuw6DHtVuq6W63HzBaMv3rgZFI1Z3p41Iqftve2EAYoFyzcrgjyu9Bw.webp",
+                "profile": "https://image.kpopmap.com/2019/03/jisoo_profile_s_0215.jpg",
                 "idol_birthday": "1995-01-03"
             }
         },
         {
             "로제(Rose)": {
-                "profile": "https://i.namu.wiki/i/QkWTGEWhL6wc-8Zd6KQn9iV_IcshKx4UQMa8zjM9-GzL7jTq_G6z-xrRR5vyI6X4PXE7u6InO7jqjj8ub_S8ndOQFfLR2AL1T_JqCDFZcdSg_cDig21zpva9LqTgDIXSgSmqVONNIGUFK3H0dmINTg.webp",
+                "profile": "https://image.kpopmap.com/2019/03/BLACKPINK-Rose-082322.jpg",
                 "idol_birthday": "1997-02-11"
             }
         },
         {
             "제니(Jenny)": {
-                "profile": "https://i.namu.wiki/i/j_4405lkhGFvHyAgKdno7-YkYemTAmhAtr98tj_HZLNdnISkU87slNTZrEcIcWlh9cbMra3l4X8Qvlx-yLwvYrYN7NOQULot4k-FGKrdlzugsQOsbxjGEIyCkGRbDx_wO295TA7HA7DaCIQoc6Jzcg.webp",
+                "profile": "https://image.kpopmap.com/2019/03/BLACKPINK-Jennie-082322.jpg",
                 "idol_birthday": "1996-01-16"
             }
         },
         {
             "리사(Lisa)": {
-                "profile": "https://i.namu.wiki/i/iOatgawg2prYRPY8xJPV5H7rwv2aFJWKWCyNTJOu314mQIVWTBCiHiCC_0Tsa60CkJpmV7giNS2KGEpnnR1dibh8eGflBdp4Vg-CnHoDf720giCGK4GjLgzsP4jqFvGM6HSOPcbz7mqlKx4IBpG5EA.webp",
+                "profile": "https://image.kpopmap.com/2019/03/BLACKPINK-Lisa-082322.jpg",
                 "idol_birthday": "1997-03-27"
             }
         }

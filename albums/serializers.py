@@ -20,21 +20,7 @@ class GroupAlbumSerializer(ModelSerializer):
         group = self.context["group"]  #context에서 group 객체를 가져옴.
         album = Album.objects.create(group_artists=group,**validated_data)
         return album
-    def create(self, validated_data):
-        group=self.context["group"]
-        album_name=validated_data.get("album_name")
-        album_cover_url = validated_data.get("album_cover")
-        response = requests.get(album_cover_url)
-        album_cover_image = Image.open(BytesIO(response.content))
-        resized_image = self.resize_img(album_cover_image)
-        album_cover_url = self.upload_img_url(resized_image, album_name)
-        album = Album.objects.create(
-            group_artists=group,
-            album_name=album_name,
-            album_cover=album_cover_url,
-            release_date=validated_data.get("release_date")
-        )
-        return album
+    
     def update(self, instance, validated_data):
         album_name = validated_data.get("album_name", instance.album_name)
         album_cover = validated_data.get("album_cover", instance.album_cover)
