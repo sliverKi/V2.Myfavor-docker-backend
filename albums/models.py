@@ -3,7 +3,7 @@ import datetime
 
 class Album(models.Model):
     solo_artists=models.ForeignKey(
-        "idols.Idol",
+        "solos.Solo",
         blank=True,
         null=True,
         on_delete=models.CASCADE,

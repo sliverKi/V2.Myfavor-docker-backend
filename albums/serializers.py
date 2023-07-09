@@ -10,6 +10,12 @@ from io import BytesIO
 import base64
 import os
 from django.conf import settings
+
+class AlbumSerializer(ModelSerializer):
+    class Meta:
+        model=Album
+        fields=("pk", "album_name", "album_cover")
+    
 class GroupAlbumSerializer(ModelSerializer):
     # groupname=serializers.CharField(source="group_artists.groupname", read_only=True)
     class Meta:
@@ -39,6 +45,11 @@ class GroupAlbumSerializer(ModelSerializer):
         return instance
     
         
+class SoloAlbumSerializer(ModelSerializer):
+    class Meta:
+        model =Album
+        fields=("pk", "album_name","release_date", "album_cover")
+    
 
 
 
@@ -61,6 +72,6 @@ class GroupAlbumSerializer(ModelSerializer):
   "album_cover": "https://a5.mzstatic.com/us/r1000/0/Music125/v4/60/8d/ac/608dacc2-d6d6-462d-26f0-d693e4364751/artwork.jpg"
 } 
 """
-"""update input data
+"""update input data(group)
 {  "album_name": "NextLevel- The 3rd Single"}
 """
