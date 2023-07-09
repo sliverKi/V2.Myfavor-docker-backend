@@ -26,6 +26,7 @@ django-storages = "^1.13.2"
 django-debug-toolbar = "^4.1.0"
 Pillow = "^10.0.0"
 django-seed = "^0.3.1"
+redis = "^4.6.0"
 
 
 
