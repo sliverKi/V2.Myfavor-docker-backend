@@ -4,7 +4,7 @@ import os
 import environ
 import dj_database_url
 
-
+#test1: albums migrations zero
 env = environ.Env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
