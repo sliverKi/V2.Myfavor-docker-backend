@@ -234,14 +234,14 @@ CACHES={
 # CSRF_COOKIE_DOMAIN="127.0.0.1"
 
 #gmail SMTP
-# EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST="smtp.gmail.com"
-# EMAIL_PORT=587
-# EMAIL_HOST_USER=env("EMAIL_HOST_USER")
-# EMAIL_HOST_PASSWORD=env("EMAIL_HOST_PASSWORD")
-# EMAIL_USE_TLS=True
-# DEFAULT_FROM_EMAIL=EMAIL_HOST_USER
-# PASSWORD_RESET_CONFIRM_URL = 'password_reset_confirm'
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST="smtp.gmail.com"
+EMAIL_PORT=587
+EMAIL_HOST_USER=env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD=env("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS=True
+DEFAULT_FROM_EMAIL=EMAIL_HOST_USER
+PASSWORD_RESET_CONFIRM_URL = 'password_reset_confirm'
 
 #AWS-Iam-accessKey
 # AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID") # .csv 파일에 있는 내용을 입력 Access key ID

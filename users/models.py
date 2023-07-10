@@ -70,7 +70,7 @@ class User(AbstractUser):
     class Meta:
         verbose_name_plural = "Our_Users"
 
-
+    # 회원 가입시 email 인증 로직 추가할 것.
 # 제보
 class Report(CommonModel):
 
