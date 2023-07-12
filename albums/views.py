@@ -17,7 +17,7 @@ class GroupAlbum(APIView):
     
     def get(self, request,groupname):
         group=self.get_object(groupname)
-        albums=group.albums_group.all().order_by("release_date")
+        albums=group.albums_group.all().order_by("-release_date")
         serializer=AlbumSerializer(albums, many=True)
         data={
             "artists":group.groupname,
@@ -60,7 +60,7 @@ class GroupAlbumDetail(APIView):
     def get(self, request, groupname, pk):
         group=self.get_groupname(groupname)
         try:
-            album = self.get_album(group, pk)
+            album = self.get_album(group, pk).order_by("-release_date")
         except NotFound:
             return Response({"message": "Album not found in the group."}, status=status.HTTP_400_BAD_REQUEST)
         serializer = GroupAlbumSerializer(album)
@@ -108,7 +108,7 @@ class SoloAlbum(APIView):
     def get(self, request, idol_name_kr):
         solo=self.get_object(idol_name_kr)
         print("1",solo)
-        albums=solo.albums_solo.all().order_by("release_date")
+        albums=solo.albums_solo.all().order_by("-release_date")
         serializer=AlbumSerializer(albums, many=True)
         data={
             "artists":solo.member.idol_name_kr,
@@ -146,7 +146,7 @@ class SoloAlbumDetail(APIView):
     
     def get(self, request, idol_name_kr, pk):
         solo = self.get_solo(idol_name_kr)
-        album = self.get_album(solo, pk)
+        album = self.get_album(solo, pk).order_by("-release_date")
         serializer = SoloAlbumSerializer(album)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

@@ -79,7 +79,7 @@ class FindPW(APIView):#비밀번호 잊으면 비밀번호 초기화-> 재설정
     def post(self, request):#닉네임 이메일 전화번호
         nickname=request.data.get("nickname")
         email=request.data.get("email")
-        # phone=request.data.get("phone")
+       
 
         # if not nickname or email:
         #     raise ParseError("Please, insert data.")
