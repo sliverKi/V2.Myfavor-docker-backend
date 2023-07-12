@@ -6,7 +6,7 @@ from . import views
 urlpatterns = [
 
     path("", views.NewUsers.as_view()),  
-    path("me/",views.LoginUser.as_view()),
+    path("me/",views.LoginUser.as_view(), name="loginSuccess_user's_info"),
     path("list/", views.AllUsers.as_view()),  
     path("mypage/", views.MyPage.as_view()), 
     path("mypage/myreport/", views.MyReport.as_view()), 

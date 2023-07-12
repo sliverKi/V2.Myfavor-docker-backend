@@ -23,6 +23,12 @@ from django.contrib.auth import get_user_model
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 
+class emailValidate(APIView):
+    def get(self, request):
+        return Response({"message":"이메일 인증을 완료해 주세요."}, status=status.HTTP_200_OK)
+    def post(self, request):
+        pass
+
 class Login(APIView):  
     def post(self, request, format=None):
         email = request.data.get("email")
@@ -149,8 +155,8 @@ class ChangePW(APIView):
 
     def put(self, request):
         user = request.user
-        old_password = request.data.get("old_password")
-        new_password = request.data.get("new_password")
+        old_password = request.data.get("old_password")#{"eungi123@E"}
+        new_password = request.data.get("new_password")#{"eungi135@E"}
 
         if not old_password or not new_password:
             raise ParseError

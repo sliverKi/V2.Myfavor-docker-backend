@@ -34,13 +34,7 @@ from .serializers import (
 from medias.serializers import UserProfileSerializer
 from idols.models import Idol
 
-class LoginUser(APIView):
-    permission_classes = [IsAuthenticated]
-    def get(self, request):
-        user=request.user
-        print("user: ", user)
-        serializer=TinyUserSerializers(user)
-        return Response(serializer.data, status=HTTP_200_OK)
+
 
 class NewUsers(APIView):
     def get(self, request):
@@ -59,11 +53,21 @@ class NewUsers(APIView):
             user = serializer.save()
             user.set_password(password)
             user.save()
-            serializer = PrivateUserSerializer(user)
+            # user.is_active=0
+            # serializer = PrivateUserSerializer(user)
             return Response(serializer.data, status=HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
+
+class LoginUser(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user=request.user
+        print("user: ", user)
+        serializer=TinyUserSerializers(user)
+        return Response(serializer.data, status=HTTP_200_OK)
+    
 
 class AllUsers(APIView):
     permission_classes = [IsAdminUser]

@@ -242,6 +242,10 @@ EMAIL_HOST_PASSWORD=env("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS=True
 DEFAULT_FROM_EMAIL=EMAIL_HOST_USER
 PASSWORD_RESET_CONFIRM_URL = 'password_reset_confirm'
+#ACCOUNT_EMAIL_VERIFICATION = 'mandatory'(email인증을 하지 않으면 로그인 할 수 없음.)
+#ACCOUNT_CONFIRM_EMIAL_ON_GET = True (인증 링크를 누르면 바로 확인이 되게 함 )
+#ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+
 
 #AWS-Iam-accessKey
 # AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID") # .csv 파일에 있는 내용을 입력 Access key ID

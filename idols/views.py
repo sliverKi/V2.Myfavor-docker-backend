@@ -66,8 +66,8 @@ class IdolDetail(APIView): #[수정OK]
 
     def get(self, request, idol_name_kr): 
         idol = self.get_object(idol_name_kr)
-        idol.viewCount+=1
-        idol.save()
+        # idol.viewCount+=1
+        # idol.save()
         serializer = IdolDetailSerializer(
             idol,
             context={"request": request},
