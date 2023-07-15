@@ -117,7 +117,13 @@ class MyReport(APIView):#내가 제보한 글
         user_report=Report.objects.filter(owner=user).order_by('-created_at')
         serializer=ReportDetailSerializer(user_report, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
-
+class MyReportDetail(APIView):
+    def get(self, request):
+        pass
+    def put(self, reqeust):
+        pass
+    def detele(self, request):
+        pass
 
 class UserDetail(APIView):  
     permission_classes = [IsAdminUser]  

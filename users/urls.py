@@ -9,11 +9,12 @@ urlpatterns = [
     path("me/",views.LoginUser.as_view(), name="loginSuccess_user's_info"),
     path("list/", views.AllUsers.as_view()),  
     path("mypage/", views.MyPage.as_view()), 
-    path("mypage/myreport/", views.MyReport.as_view()), 
+    path("mypage/myreport/", views.MyReport.as_view()), # get
+    path("mypage/myreport/<int:pk>", views.MyReportDetail.as_view()),#get,put,delete : user
     path("<int:pk>/", views.UserDetail.as_view()),  
     path("edit/pick/", views.EditPick.as_view()),  
-    path("reports/", views.AllReport.as_view()),#[get, post]
-    path("reports/<int:pk>/", views.ReportDetail.as_view()),#[get, put, delete]
+    path("reports/", views.AllReport.as_view()),#[get, post] :user can report idol schedule.
+    path("reports/<int:pk>/", views.ReportDetail.as_view()),#[get, put, delete] # admin user modified or register user's report.
 
     
 ]
