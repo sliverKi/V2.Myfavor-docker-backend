@@ -95,6 +95,7 @@ class ReportAdmin(admin.ModelAdmin):
     list_display = (
         "pk",
         "title",
+        "is_enroll",
     )
     list_display_links = (
         "pk",

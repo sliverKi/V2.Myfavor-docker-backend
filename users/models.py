@@ -81,7 +81,6 @@ class Report(CommonModel):
         on_delete=models.CASCADE,
         related_name="report",
     )
-
     title = models.CharField(max_length=100, default="")
     location = models.CharField(max_length=100, default="")
     time = models.DateTimeField(default=datetime.now)#스케쥴 일자 
@@ -91,7 +90,7 @@ class Report(CommonModel):
         blank=True,
         related_name="report",
     )
-
+    is_enroll=models.BooleanField(default=False)
     def str(self):
         return self.title
 

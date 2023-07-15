@@ -6,8 +6,8 @@ from idols.models import Idol
 from idols.serializers import TinyIdolSerializer
 
 
-class HtmlSerializer(serializers.Serializer):
-    html_field = serializers.CharField()
+# class HtmlSerializer(serializers.Serializer):
+#     html_field = serializers.CharField()
 
 
 # pick 수정용
@@ -141,13 +141,19 @@ class UserSerializer(serializers.ModelSerializer):
         return user.is_admin == request.user.is_admin
 
 
+class ReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Report
+        fields=("pk", "title", "time", "is_enroll")
+
+
 class ReportDetailSerializer(serializers.ModelSerializer):
     owner = serializers.CharField(source='owner.nickname', read_only=True)
     whoes = serializers.SerializerMethodField()
 
     class Meta:
         model = Report
-        fields = ("pk","owner","title","location","time","whoes")
+        fields = ("pk","owner","title","location","time","whoes","is_enroll")
     
     def get_whoes(self, instance):
         whoes = instance.whoes.all()
