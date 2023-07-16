@@ -11,8 +11,7 @@ urlpatterns = [
     #[보류~> 다중 카테고리로 변경, 년월일 자를 같이 받아야-> 해결: ScheduleDate]
     # 필요 없는 url -> path("<str:idol_name_kr>/schedule/",views.IdolSchedulesCategories.as_view(), name="make multi category in idol schedules."), #{post}
     path("<str:idol_name_kr>/schedule/", views.ScheduleDate.as_view(), name="filter_schedule_date"),
-    
-    
+    path("<str:idol_name_kr>/upcoming/",views.UpcomingSchedules.as_view(), name="upcoming-schedules")    
     #아래 url 다 필요 없음
     # path("<str:idol_name_kr>/schedules/<categories>",views.IdolSchedulesCategories.as_view()), #GET 수정OK
     

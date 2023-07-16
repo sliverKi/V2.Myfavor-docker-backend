@@ -22,7 +22,7 @@ from schedules.models import Schedule
 from medias.serializers import PhotoSerializer
 from groups.models import Group
 from datetime import datetime
-
+from django.utils.dateformat import DateFormat
 class Idols(APIView): #[수정OK]
     
     def get(self, request):
@@ -339,6 +339,26 @@ class ScheduleDate(APIView):
   "when":"2023-07-16"
 } 
 """
+class UpcomingSchedules(APIView):
+    def get(self, request, idol_name_kr):
+        today = DateFormat(datetime.now()).format('Y-m-d')
+        print("today: ", today)
+        year=today.year
+        month=today.month
+        day=today.day
+        pass
+        # try:
+        #     schedules = Schedule.objects.filter(
+        #     when__year=year,
+        #     when__month=month,
+        #     when__day=day         
+        # )
+        # except :
+
+
+
+
+
 class IdolSchedulesYear(APIView):
     
     def get_object(self, pk):
