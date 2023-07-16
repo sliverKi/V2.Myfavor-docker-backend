@@ -132,9 +132,13 @@ class UserDetail(APIView):
             data=request.data,
             partial=True,
         )
+        print("re", request.data)
         if serializer.is_valid():
+            print(1)
             user = serializer.save()
+            print(2)
             serializer = TinyUserSerializers(user)
+            print(3)
             return Response(serializer.data, status=HTTP_202_ACCEPTED)
         else:
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
