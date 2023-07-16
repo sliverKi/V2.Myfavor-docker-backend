@@ -70,14 +70,7 @@ class User(AbstractUser):
     class Meta:
         verbose_name_plural = "Our_Users"
 
-    def save(self, *args, **kwargs):
-        if self.pick:
-            # 선택된 아이돌의 pick_count를 1 증가시킴
-            self.pick.pick_count += 1
-            self.pick.save()
-        super(User, self).save(*args, **kwargs)
-    
-    
+
     # 회원 가입시 email 인증 로직 추가할 것.
 
 
