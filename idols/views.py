@@ -346,7 +346,7 @@ class UpcomingSchedules(APIView):
             schedules = Schedule.objects.filter(
             participant__idol_name_en=idol_name_en,
             when__gte=today
-            ).order_by("when")
+            ).order_by("when")[:3]
             
             serializer = ScheduleSerializer(schedules, many=True)
 
