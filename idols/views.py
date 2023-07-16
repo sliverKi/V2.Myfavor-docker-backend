@@ -247,18 +247,28 @@ class IdolSchedulesCategories(APIView):#[수정(OK)]
         # category_list = categories.split(",")  # 다중 카테고리를 콤마로 분리
         
         all_categories = ["broadcast", "event", "release", "buy", "congrats"]
-        category_list = request.data.get("categories", all_categories)  
+        category_list = request.data.get("categories", all_categories)
+        when= request.data.get("when")
+        print("when", when)
+        year, month =when.split("-")
+        
+        print("year:",type(year), "month:",type(month))
+
         #client에서 아무런 카테고리를 선택하지 않은경우 ~> 모든 카테고리 활성상태
         # print(category_list)
         
         if len(category_list)==0:#아아돌이 참여하는 모든 스케쥴 받아옴
             schedules = Schedule.objects.filter(
-                participant__idol_name_kr=idol_name_kr
+                participant__idol_name_kr=idol_name_kr,
+                when__year=year,
+                when__month=month
             )
         else:#검색
             schedules = Schedule.objects.filter(
                 ScheduleType__type__in=category_list,
                 participant__idol_name_kr=idol_name_kr,
+                when__year=year,
+                when__month=month
             )
         if not schedules.exists():#참여하고 있는 스케줄이 없는 경우 
             return Response([], status=HTTP_404_NOT_FOUND)
@@ -269,7 +279,8 @@ class IdolSchedulesCategories(APIView):#[수정(OK)]
 
 """
 {
-  "categories": ["congrats", "broadcast"]
+  "categories": ["congrats", "broadcast"],
+  "when":"2023-07"
 } or
 {"categories":[]}
 """

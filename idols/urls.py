@@ -10,6 +10,9 @@ urlpatterns = [
     
     #[보류~> 다중 카테고리로 변경, 년월일 자를 같이 받아야]
     path("<str:idol_name_kr>/schedule/",views.IdolSchedulesCategories.as_view(), name="make multi category in idol schedules."), #{post}
+    # path("<str:idol_name_kr>/schedule/w", views.ScheduleDate.as_view(), name="filter_schedule_date")
+    
+    
     # path("<str:idol_name_kr>/schedules/<categories>",views.IdolSchedulesCategories.as_view()), #GET 수정OK
     
     path("<int:pk>/schedules/<str:type>/<str:year>/", views.IdolSchedulesYear.as_view()), 
