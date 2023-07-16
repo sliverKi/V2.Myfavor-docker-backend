@@ -341,22 +341,19 @@ class ScheduleDate(APIView):
 """
 class UpcomingSchedules(APIView):
     def get(self, request, idol_name_en):
-        today = DateFormat(datetime.now()).format('Y-m-d')
-        print("today: ", today)
-        year=today.year
-        month=today.month
-        day=today.day
-        print("year: ",year, "month:",month, "day: ", day)
-        pass
-        # try:
-        #     schedules = Schedule.objects.filter(
-        #     when__year=year,
-        #     when__month=month,
-        #     when__day=day         
-        # )
-        # except Schedule.DoesNotExist:
-        #     return Response([], status=HTTP_200_OK)
+        today = datetime.today()
+        try:
+            schedules = Schedule.objects.filter(
+            participant__idol_name_en=idol_name_en,
+            when__gte=today
+            ).order_by("when")
+            
+            serializer = ScheduleSerializer(schedules, many=True)
 
+        except schedules.DoesNotExist:
+            return Response([], status=HTTP_200_OK)
+
+        return Response(serializer.data, status=HTTP_200_OK)
 
 
 
