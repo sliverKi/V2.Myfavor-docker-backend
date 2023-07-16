@@ -84,16 +84,16 @@ class GroupIdol(APIView):
         except Group.DoesNotExist:
             raise NotFound
     
-    def get_idol(self, group,idol_name_kr):
+    def get_idol(self, group,idol_name_en):
         try:
-            return group.member.get(idol_name_kr=idol_name_kr)
+            return group.member.get(idol_name_en=idol_name_en)
         except Idol.DoesNotExist:
             raise NotFound
         
-    def get(self, request, groupname, idol_name_kr):
+    def get(self, request, groupname, idol_name_en):
         group=self.get_group(groupname)
         try:
-            idol = self.get_idol(group, idol_name_kr)
+            idol = self.get_idol(group, idol_name_en)
             # idol.viewCount+=1
             # idol.save()
         except NotFound:
@@ -101,8 +101,8 @@ class GroupIdol(APIView):
         serializer = SimpleIdolInfoSerializer(idol)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def delete(self, request, group, idol_name_kr):
-        idol=self.get_idol(group, idol_name_kr)
+    def delete(self, request, group, idol_name_en):
+        idol=self.get_idol(group, idol_name_en)
         if not request.user.is_admin: 
             raise PermissionDenied
         idol.delete()

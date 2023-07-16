@@ -21,7 +21,7 @@ class SimpleIdolInfoSerializer(ModelSerializer):#groupIdol에서 사용
     group=serializers.SerializerMethodField()
     class Meta:
         model=Idol
-        fields=("group","has_schedules","viewCount")
+        fields=("group","has_schedules")
     def get_group(self, obj):
         return obj.group.values_list('groupname', flat=True)
 
@@ -78,9 +78,9 @@ class IdolDetailSerializer(ModelSerializer):
             "group",
             "idol_birthday",
             "has_schedules",
-            "viewCount",
+            )#viewCount,
             # "idol_schedules",
-        )
+        
     # def get_fullname(self,obj):
     #     return f"{obj.idol_name_kr}({obj.idol_name_en})"
     
@@ -98,7 +98,7 @@ class IdolsViewSerializer(ModelSerializer):
     fullname=serializers.SerializerMethodField()
     class Meta:
         model=Idol
-        fields=("pk", "fullname", "idol_profile", "viewCount")
+        fields=("pk", "fullname", "idol_profile")# "viewCount")
 
     def get_fullname(self, obj):
         return f"{obj.idol_name_kr} ({obj.idol_name_en})"

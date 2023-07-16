@@ -99,27 +99,27 @@ class GroupAlbumDetail(APIView):
 
 
 class SoloAlbum(APIView):
-    def get_object(self, idol_name_kr):
+    def get_object(self, idol_name_en):
         try:
-            return Solo.objects.get(member__idol_name_kr=idol_name_kr)
+            return Solo.objects.get(member__idol_name_en=idol_name_en)
         except Solo.DoesNotExist:
             raise NotFound
         
-    def get(self, request, idol_name_kr):
-        solo=self.get_object(idol_name_kr)
+    def get(self, request, idol_name_en):
+        solo=self.get_object(idol_name_en)
         print("1",solo)
         albums=solo.albums_solo.all().order_by("-release_date")
         serializer=AlbumSerializer(albums, many=True)
         data={
-            "artists":solo.member.idol_name_kr,
+            "artists":solo.member.idol_name_en,
             "albums":serializer.data
         }
         return Response(data, status=status.HTTP_200_OK)
     
-    def post(self, request, idol_name_kr):
+    def post(self, request, idol_name_en):
         if not request.user.is_admin:
             raise PermissionDenied
-        solo = self.get_object(idol_name_kr)
+        solo = self.get_object(idol_name_en)
         serializer = SoloAlbumSerializer(
             data=request.data,
             context={'solo': solo}
@@ -132,9 +132,9 @@ class SoloAlbum(APIView):
 
 class SoloAlbumDetail(APIView):
     
-    def get_solo(self, idol_name_kr):
+    def get_solo(self, idol_name_en):
         try:
-            return Solo.objects.get(member__idol_name_kr=idol_name_kr)
+            return Solo.objects.get(member__idol_name_en=idol_name_en)
         except Solo.DoesNotExist:
             raise NotFound
     
@@ -144,15 +144,15 @@ class SoloAlbumDetail(APIView):
         except Album.DoesNotExist:
             raise NotFound
     
-    def get(self, request, idol_name_kr, pk):
-        solo = self.get_solo(idol_name_kr)
+    def get(self, request, idol_name_en, pk):
+        solo = self.get_solo(idol_name_en)
         album = self.get_album(solo, pk).order_by("-release_date")
         serializer = SoloAlbumSerializer(album)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     
-    def put(self, request,idol_name_kr, pk):
-        solo=self.get_solo(idol_name_kr)
+    def put(self, request,idol_name_en, pk):
+        solo=self.get_solo(idol_name_en)
         album=self.get_album(solo, pk)
         
         if not request.user.is_admin:
@@ -172,8 +172,8 @@ class SoloAlbumDetail(APIView):
             serializer=SoloAlbumSerializer(updated_album)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def delete(self, request, idol_name_kr, pk):
-        solo=self.get_solo(idol_name_kr)
+    def delete(self, request, idol_name_en, pk):
+        solo=self.get_solo(idol_name_en)
         album = self.get_album(solo, pk)
         if not request.user.is_admin: 
             raise PermissionDenied

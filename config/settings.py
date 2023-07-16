@@ -91,7 +91,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 
 DEBUG = 'RENDER' not in os.environ  #딕셔너리 key에 RENDER라는 환경변수가 설정되어 있지 않은경우(=개발환경인 경우)에만 True 반환
-#DEBUG = True
+# DEBUG = True
 
 if DEBUG:#개발 환경에서의 설정
     STATIC_ROOT=os.path.join(BASE_DIR,'static')

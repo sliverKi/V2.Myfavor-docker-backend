@@ -162,7 +162,7 @@ class EditPick(APIView):
     def get(self, request):
         pick = request.user
         serializer = PickSerializer(pick)
-        return Response(serializer.dat, status=HTTP_200_OK)
+        return Response(serializer.data, status=HTTP_200_OK)
 
 
     def put(self, request):

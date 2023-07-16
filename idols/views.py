@@ -58,14 +58,14 @@ class Idols(APIView): #[수정OK]
 
 class IdolDetail(APIView): #[수정OK]
 
-    def get_object(self, idol_name_kr): 
+    def get_object(self, idol_name_en): 
         try:
-            return Idol.objects.get(idol_name_kr=idol_name_kr)
+            return Idol.objects.get(idol_name_en=idol_name_en)
         except Idol.DoesNotExist:
             raise NotFound
 
-    def get(self, request, idol_name_kr): 
-        idol = self.get_object(idol_name_kr)
+    def get(self, request, idol_name_en): 
+        idol = self.get_object(idol_name_en)
        
         serializer = IdolDetailSerializer(
             idol,
@@ -73,11 +73,11 @@ class IdolDetail(APIView): #[수정OK]
         )
         return Response(serializer.data, status=HTTP_200_OK)
     
-    def put(self, request, idol_name_kr): 
+    def put(self, request, idol_name_en): 
         if not request.user.is_admin:
             raise PermissionDenied
 
-        idol=self.get_object(idol_name_kr)
+        idol=self.get_object(idol_name_en)
         if request.user.is_admin:
             serializer=IdolDetailSerializer(
                 idol,  # user-data
@@ -126,8 +126,8 @@ class IdolDetail(APIView): #[수정OK]
         }
         """
 
-    def delete(self, request, idol_name_kr): 
-        idol=self.get_object(idol_name_kr)
+    def delete(self, request, idol_name_en): 
+        idol=self.get_object(idol_name_en)
        
         if request.user.is_admin==False: 
             raise PermissionDenied
@@ -137,16 +137,16 @@ class IdolDetail(APIView): #[수정OK]
 
 class IdolSchedule(APIView): #수정[OK]
 
-    def get_object(self, idol_name_kr):
+    def get_object(self, idol_name_en):
 
         try:
-            return Idol.objects.get(idol_name_kr=idol_name_kr)
+            return Idol.objects.get(idol_name_en=idol_name_en)
         except Idol.DoesNotExist:
             raise NotFound
 
-    def get(self, request, idol_name_kr):
+    def get(self, request, idol_name_en):
 
-        idol = self.get_object(idol_name_kr)
+        idol = self.get_object(idol_name_en)
         serializer = ScheduleSerializer(
             
             idol.idol_schedules.all(),
@@ -199,8 +199,8 @@ class IdolSchedule(APIView): #수정[OK]
                 for participant_data in request.data.get("participant"):
                     try:
                         
-                        idol_name_kr=participant_data.get("idol_name_kr")
-                        idol=Idol.objects.get(idol_name_kr=idol_name_kr)
+                        idol_name_en=participant_data.get("idol_name_en")
+                        idol=Idol.objects.get(idol_name_en=idol_name_en)
                         schedule.participant.add(idol)
                         
                     except Idol.DoesNotExist:
@@ -286,7 +286,7 @@ class IdolSchedulesCategories(APIView):#[수정(OK)]
 """
 
 class ScheduleDate(APIView):
-    def post(self, request, idol_name_kr):
+    def post(self, request, idol_name_en):
            
         # category_list = categories.split(",")  # 다중 카테고리를 콤마로 분리
         
@@ -312,14 +312,14 @@ class ScheduleDate(APIView):
         
         if len(category_list)==0:#아아돌이 참여하는 모든 스케쥴 받아옴
             schedules = Schedule.objects.filter(
-                participant__idol_name_kr=idol_name_kr,
+                participant__idol_name_en=idol_name_en,
                 when__year=year,
                 when__month=month
             )
         else:#검색
             schedules = Schedule.objects.filter(
                 ScheduleType__type__in=category_list,
-                participant__idol_name_kr=idol_name_kr,
+                participant__idol_name_en=idol_name_en,
                 when__year=year,
                 when__month=month         
             )
@@ -340,12 +340,13 @@ class ScheduleDate(APIView):
 } 
 """
 class UpcomingSchedules(APIView):
-    def get(self, request, idol_name_kr):
+    def get(self, request, idol_name_en):
         today = DateFormat(datetime.now()).format('Y-m-d')
         print("today: ", today)
         year=today.year
         month=today.month
         day=today.day
+        print("year: ",year, "month:",month, "day: ", day)
         pass
         # try:
         #     schedules = Schedule.objects.filter(
@@ -353,7 +354,8 @@ class UpcomingSchedules(APIView):
         #     when__month=month,
         #     when__day=day         
         # )
-        # except :
+        # except Schedule.DoesNotExist:
+        #     return Response([], status=HTTP_200_OK)
 
 
 
