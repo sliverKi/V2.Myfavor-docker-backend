@@ -43,11 +43,11 @@ class NewUsers(APIView):
         return Response({"email, password, nickname, name, age, pick, phone 을 입력해주세요."})
 
     def post(self, request):
-
+        
         password = request.data.get("password")
-
         if not password:
             raise ParseError
+        
         serializer = PrivateUserSerializer(data=request.data)
         print(password)
 
@@ -57,10 +57,23 @@ class NewUsers(APIView):
             user.save()
             # user.is_active=0
             # serializer = PrivateUserSerializer(user)
+            pick=request.data.get("pick")
+            print(pick)
+            if pick:
+                try:
+                    picked_idol=Idol.objects.get(pk=pick)
+                    user.pick=picked_idol
+                    user.save()
+                    picked_idol.pickCount+=1
+                    picked_idol.save()
+                except Idol.DoesNotExist:
+                    return Response({"error":"Pick한 아이돌이 없습니다!"}, status=HTTP_400_BAD_REQUEST)
             return Response(serializer.data, status=HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-
+"""
+{"email":"lovee3578@naver.com", "password":"eungi123@E", "nickname":"엄지지", "name":"엄지공주", "age":20, "phone":"01012341234", "pick":4}
+"""
 
 class LoginUser(APIView):
     permission_classes = [IsAuthenticated]
@@ -166,10 +179,10 @@ class EditPick(APIView):
 
 
     def put(self, request):
-        pick = request.user
-
+        user = request.user
+        print("me",user)
         serializer = PickSerializer(
-            pick,
+            user,
             data=request.data,
             partial=True,
         )

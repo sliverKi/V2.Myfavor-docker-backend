@@ -15,6 +15,27 @@ class PickSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("pick",)
+    
+    def update(self, instance, validated_data):
+        current_pick = instance.pick
+        print("cur", current_pick)
+        new_pick = validated_data.get("pick")
+        print("new", new_pick)
+        # 새로운 "pick"과 기존 "pick"이 다를 경우에만 처리
+        if current_pick and current_pick != new_pick:
+            # 기존에 "pick"한 아이돌의 pickCount를 -1로 감소시킴
+            if current_pick:
+                current_pick.pickCount -= 1
+                current_pick.save()
+
+            # 새로운 아이돌로 업데이트하고 pickCount를 +1로 증가시킴
+            instance.pick = new_pick
+            instance.save()
+
+            if new_pick:
+                new_pick.pickCount += 1
+                new_pick.save()
+        return instance
 
 
 # 캘린더에서 사용할 유저 정보
@@ -52,7 +73,6 @@ class SimpleUserSerializers(serializers.ModelSerializer):
 # admin 조회 용
 class TinyUserSerializers(serializers.ModelSerializer):
   
-
     def get_object(self, user):
         request = self.context["request"]
         return Idol.objects.filter(user=request.user, user__pk=user.pk).exists()
@@ -93,7 +113,6 @@ class PrivateUserSerializer(serializers.ModelSerializer):
         return age
 
     def validate_password(self, password):
-
         if password:
             if not re.search(r"[a-z]", password):
                 raise ValidationError("비밀번호는 영문 소문자를 포함해야 합니다.")

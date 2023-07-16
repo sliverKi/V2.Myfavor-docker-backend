@@ -16,7 +16,6 @@ urlpatterns = [
     path("api/v2/oauth/", include("oauth.urls")),
     path("api/v2/search/", include("search.urls")),
     path("api/v2/solos/", include("solos.urls")),
-    path("api/v2/hits/", include("hits.urls")),
     path("api/v2/albums/", include("albums.urls")),
      
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

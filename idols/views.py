@@ -336,7 +336,7 @@ class ScheduleDate(APIView):
 """
 {
   "categories": ["congrats", "broadcast"],
-  "when":"2023-07-16"
+  "when":"2023-07-16" or "2023-07"
 } 
 """
 class UpcomingSchedules(APIView):
@@ -347,13 +347,11 @@ class UpcomingSchedules(APIView):
             participant__idol_name_en=idol_name_en,
             when__gte=today
             ).order_by("when")[:3]
-            
             serializer = ScheduleSerializer(schedules, many=True)
-
         except schedules.DoesNotExist:
             return Response([], status=HTTP_200_OK)
-
         return Response(serializer.data, status=HTTP_200_OK)
+
 
 
 
