@@ -21,7 +21,7 @@ from schedules.serializers import ScheduleSerializer
 from schedules.models import Schedule
 from medias.serializers import PhotoSerializer
 from groups.models import Group
-
+from datetime import datetime
 
 class Idols(APIView): #[수정OK]
     
@@ -160,6 +160,7 @@ class IdolSchedule(APIView): #수정[OK]
         #아이돌 스케줄이 등록되면 hasSchedule을 false에서 true로 변경 할 것 (participant 에 있는 아이들도 같이 바꿀것 )
         idol=self.get_object(idol_name_kr)
         serializer=ScheduleSerializer(data=request.data)
+        
         if not request.user.is_admin:
             raise PermissionDenied
         
@@ -239,7 +240,7 @@ class IdolSchedule(APIView): #수정[OK]
     }
     """
 
-                  
+"""
 class IdolSchedulesCategories(APIView):#[수정(OK)]
     
     # def get(self, request, idol_name_kr, categories):
@@ -277,7 +278,7 @@ class IdolSchedulesCategories(APIView):#[수정(OK)]
 
         return Response(serializer.data, status=HTTP_200_OK)
 
-"""
+
 {
   "categories": ["congrats", "broadcast"],
   "when":"2023-07"
@@ -285,7 +286,60 @@ class IdolSchedulesCategories(APIView):#[수정(OK)]
 {"categories":[]}
 """
 
+class ScheduleDate(APIView):
+    def post(self, request, idol_name_kr):
+           
+        # category_list = categories.split(",")  # 다중 카테고리를 콤마로 분리
+        
+        all_categories = ["broadcast", "event", "release", "buy", "congrats"]
+        category_list = request.data.get("categories", all_categories)
+        when= request.data.get("when")
+        year, month, day = None, None, None
+        
+        if when:
+            cnt=when.count("-")
+            if cnt==2:
+                date=datetime.strptime(when, "%Y-%m-%d")
+                year=date.year
+                month=date.month
+                day=date.day
+                print("year", year, "month", month)
+                print("day", day)
+            else:
+                date=datetime.strptime(when, "%Y-%m")
+                year=date.year
+                month=date.month
+                print("year", year, "month", month)            
+        
+        if len(category_list)==0:#아아돌이 참여하는 모든 스케쥴 받아옴
+            schedules = Schedule.objects.filter(
+                participant__idol_name_kr=idol_name_kr,
+                when__year=year,
+                when__month=month
+            )
+        else:#검색
+            schedules = Schedule.objects.filter(
+                ScheduleType__type__in=category_list,
+                participant__idol_name_kr=idol_name_kr,
+                when__year=year,
+                when__month=month         
+            )
+        if day:
+            schedules = schedules.filter(when__day=day)
+        
+        if not schedules.exists():#참여하고 있는 스케줄이 없는 경우 
+            return Response([], status=HTTP_404_NOT_FOUND)
+        
+        serializer = ScheduleSerializer(schedules, many=True)
 
+        return Response(serializer.data, status=HTTP_200_OK)
+
+"""
+{
+  "categories": ["congrats", "broadcast"],
+  "when":"2023-07-16"
+} 
+"""
 class IdolSchedulesYear(APIView):
     
     def get_object(self, pk):
