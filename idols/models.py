@@ -34,10 +34,11 @@ class Idol(models.Model):
         blank=True,
         related_name="idols",
     )  
-    viewCount=models.PositiveBigIntegerField(#조회수
+    pickCount=models.PositiveBigIntegerField( #user's pick
         default=0,
         editable=False,
     )   
+
     def __str__(self)->str:
         return f"{self.idol_name_kr} ( {self.idol_name_en} )"
 

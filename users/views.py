@@ -111,60 +111,7 @@ class MyPage(APIView):
         user.delete()
         return Response({"message": "계정이 삭제되었습니다."}, status=HTTP_204_NO_CONTENT)
 
-class MyReport(APIView):#내가 제보한 글
-    permission_classes = [IsAuthenticated]
-    def get(self, request):
-        user=request.user
 
-        user_report=Report.objects.filter(owner=user).order_by('-created_at')
-        serializer=ReportSerializer(user_report, many=True)
-        return Response(serializer.data, status=HTTP_200_OK)
-
-class MyReportDetail(APIView):
-    permission_classes = [IsAuthenticated]
-    
-    def get_object(self, pk):
-        try:
-            return Report.objects.get(pk=pk)
-        except Report.DoesNotExist:
-            raise NotFound
-    
-    def get(self, reqeust, pk):
-        report=self.get_object(pk)
-        serializer=ReportDetailSerializer(report)
-        return Response(serializer.data, status=HTTP_200_OK)
-        
-    def put(self, request, pk):
-        report=self.get_object(pk)
-        
-        if report.is_enroll:
-            return Response("이 제보는 등록되었습니다.!", status=HTTP_400_BAD_REQUEST)
-        
-        serializer=ReportDetailSerializer(
-            report, 
-            data=request.data, 
-            partial=True,
-            
-        )
-        if serializer.is_valid():
-            updated_report=serializer.save()
-            return Response(
-                ReportDetailSerializer(updated_report).data, status=HTTP_202_ACCEPTED
-            )
-        else:
-            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-    """
-    {
-    "title": "Billboard Show Case4",
-    "location": "turkey",
-    "time": "2023-07-29T06:34:03"
-    } "whoes field 변경 불가"
-    """
-    
-    def delete(self, request, pk):
-        reports = self.get_object(pk)
-        reports.delete()
-        return Response(status=HTTP_204_NO_CONTENT)
 
 class UserDetail(APIView):  
     permission_classes = [IsAdminUser]  
@@ -340,7 +287,60 @@ class ReportDetail(APIView):
 
         return Response(status=HTTP_204_NO_CONTENT)
 
+class MyReport(APIView):#내가 제보한 글
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user=request.user
 
+        user_report=Report.objects.filter(owner=user).order_by('-created_at')
+        serializer=ReportSerializer(user_report, many=True)
+        return Response(serializer.data, status=HTTP_200_OK)
+
+class MyReportDetail(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get_object(self, pk):
+        try:
+            return Report.objects.get(pk=pk)
+        except Report.DoesNotExist:
+            raise NotFound
+    
+    def get(self, reqeust, pk):
+        report=self.get_object(pk)
+        serializer=ReportDetailSerializer(report)
+        return Response(serializer.data, status=HTTP_200_OK)
+        
+    def put(self, request, pk):
+        report=self.get_object(pk)
+        
+        if report.is_enroll:
+            return Response("이 제보는 등록되었습니다.!", status=HTTP_400_BAD_REQUEST)
+        
+        serializer=ReportDetailSerializer(
+            report, 
+            data=request.data, 
+            partial=True,
+            
+        )
+        if serializer.is_valid():
+            updated_report=serializer.save()
+            return Response(
+                ReportDetailSerializer(updated_report).data, status=HTTP_202_ACCEPTED
+            )
+        else:
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+    """
+    {
+    "title": "Billboard Show Case4",
+    "location": "turkey",
+    "time": "2023-07-29T06:34:03"
+    } "whoes field 변경 불가"
+    """
+    
+    def delete(self, request, pk):
+        reports = self.get_object(pk)
+        reports.delete()
+        return Response(status=HTTP_204_NO_CONTENT)
 
 
 class UserPhotos(APIView):

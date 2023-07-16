@@ -66,8 +66,7 @@ class IdolDetail(APIView): #[수정OK]
 
     def get(self, request, idol_name_kr): 
         idol = self.get_object(idol_name_kr)
-        # idol.viewCount+=1
-        # idol.save()
+       
         serializer = IdolDetailSerializer(
             idol,
             context={"request": request},
@@ -328,7 +327,7 @@ class ScheduleDate(APIView):
             schedules = schedules.filter(when__day=day)
         
         if not schedules.exists():#참여하고 있는 스케줄이 없는 경우 
-            return Response([], status=HTTP_404_NOT_FOUND)
+            return Response([], status=HTTP_204_NO_CONTENT)
         
         serializer = ScheduleSerializer(schedules, many=True)
 
