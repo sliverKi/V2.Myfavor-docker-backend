@@ -22,7 +22,7 @@ class Command(BaseCommand):
         
         count = options['count']
         
-        start_date = datetime(2023, 1, 1)
+        start_date = datetime(2023, 7, 1)
         end_date = datetime(2023, 12, 31)
 
         if count<=0:

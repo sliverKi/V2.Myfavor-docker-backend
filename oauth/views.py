@@ -112,7 +112,7 @@ class FindPW(APIView):#비밀번호 잊으면 비밀번호 초기화-> 재설정
             subject,
             message,
             "myfavor86@gmail.com",
-            ["lovee2756@naver.com"],
+            [user.email],
             fail_silently=False,
         )
 
