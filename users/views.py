@@ -114,7 +114,7 @@ class MyPage(APIView):
 
 
 class UserDetail(APIView):  
-    permission_classes = [IsAdminUser]  
+    # permission_classes = [IsAdminUser]  
 
     def get(self, request, pk):
         try:
