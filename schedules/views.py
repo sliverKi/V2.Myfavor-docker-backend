@@ -12,15 +12,15 @@ from rest_framework.status import (
     HTTP_403_FORBIDDEN, 
     HTTP_404_NOT_FOUND 
 )
-from .serializers import ScheduleSerializer, ScheduleDetailSerializer
-
+from .serializers import  slideScheduleSerializer, ScheduleSerializer, ScheduleDetailSerializer
+from datetime import datetime
 class Schedules(APIView): 
     
     def get(self, request):
         all_schedules = Schedule.objects.all().order_by("pk")
         print(all_schedules)
         serializer = ScheduleSerializer(all_schedules, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=HTTP_200_OK)
 
     def post(self, request):
   
@@ -42,6 +42,26 @@ class Schedules(APIView):
             else:
                 return Response(serializer.errors, HTTP_403_FORBIDDEN)
 
+
+class SlideSchedules(APIView):
+    def get(self, pk):
+        today=datetime.today()
+        print(today)
+        slide_schedules = Schedule.objects.filter(
+            when__gte=today
+        ).order_by("when")
+        serializer = slideScheduleSerializer(slide_schedules, many=True)
+        
+        modified_data = []#participant가 다수의 아이돌을 포함하고 있는 경우 ~> 쪼개기
+        for entry in serializer.data:
+            for participant in entry["participant"]:
+                new_entry = entry.copy()
+                new_entry["participant"] = participant
+                modified_data.append(new_entry)
+        
+        return Response(modified_data, status=HTTP_200_OK)
+        # return Response(serializer.data, status=HTTP_200_OK)
+            
 
 class ScheduleDetail(APIView): 
 

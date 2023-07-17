@@ -36,27 +36,26 @@ class SoloList(APIView):
 
 
 class SoloDetail(APIView):
-    def get_object(self, idol_name_kr):
+    def get_object(self, idol_name_en):
         try:
-            return Solo.objects.get(member__idol_name_kr=idol_name_kr)
+            return Solo.objects.get(member__idol_name_en=idol_name_en)
         except Solo.DoesNotExist:
             raise NotFound
         
-    def get(self, request, idol_name_kr):
-        solo=self.get_object(idol_name_kr)
+    def get(self, request, idol_name_en):
+        solo=self.get_object(idol_name_en)
         idol=solo.member
-        idol.viewCount+=1
-        idol.save()
+        
         serializer=soloDetailSerializer(
             solo,
             context={"request": request},
         )
         response_data = serializer.data #response_data 딕셔너리에 "viewCount" 필드를 추가, 
-        response_data["viewCount"] = idol.viewCount #해당 필드의 값을 Idol 모델의 viewCount 값으로 설정
+        
         return Response(response_data, status=status.HTTP_200_OK)#Solo 모델의 정보와 viewCount 값을 함께 반환
     
-    def put(self, request, idol_name_kr):
-        solo=self.get_object(idol_name_kr)
+    def put(self, request, idol_name_en):#수정이 안됌
+        solo=self.get_object(idol_name_en)
         if not request.user.is_admin:
             raise PermissionError
         serializer=soloDetailSerializer(
@@ -71,8 +70,8 @@ class SoloDetail(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
-    def delete(self, request, idol_name_kr):
-        solo=self.get_object(idol_name_kr)
+    def delete(self, request, idol_name_en):
+        solo=self.get_object(idol_name_en)
         if not request.user.is_admin: 
             raise PermissionDenied
         solo.delete()

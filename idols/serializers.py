@@ -8,6 +8,15 @@ from boards.serializers import BoardSerializer
 from schedules.models import Schedule
 
 
+class slideName(ModelSerializer):
+    idol=serializers.SerializerMethodField()
+    class Meta:
+        model=Idol
+        fields=("idol",)
+    def get_idol(self,obj):
+        return f"{obj.idol_name_kr}({obj.idol_name_en})"
+    
+    
 class soloSerializer(ModelSerializer):
     class Meta:
         model=Idol
@@ -38,30 +47,8 @@ class IdolsListSerializer(ModelSerializer):
         )
 
 
-class DateScheduleSerializer(ModelSerializer):
-    ScheduleType = BoardSerializer(read_only=True)
 
-    year=serializers.SerializerMethodField()
-    month=serializers.SerializerMethodField()
-    day=serializers.SerializerMethodField()
-    class Meta:
-        model=Schedule
-        fields=(
-            "pk",
-            "ScheduleTitle", 
-            "ScheduleType", 
-            "location", 
-            #"when", 
-            "year", 
-            "month", 
-            "day"
-        )
-    def get_year(self, obj):
-        return obj.when.year
-    def get_month(self, obj):
-        return obj.when.month
-    def get_day(self, obj):
-        return obj.when.day
+   
 
 class IdolDetailSerializer(ModelSerializer):
     # fullname=serializers.SerializerMethodField()

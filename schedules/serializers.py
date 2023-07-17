@@ -8,6 +8,22 @@ from boards.models import Board
 from boards.serializers import BoardSerializer
 from idols.serializers import TinyIdolSerializer, soloSerializer
 from idols.models import Idol
+from idols.serializers import slideName
+
+class slideScheduleSerializer(ModelSerializer):
+    ScheduleType = BoardSerializer(read_only=True)
+    participant=slideName(read_only=True, many=True)
+    class Meta:
+        model=Schedule
+        fields=(
+            "pk",
+            "ScheduleTitle", 
+            "ScheduleType", 
+            "location", 
+            "when", 
+            "participant"
+        )
+        
 
 class ScheduleSerializer(ModelSerializer):
 

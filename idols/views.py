@@ -14,7 +14,7 @@ from rest_framework.status import (
 from rest_framework.filters import SearchFilter
 
 from .models import Idol
-from .serializers import  TinyIdolSerializer, IdolsListSerializer, IdolDetailSerializer, DateScheduleSerializer, IdolsViewSerializer
+from .serializers import  TinyIdolSerializer, IdolsListSerializer, IdolDetailSerializer
 from boards.models import Board
 from boards.serializers import BoardSerializer
 from schedules.serializers import ScheduleSerializer
@@ -353,9 +353,17 @@ class UpcomingSchedules(APIView):
         return Response(serializer.data, status=HTTP_200_OK)
 
 
+class TopIdols(APIView):
+    def get(self, request):
+        # 상위 6명의 아이돌을 pickCount 기준으로 내림차순으로 정렬하여 가져옴
+        top_idols = Idol.objects.order_by('-pickCount')[:6]
 
+        # 상위 6명의 아이돌의 pickCount를 가져와서 딕셔너리에 저장
+        top_idols_pick_counts = {idol.idol_name_kr: idol.pickCount for idol in top_idols}
 
+        return Response(top_idols_pick_counts)
 
+"""
 class IdolSchedulesYear(APIView):
     
     def get_object(self, pk):
@@ -406,7 +414,7 @@ class IdolScheduelsDay(APIView):
         serializer=DateScheduleSerializer(schedules, many=True)
         return Response(serializer.data, status=HTTP_200_OK) 
 
-    
+"""
 
 class IdolPhotos(APIView):
 
