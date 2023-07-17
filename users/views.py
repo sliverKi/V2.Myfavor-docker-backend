@@ -56,18 +56,18 @@ class NewUsers(APIView):
             user.set_password(password)
             user.save()
             # user.is_active=0
-            # serializer = PrivateUserSerializer(user)
-            pick=request.data.get("pick")
-            print(pick)
-            if pick:
-                try:
-                    picked_idol=Idol.objects.get(pk=pick)
-                    user.pick=picked_idol
-                    user.save()
-                    picked_idol.pickCount+=1
-                    picked_idol.save()
-                except Idol.DoesNotExist:
-                    return Response({"error":"Pick한 아이돌이 없습니다!"}, status=HTTP_400_BAD_REQUEST)
+            serializer = PrivateUserSerializer(user)
+            # pick=request.data.get("pick")
+            # print(pick)
+            # if pick:
+            #     try:
+            #         picked_idol=Idol.objects.get(pk=pick)
+            #         user.pick=picked_idol
+            #         user.save()
+            #         picked_idol.pickCount+=1
+            #         picked_idol.save()
+            #     except Idol.DoesNotExist:
+            #         return Response({"error":"Pick한 아이돌이 없습니다!"}, status=HTTP_400_BAD_REQUEST)
             return Response(serializer.data, status=HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)

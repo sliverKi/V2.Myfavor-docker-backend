@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     path("", views.Idols.as_view(), name="idolList."),  #등록된 idolList {GET, POST}
-    path("topIdol/", views.TopIdols.as_view()),
+    # path("topIdol/", views.TopIdols.as_view()),
     path("<str:idol_name_en>/", views.IdolDetail.as_view(), name="get specific idol detail-info."),  #{get, post}
     path("<str:idol_name_en>/schedules/", views.IdolSchedule.as_view(), name="create-idol-scheduel."), #{아이돌의 일정 생성, get,post}
     
