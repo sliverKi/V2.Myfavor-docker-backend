@@ -1,12 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework import  status
 from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied, NotFound
 from rest_framework.response import Response
-
+from idols.models import Idol
 from .models import Solo
 from .serializers import soloSeiralizer, soloDetailSerializer
-class SoloList(APIView):
+class SoloList(APIView):#ok
     def get(self, request):
         all_solos=Solo.objects.all().order_by("pk")
         serializer=soloSeiralizer(all_solos, many=True, context={"request":request})
@@ -35,7 +35,7 @@ class SoloList(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class SoloDetail(APIView):
+class SoloDetail(APIView):#ok
     def get_object(self, idol_name_en):
         try:
             return Solo.objects.get(member__idol_name_en=idol_name_en)
@@ -44,18 +44,20 @@ class SoloDetail(APIView):
         
     def get(self, request, idol_name_en):
         solo=self.get_object(idol_name_en)
-        idol=solo.member
+        # idol=solo.member
         
         serializer=soloDetailSerializer(
             solo,
             context={"request": request},
         )
-        response_data = serializer.data #response_data 딕셔너리에 "viewCount" 필드를 추가, 
+        response_data = serializer.data 
         
-        return Response(response_data, status=status.HTTP_200_OK)#Solo 모델의 정보와 viewCount 값을 함께 반환
+        return Response(response_data, status=status.HTTP_200_OK)
     
-    def put(self, request, idol_name_en):#수정이 안됌
+    def put(self, request, idol_name_en):
         solo=self.get_object(idol_name_en)
+        print("solo", solo.member, "2", solo.member.idol_birthday, solo.member.idol_name_en)
+        
         if not request.user.is_admin:
             raise PermissionError
         serializer=soloDetailSerializer(
@@ -63,8 +65,14 @@ class SoloDetail(APIView):
             data=request.data,
             partial=True
         )
+        print("re: ",request.data)
+    
         if serializer.is_valid():
-            updated_solo=serializer.save()
+            updated_solo=serializer.save(
+                idol_birthday = request.data.get("idol_birthday", solo.member.idol_birthday),
+                idol_name_kr=request.data.get("idol_name_kr", solo.member.idol_name_kr),
+                idol_name_en=request.data.get("idol_name_en",  solo.member.idol_name_en)
+            )
             return Response(soloDetailSerializer(updated_solo).data, status=status.HTTP_202_ACCEPTED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

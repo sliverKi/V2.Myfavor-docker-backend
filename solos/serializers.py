@@ -80,6 +80,45 @@ class soloDetailSerializer(ModelSerializer):
         except Exception as e:
             raise ValidationError({"error": str(e)})
         return solo
+    def update(self, instance, validated_data):
+        idol_name_kr = validated_data.get("idol_name_kr", instance.member.idol_name_kr)
+        idol_birthday = validated_data.get("idol_birthday", instance.member.idol_birthday)
+
+        # idol_name_en은 요청 데이터에 포함되지 않으면 기존 값을 사용합니다.
+        idol_name_en = validated_data.get("idol_name_en", instance.member.idol_name_en)
+
+        try:
+            with transaction.atomic():
+                # 나머지 필드들도 업데이트합니다. (요청 데이터에 포함되어 있는 경우에만)
+                instance.enter = validated_data.get("enter", instance.enter)
+                instance.solo_profile = validated_data.get("solo_profile", instance.solo_profile)
+                instance.solo_debut = validated_data.get("solo_debut", instance.solo_debut)
+                instance.solo_insta = validated_data.get("solo_insta", instance.solo_insta)
+                instance.solo_youtube = validated_data.get("solo_youtube", instance.solo_youtube)
+
+                # instance를 저장합니다.
+                instance.save()
+
+                # instance.member에 연결된 Idol 객체를 가져온 후 수정한 필드를 저장합니다.
+                if instance.member:
+                    instance.member.idol_name_kr = idol_name_kr
+                    instance.member.idol_name_en = idol_name_en
+                    instance.member.idol_birthday = idol_birthday
+                    instance.member.save()
+
+        except Exception as e:
+            raise ValidationError({"error": str(e)})
+
+        return instance
+
+
+
+
+
+
+
+    
+   
 
 """create data
 {
@@ -98,6 +137,9 @@ class soloDetailSerializer(ModelSerializer):
 "idol_birthday":"1993-05-16",
 "solo_debut":"2008-09-18"
 }
+
+updatedata
+{ "idol_name_en":"Lisa","idol_birthday":"1996-07-07", "idol_name_kr":"라리사노반", "enter":"YG Family"}
 """
 
 
