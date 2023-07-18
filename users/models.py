@@ -49,7 +49,7 @@ class User(AbstractUser):
     phone = models.CharField(max_length=13, null=True, blank=True)
 
     is_admin = models.BooleanField(default=False)  
-
+    is_active = models.BooleanField(default=False)
     pick = models.ForeignKey(
         "idols.Idol",
         blank=False,

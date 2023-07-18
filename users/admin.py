@@ -29,6 +29,7 @@ class CustomUserAdmin(UserAdmin):
                     "pick",
                     "age",
                     "is_admin",
+                    "is_active"
                 ),
                 "classes": ("wide",),
             },
@@ -37,7 +38,7 @@ class CustomUserAdmin(UserAdmin):
             "Permissions",
             {
                 "fields": (
-                    "is_active",
+                    
                     "is_staff",
                     "is_superuser",
                     "groups",
@@ -63,6 +64,7 @@ class CustomUserAdmin(UserAdmin):
         "phone",
         "pick",
         "is_admin",
+        "is_active"
     )
     list_display_links = (
         "email",
@@ -71,7 +73,7 @@ class CustomUserAdmin(UserAdmin):
         "name",
         "pick",
     )
-    list_filter = ("nickname",)
+    list_filter = ("nickname","is_active")
     search_fields = (
         "name",
         "nickname",

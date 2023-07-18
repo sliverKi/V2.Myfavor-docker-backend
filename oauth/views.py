@@ -8,50 +8,156 @@ from django.contrib.auth.tokens import default_token_generator
 from rest_framework import status 
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.exceptions import NotFound, ParseError
+from rest_framework.exceptions import NotFound, ParseError, AuthenticationFailed
 from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser,
 )
 from users.models import User
 from users.serializers import (
-    TinyUserSerializers
+    TinyUserSerializers,
+    PrivateUserSerializer
 )
-
+from idols.models import Idol
+from .models import EmailVerificationToken
 from django.contrib.auth import login, authenticate
 from django.contrib.auth import get_user_model
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 
-class emailValidate(APIView):
+class SignUP(APIView):#회원가입
     def get(self, request):
-        return Response({"message":"이메일 인증을 완료해 주세요."}, status=status.HTTP_200_OK)
-    def post(self, request):
-        pass
+        return Response({"email, password, nickname, name, age, pick, phone 을 입력해주세요."})
 
-class Login(APIView):  
+    def post(self, request):#[수정필요]
+        
+        password = request.data.get("password")
+        if not password:
+            raise ParseError
+        
+        serializer = PrivateUserSerializer(data=request.data)
+        print(password)
+
+        if serializer.is_valid():
+            user = serializer.save()
+            user.set_password(password)
+            
+            token = default_token_generator.make_token(user)
+            email_vertification_token = EmailVerificationToken.objects.create(
+            user=user,
+            token=token,
+            )
+            print("2", user, token)
+            reset_url = request.build_absolute_uri(
+            reverse_lazy("email_verification", kwargs={"pk": user.pk, "token": email_vertification_token})
+            )#send mail 성공시
+            
+            subject="Account Activation"
+            message = f"Please click the link below to activate account:\n\n{reset_url}"
+            # Send email
+            send_mail(
+                subject,
+                message,
+                "myfavor86@gmail.com",
+                [user.email],
+                fail_silently=False,
+            )
+            user.is_active=False#아직 이메일 인증을 하지 않음.
+            user.save()
+            
+            serializer = PrivateUserSerializer(user)
+            pick=request.data.get("pick")
+            print(pick)
+            if pick:
+                try:
+                    picked_idol=Idol.objects.get(pk=pick)
+                    user.pick=picked_idol
+                    user.save()
+                    picked_idol.pickCount+=1
+                    picked_idol.save()
+                except Idol.DoesNotExist:
+                    return Response({"error":"Pick한 아이돌이 없습니다!"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
+"""
+{"email":"lovee3578@naver.com", "password":"eungi123@E", "nickname":"엄지지", "name":"엄지공주", "age":20, "phone":"01012341234", "pick":4}
+"""
+
+
+class EmailVerification(APIView):
+    def get(self, request, pk, token):
+        print("7",pk)
+        try:
+            user = User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise NotFound("User not found.")
+        print("3", user,token)
+        if not user.is_active:
+            user.is_active = True
+            user.save()
+            return Response({"detail": "Email verification successful."}, status=status.HTTP_200_OK)
+        else:
+            return Response({"detail": "Invalid verification link."}, status=status.HTTP_400_BAD_REQUEST)
+
+"""
+class Login(APIView):
     def post(self, request, format=None):
         email = request.data.get("email")
         password = request.data.get("password")
         
         try:
             user = User.objects.get(email=email)
+            print("user", user)
+            user = authenticate(
+                request,
+                email=email,
+                password=password,
+            )
+
+            if user is None:
+                raise AuthenticationFailed({"error": "비밀번호가 잘못되었습니다."}, code='authentication_failed')
+
+            if not user.is_active:
+                return Response({"error": "Email 인증을 완료해 주세요!"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+        
+            login(request, user)
+            return Response(status=status.HTTP_200_OK)
+
+        except User.DoesNotExist:
+            raise NotFound
+"""
+class Login(APIView):  #is_active 검사 
+    def post(self, request, format=None):
+        email = request.data.get("email")
+        password = request.data.get("password")
+        
+        try:
+            user = User.objects.get(email=email)
+            print("user", user)
+            if not user.is_active:
+                raise ParseError({"error":"Email 인증을 완료해 주세요!"})
+            
             user = authenticate(
             request,
             email = email,
             password = password,
-        )    
+            )
+            print("user2", user)    
             
         except User.DoesNotExist:
             raise NotFound
-        
+                
         if not email or not password:
             raise ParseError("잘못된 정보를 입력하였습니다.")
         
         if user.check_password(password):
             login(request, user)
             return Response(status=status.HTTP_200_OK)
-        return Response({"error": "비밀번호가 잘못되었습니다."}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"error": "비밀번호가 잘못되었습니다."}, status=status.HTTP_400_BAD_REQUEST)
     
 #접속한 사용자의 정보를 불러와야 함.
 #{"email":"myfavor@gmail.com", "password":"myfavor"}
