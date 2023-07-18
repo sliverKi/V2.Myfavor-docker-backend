@@ -81,3 +81,7 @@ class IdolDetailSerializer(ModelSerializer):
     #         instance.group.set(group_data)
     #     return instance
 
+class PickIdolSerializer(ModelSerializer):#groupDetail에서 사용
+    class Meta:
+        model=Idol
+        fields=( "idol_name_kr","idol_name_en", "idol_profile", "idol_birthday", "pickCount")

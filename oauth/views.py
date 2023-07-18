@@ -167,7 +167,7 @@ class ChangePW(APIView):
                 user.save()
                 return Response({"비밀번호가 성공적으로 변경되었습니다."}, status=status.HTTP_202_ACCEPTED)
             else:
-                return Response({"변경 될 비밀번호가 기존 비밀번호와 동일합니다."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"변경될 비밀번호가 기존 비밀번호와 동일합니다."}, status=status.HTTP_400_BAD_REQUEST)
         else:
             raise ParseError("비밀번호를 다시 확인해주세요.")
 

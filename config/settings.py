@@ -266,3 +266,7 @@ PASSWORD_RESET_CONFIRM_URL = 'password_reset_confirm'
 # DEFAULT_FILE_STORAGE = 'config.utils.CustomS3Boto3Storage'
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'path/to/store/my/files/')
+
+
+
+

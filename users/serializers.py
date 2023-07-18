@@ -24,14 +24,11 @@ class PickSerializer(serializers.ModelSerializer):
         # 새로운 "pick"과 기존 "pick"이 다를 경우에만 처리
         if current_pick and current_pick != new_pick:
             # 기존에 "pick"한 아이돌의 pickCount를 -1로 감소시킴
-            if current_pick:
-                current_pick.pickCount -= 1
-                current_pick.save()
-
+            current_pick.pickCount -= 1
+            current_pick.save()
             # 새로운 아이돌로 업데이트하고 pickCount를 +1로 증가시킴
             instance.pick = new_pick
             instance.save()
-
             if new_pick:
                 new_pick.pickCount += 1
                 new_pick.save()
