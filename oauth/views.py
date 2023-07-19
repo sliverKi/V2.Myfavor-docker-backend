@@ -133,7 +133,9 @@ class Login(APIView):  #is_active 검사
     def post(self, request, format=None):
         email = request.data.get("email")
         password = request.data.get("password")
-        
+
+        if not email or not password:
+            raise ParseError("잘못된 정보를 입력하였습니다.")
         try:
             user = User.objects.get(email=email)
             print("user", user)
@@ -150,9 +152,6 @@ class Login(APIView):  #is_active 검사
         except User.DoesNotExist:
             raise NotFound
                 
-        if not email or not password:
-            raise ParseError("잘못된 정보를 입력하였습니다.")
-        
         if user.check_password(password):
             login(request, user)
             return Response(status=status.HTTP_200_OK)
