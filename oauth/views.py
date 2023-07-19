@@ -24,7 +24,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth import get_user_model
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
-
+import re
 class SignUP(APIView):#회원가입
     def get(self, request):
         return Response({"email, password, nickname, name, age, pick, phone 을 입력해주세요."})
@@ -239,7 +239,14 @@ class PWResetConfirm(APIView):
             raise NotFound("Invalid password reset token.")
 
         # 단계 3: 새로운 비밀번호를 업데이트합니다.
+        
         new_password = request.data.get("new_password")
+        
+        password_patterns=r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+{}\":;'])[\w~!@#$%^&*()_+{}\":;']{8,16}$"
+        if not re.match(password_patterns, new_password):
+            return Response({"message":"새로운 비밀번호는 8자 이상 16자 이하의 영문 대소문자와 숫자, 특수문자를 포함해야 합니다."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         print("4", new_password)#{"new_password":"eungi123@E"}
         if not new_password:
             return Response({"error": "New password is required."}, status=status.HTTP_400_BAD_REQUEST)
@@ -265,14 +272,21 @@ class ChangePW(APIView):
 
         if not old_password or not new_password:
             raise ParseError
-
+        
+        # password_patterns=r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$"
+        password_patterns=r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+{}\":;'])[\w~!@#$%^&*()_+{}\":;']{8,16}$"
+        if not re.match(password_patterns, new_password):
+            return Response({"message":"새로운 비밀번호는 8자 이상 16자 이하의 영문 대소문자와 숫자, 특수문자를 포함해야 합니다."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
         if user.check_password(old_password):
             if old_password != new_password:
                 user.set_password(new_password)
                 user.save()
-                return Response({"비밀번호가 성공적으로 변경되었습니다."}, status=status.HTTP_202_ACCEPTED)
+                return Response({"message":"비밀번호가 성공적으로 변경되었습니다."}, status=status.HTTP_202_ACCEPTED)
             else:
-                return Response({"변경될 비밀번호가 기존 비밀번호와 동일합니다."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"message":"변경될 비밀번호가 기존 비밀번호와 동일합니다."}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            raise ParseError("비밀번호를 다시 확인해주세요.")
+            raise Response({"message":"비밀번호를 다시 확인해주세요."}, status=status.HTTP_400_BAD_REQUEST)
 
