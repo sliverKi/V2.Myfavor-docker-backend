@@ -49,7 +49,7 @@ class SlideSchedules(APIView):
         print(today)
         slide_schedules = Schedule.objects.filter(
             when__gte=today
-        ).order_by("when")
+        ).order_by("when")[:10]
         serializer = slideScheduleSerializer(slide_schedules, many=True)
         
         modified_data = []#participant가 다수의 아이돌을 포함하고 있는 경우 ~> 쪼개기
