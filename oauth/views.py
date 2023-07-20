@@ -102,33 +102,7 @@ class EmailVerification(APIView):
         else:
             return Response({"detail": "Invalid verification link."}, status=status.HTTP_400_BAD_REQUEST)
 
-"""
-class Login(APIView):
-    def post(self, request, format=None):
-        email = request.data.get("email")
-        password = request.data.get("password")
-        
-        try:
-            user = User.objects.get(email=email)
-            print("user", user)
-            user = authenticate(
-                request,
-                email=email,
-                password=password,
-            )
 
-            if user is None:
-                raise AuthenticationFailed({"error": "비밀번호가 잘못되었습니다."}, code='authentication_failed')
-
-            if not user.is_active:
-                return Response({"error": "Email 인증을 완료해 주세요!"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
-        
-            login(request, user)
-            return Response(status=status.HTTP_200_OK)
-
-        except User.DoesNotExist:
-            raise NotFound
-"""
 class Login(APIView):  #is_active 검사 
     def post(self, request, format=None):
         email = request.data.get("email")
