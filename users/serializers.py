@@ -5,7 +5,8 @@ from .models import User, Report
 from idols.models import Idol
 from idols.serializers import TinyIdolSerializer
 from boards.serializers import BoardSerializer
-
+from boards.models import Board
+from django.db import transaction
 
 # class HtmlSerializer(serializers.Serializer):
 #     html_field = serializers.CharField()
@@ -170,10 +171,20 @@ class ReportSerializer(serializers.ModelSerializer):
 class ReportDetailSerializer(serializers.ModelSerializer):
     owner = serializers.CharField(source='owner.nickname', read_only=True)
     whoes = serializers.SerializerMethodField()
+    ScheduleType = BoardSerializer(read_only=True)
 
     class Meta:
         model = Report
-        fields = ("pk","owner","ScheduleTitle","ScheduleType","location","when","whoes","is_enroll")
+        fields = (
+            "pk",
+            "owner",
+            "ScheduleTitle",
+            "ScheduleType",
+            "location",
+            "when",
+            "whoes",
+            "is_enroll"
+        )
     
     def get_whoes(self, instance):
         whoes = instance.whoes.all()
@@ -182,5 +193,21 @@ class ReportDetailSerializer(serializers.ModelSerializer):
             for idol in whoes
         ]
  
+    def create(self, validated_data):
+        ScheduleType_data = validated_data.pop('ScheduleType', None)
+        print("1", ScheduleType_data)
+        try:
+            with transaction.atomic():
+                report=Report.objects.create(**validated_data)
+                if ScheduleType_data:
+                    print("2",ScheduleType_data)
+                    ScheduleType=Board.objects.filter(type=ScheduleType_data).first()
+                    report.ScheduleType=ScheduleType
+                    report.save()
+                
+        except Exception as e:
+            raise ValidationError({"error":str(e)})
+        return report
+
 
 

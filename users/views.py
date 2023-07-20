@@ -171,22 +171,23 @@ class AllReport(APIView):
     def get(self, request):#[수정 ok]
 
         all_reports = Report.objects.all()
-        serializer = ReportDetailSerializer(all_reports, many=True)
+        serializer = ReportSerializer(all_reports, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
 
     def post(self,request):#[수정 ok]
 
         serializer = ReportDetailSerializer(
-            data=request.data,
-            
+            data=request.data,  
         )
         if serializer.is_valid():
             with transaction.atomic():
                 owner_nickname = request.user.nickname
                 owner = User.objects.get(nickname=owner_nickname)
-                report = serializer.save(owner=owner)
+                report = serializer.save(
+                    owner=owner,
+                    ScheduleType=request.data.get("ScheduleType")
+                    )
                 whoes = request.data.get("whoes", [])
-                
                 print("whoes",whoes)
                 print(request.user.pick.idol_name_en)
                 if not whoes:
@@ -224,11 +225,11 @@ class AllReport(APIView):
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 """
 {
-    "whoes": ["Winter"], ["윈터(Winter)"], ["윈터"]
-    "type": "broadcast",
-    "title": "Billboard Show Case2",
+    "whoes": ["LA"],
+    "ScheduleType": "broadcast",
+    "ScheduleTitle": "post test AllReport",
     "location": "USA",
-    "time": "2023-03-12T15:34:03+09:00"
+    "when": "2023-03-12T15:34:03+09:00"
 }
 """
 
