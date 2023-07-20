@@ -4,13 +4,14 @@ from rest_framework import serializers
 from .models import User, Report
 from idols.models import Idol
 from idols.serializers import TinyIdolSerializer
+from boards.serializers import BoardSerializer
 
 
 # class HtmlSerializer(serializers.Serializer):
 #     html_field = serializers.CharField()
 
 
-# pick 수정용
+# pick 수정~> 유효시간 설정하기 
 class PickSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -159,9 +160,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ReportSerializer(serializers.ModelSerializer):
+    ScheduleType = BoardSerializer(read_only=True)
+
     class Meta:
         model=Report
-        fields=("pk", "title", "time", "is_enroll")
+        fields=("pk", "ScheduleTitle", "ScheduleType", "when", "is_enroll")
 
 
 class ReportDetailSerializer(serializers.ModelSerializer):
@@ -170,7 +173,7 @@ class ReportDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Report
-        fields = ("pk","owner","title","location","time","whoes","is_enroll")
+        fields = ("pk","owner","ScheduleTitle","ScheduleType","location","when","whoes","is_enroll")
     
     def get_whoes(self, instance):
         whoes = instance.whoes.all()

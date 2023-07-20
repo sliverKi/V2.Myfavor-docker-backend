@@ -92,7 +92,7 @@ class groupDetailSerializer(ModelSerializer):
         instance.enter = enter
         instance.group_insta = group_insta
         instance.group_youtube = group_youtube
-
+        instance.groupname=groupname
         instance.save()
 
         print("members:", members_data)
@@ -180,5 +180,42 @@ class groupDetailSerializer(ModelSerializer):
         }
     ]
 }
+"""
+
+"""
+{
+"enter":"S2" ,       
+"groupname": "KIss of Life",
+        "group_profile": "https://image.kpopmap.com/2023/06/kiss_of_life_profile_s_0622.jpg",
+        "group_debut": "2023-07-05",
+        "group_insta": "https://www.instagram.com/kissoflife_s2/",
+        "group_youtube": "https://www.youtube.com/@KISSOFLIFE_official",
+ "member": [
+        {
+            "나띠(Natty)": {
+                "profile": "https://image.kpopmap.com/2020/04/natty_profile_s_0621.jpg",
+                "idol_birthday": "2002-05-30"
+            }
+        },
+       {
+           "혜원(Belle)":{
+               "profile":"https://image.kpopmap.com/2023/06/belle_profile_s_0621.jpg",
+               "idol_birthday":"2004-05-20"
+             }
+        },
+       {
+         "줄리 한(Julie)":{
+          "profile":"https://image.kpopmap.com/2023/06/jullie_profile_s_0622.jpg",
+         "idol_birthday":"2000-05-29"
+            }
+        },
+        {
+         "원 하늘(Ha Neul)":{
+          "profile":"https://image.kpopmap.com/2023/06/haneul_profile_S_0621.jpg",
+         "idol_birthday":"2005-05-25"
+            }
+        }
+     ]
+    }
 """
 

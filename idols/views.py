@@ -155,9 +155,9 @@ class IdolSchedule(APIView): #수정[OK]
         return Response(serializer.data, status=HTTP_200_OK)
 
     
-    def post(self, request, idol_name_kr):
+    def post(self, request, idol_name_en):
         #아이돌 스케줄이 등록되면 hasSchedule을 false에서 true로 변경 할 것 (participant 에 있는 아이들도 같이 바꿀것 )
-        idol=self.get_object(idol_name_kr)
+        idol=self.get_object(idol_name_en)
         serializer=ScheduleSerializer(data=request.data)
         
         if not request.user.is_admin:
@@ -221,8 +221,7 @@ class IdolSchedule(APIView): #수정[OK]
 
         "ScheduleTitle": "아는 형님 녹화",
         "ScheduleType": {
-            "type": "broadcast",
-            "content":"지젤 건강문제로 녹화 불참"(optional)
+            "type": "broadcast"
         },
         "location": "여의도 일산",
         "when": "2023-06-30T18:00:00",
@@ -234,6 +233,33 @@ class IdolSchedule(APIView): #수정[OK]
             {
                 "idol_name_kr": "카리나",
                 "idol_name_en": "Karina"
+            }
+        ]
+    }
+
+    {
+        "ScheduleTitle": "Music Bank 녹화",
+        "ScheduleType": {
+            "type": "broadcast"
+          },
+        "location": "여의도 일산",
+        "when": "2023-07-13T18:00:00",
+        "participant": [
+            {
+                "idol_name_kr": "혜원",
+                "idol_name_en": "Belle"
+            },
+            {
+                "idol_name_kr": "줄리 한",
+                "idol_name_en": "Julie"
+            },
+            {
+                "idol_name_kr": "원 하늘",
+                "idol_name_en": "Ha Neul"
+            },
+           {
+                "idol_name_kr": "나띠",
+                "idol_name_en": "Natty"
             }
         ]
     }

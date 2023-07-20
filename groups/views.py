@@ -6,7 +6,7 @@ from rest_framework.exceptions import NotFound, PermissionDenied
 from .models import Group
 from .serializers import groupSerializer, groupDetailSerializer
 from idols.models import Idol
-from idols.serializers import SimpleIdolInfoSerializer
+from idols.serializers import TinyIdolSerializer, SimpleIdolInfoSerializer
 
 class GroupList(APIView):#[OK]
     
@@ -98,7 +98,7 @@ class GroupIdol(APIView):
             # idol.save()
         except NotFound:
             return Response({"message": "Idol not found in the group."}, status=status.HTTP_400_BAD_REQUEST)
-        serializer = SimpleIdolInfoSerializer(idol)
+        serializer = TinyIdolSerializer(idol)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, group, idol_name_en):

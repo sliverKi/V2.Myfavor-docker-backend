@@ -84,9 +84,17 @@ class Report(CommonModel):
         on_delete=models.CASCADE,
         related_name="report",
     )
-    title = models.CharField(max_length=100, default="")
+    ScheduleTitle = models.CharField(max_length=100, default="")
+    ScheduleType = models.ForeignKey(
+        "boards.Board",
+        max_length=150,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="report",
+    )
     location = models.CharField(max_length=100, default="")
-    time = models.DateTimeField(default=datetime.now)#스케쥴 일자 
+    when = models.DateTimeField(default=datetime.now)#스케쥴 일자 
     whoes = models.ManyToManyField(  
         "idols.Idol",
         null=True,
@@ -96,7 +104,7 @@ class Report(CommonModel):
     is_enroll=models.BooleanField(default=False)
     
     def str(self):
-        return self.title
+        return self.ScheduleTitle
 
     class Meta:
         verbose_name_plural = "User Report"
