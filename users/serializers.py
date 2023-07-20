@@ -7,7 +7,7 @@ from idols.serializers import TinyIdolSerializer
 from boards.serializers import BoardSerializer
 from boards.models import Board
 from django.db import transaction
-
+from django.db.models import Q
 # class HtmlSerializer(serializers.Serializer):
 #     html_field = serializers.CharField()
 
@@ -165,7 +165,7 @@ class ReportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=Report
-        fields=("pk", "ScheduleTitle", "ScheduleType", "when", "is_enroll")
+        fields=("pk", "owner", "whoes", "ScheduleTitle", "ScheduleType","location", "when", "is_enroll")
 
 
 class ReportDetailSerializer(serializers.ModelSerializer):
@@ -194,20 +194,107 @@ class ReportDetailSerializer(serializers.ModelSerializer):
         ]
  
     def create(self, validated_data):
+        owner_nickname = validated_data.pop('owner')
+        print("3", owner_nickname)
         ScheduleType_data = validated_data.pop('ScheduleType', None)
+        whoes=validated_data.pop("whoes", [])
+
         print("1", ScheduleType_data)
         try:
             with transaction.atomic():
-                report=Report.objects.create(**validated_data)
+                owner = User.objects.get(nickname=owner_nickname)
+                print("4", owner)
+                report=Report.objects.create(owner=owner, **validated_data)
                 if ScheduleType_data:
                     print("2",ScheduleType_data)
                     ScheduleType=Board.objects.filter(type=ScheduleType_data).first()
                     report.ScheduleType=ScheduleType
                     report.save()
-                
+                print(5)
+                if not whoes:
+                    raise ParseError("제보할 아이돌을 알려 주세요.")
+                if len(set(whoes)) != 1:
+                    raise ParseError("한명의 아이돌만 제보가 가능합니다.")
+                print(7)
+                if not any(
+                    owner.pick.idol_name_kr in whoes_item or
+                    owner.pick.idol_name_en in whoes_item
+                    for whoes_item in whoes
+                    ):
+                    raise ParseError("참여자는 본인의 아이돌만 선택 가능합니다.")
+                if not isinstance(whoes, list):
+                    if whoes:
+                        raise ParseError("who_pk must be a list")
+                    else:
+                        raise ParseError(
+                            "whoes report? Who should be required. not null"
+                        )
+                idol_name = whoes[0].split("(")[0].strip()
+               
+                try:
+                    idol = Idol.objects.get(Q(idol_name_kr=idol_name) | Q(idol_name_en=idol_name))
+                    report.whoes.add(idol)
+
+                except Idol.DoesNotExist:
+                    raise ParseError("선택하신 아이돌이 없어요.")
         except Exception as e:
             raise ValidationError({"error":str(e)})
         return report
+    
+    def update(self, instance, validated_data):
+        ScheduleType_data=validated_data.pop("ScheduleType", instance.ScheduleType)
+        ScheduleTitle=validated_data.pop("ScheduleTitle", instance.ScheduleTitle)
+        location=validated_data.pop("location", instance.location)
+        print("1",location)
+        when=validated_data.pop("when", instance.when)
+        whoes=validated_data.pop("whoes", instance.whoes)
+        print("2", whoes)
+        
+        instance.ScheduleTitle = ScheduleTitle
+        instance.location = location
+        instance.when = when
+        
+        instance.save()
+
+        if ScheduleType_data:
+            print("2", ScheduleType_data)
+            for i in Board.objects.all():
+                print(i.type)
+            updated_type=Board.objects.filter(type=ScheduleType_data).first()
+            instance.ScheduleType = updated_type
+            instance.save()
+        if whoes:
+            instance.whoes.clear()
+            if not whoes:
+                raise ParseError("제보할 아이돌을 알려 주세요.")
+            if len(set(whoes)) != 1:
+                raise ParseError("한명의 아이돌에 대해서만 등록이 가능합니다.")
+            idol_name = whoes[0].split("(")[0].strip()
+               
+            try:
+                idol = Idol.objects.get(Q(idol_name_kr=idol_name) | Q(idol_name_en=idol_name))
+                instance.whoes.add(idol)
+
+            except Idol.DoesNotExist:
+                raise ParseError("선택하신 아이돌이 없어요.")
+        return instance
 
 
 
+
+"""
+create-data
+{
+    "whoes": ["LA"],
+    "ScheduleType": "broadcast",
+    "ScheduleTitle": "post test create function",
+    "location": "USA",
+    "when": "2023-03-12T15:34:03+09:00"
+}
+
+update-data
+
+"""
+    
+    
+        

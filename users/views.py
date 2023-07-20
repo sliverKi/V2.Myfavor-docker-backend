@@ -37,11 +37,6 @@ from medias.serializers import UserProfileSerializer
 from idols.models import Idol
 
 
-
-
-
-
-
 class LoginUser(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
@@ -161,77 +156,32 @@ class EditPick(APIView):
 
 
 class AllReport(APIView):
-    # def get_object(self, pk):
-
-    #     try:
-    #         return User.objects.get(pk=pk)
-    #     except User.DoesNotExist:
-    #         raise NotFound
-
     def get(self, request):#[수정 ok]
 
         all_reports = Report.objects.all()
-        serializer = ReportSerializer(all_reports, many=True)
+        serializer = ReportDetailSerializer(all_reports, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
 
     def post(self,request):#[수정 ok]
+        user=request.user
 
         serializer = ReportDetailSerializer(
             data=request.data,  
         )
         if serializer.is_valid():
-            with transaction.atomic():
-                owner_nickname = request.user.nickname
-                owner = User.objects.get(nickname=owner_nickname)
-                report = serializer.save(
-                    owner=owner,
-                    ScheduleType=request.data.get("ScheduleType")
-                    )
-                whoes = request.data.get("whoes", [])
-                print("whoes",whoes)
-                print(request.user.pick.idol_name_en)
-                if not whoes:
-                    raise ParseError("제보할 아이돌을 알려 주세요.")
-                if len(set(whoes)) != 1:
-                    raise ParseError("한명의 아이돌만 제보가 가능합니다.")
-                if not any(
-                    request.user.pick.idol_name_kr in whoes_item or
-                    request.user.pick.idol_name_en in whoes_item
-                    for whoes_item in whoes
-                    ):
-                    raise ParseError("참여자는 본인의 아이돌만 선택 가능합니다.")
-                if not isinstance(whoes, list):
-                    if whoes:
-                        raise ParseError("who_pk must be a list")
-                    else:
-                        raise ParseError(
-                            "whoes report? Who should be required. not null"
-                        )
-                idol_name = whoes[0].split("(")[0].strip()
-               
-                try:
-                    idol = Idol.objects.get(Q(idol_name_kr=idol_name) | Q(idol_name_en=idol_name))
-                    report.whoes.add(idol)
-
-                except Idol.DoesNotExist:
-                    raise ParseError("선택하신 아이돌이 없어요.")
-
-                serializer = ReportDetailSerializer(
-                    report,
-                    context={"request": request},
-                )
-                return Response(serializer.data, status=HTTP_201_CREATED)
+            report=serializer.save(
+                owner=user.nickname,
+                ScheduleType=request.data.get("ScheduleType"),
+                whoes = request.data.get("whoes")
+            )
+            serializer=ReportDetailSerializer(
+                report, 
+                context={"request":request}
+            )
+            return Response(serializer.data, HTTP_202_ACCEPTED)
         else:
-            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-"""
-{
-    "whoes": ["LA"],
-    "ScheduleType": "broadcast",
-    "ScheduleTitle": "post test AllReport",
-    "location": "USA",
-    "when": "2023-03-12T15:34:03+09:00"
-}
-"""
+            return Response(serializer.errors, HTTP_400_BAD_REQUEST)
+
 
 class ReportDetail(APIView):
     def get_object(self, pk):
@@ -256,7 +206,11 @@ class ReportDetail(APIView):
                 partial=True,
             )
         if serializer.is_valid():
-            updated_report = serializer.save()
+            updated_report = serializer.save(
+                ScheduleType=request.data.get("ScheduleType"),
+                whoes=request.data.get("whoes"),
+                location=request.data.get("location")
+            )
             return Response(
                 ReportDetailSerializer(updated_report).data, status=HTTP_200_OK)
         else:
@@ -278,7 +232,7 @@ class MyReport(APIView):#내가 제보한 글
         user=request.user
 
         user_report=Report.objects.filter(owner=user).order_by('-created_at')
-        serializer=ReportSerializer(user_report, many=True)
+        serializer=ReportDetailSerializer(user_report, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
 
 class MyReportDetail(APIView):
