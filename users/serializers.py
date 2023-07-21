@@ -8,6 +8,9 @@ from boards.serializers import BoardSerializer
 from boards.models import Board
 from django.db import transaction
 from django.db.models import Q
+from datetime import timedelta
+from django.utils import timezone
+
 # class HtmlSerializer(serializers.Serializer):
 #     html_field = serializers.CharField()
 
@@ -77,6 +80,7 @@ class TinyUserSerializers(serializers.ModelSerializer):
   
     idol_name = serializers.SerializerMethodField(read_only=True)
     idol_profile = serializers.SerializerMethodField(source="pick.idol_profile", read_only=True)
+    selected_time = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%S", read_only=True)
     
     def get_object(self, user):
         request = self.context["request"]
@@ -88,12 +92,14 @@ class TinyUserSerializers(serializers.ModelSerializer):
             "pk",
             "nickname",
             "email",
+            "phone",
+            "profileImg",
             "pick",
             "idol_name",
             "idol_profile",
-            "phone",
+            "selected_time",
             "is_admin",
-            "profileImg",
+            
         )
         extra_kwargs = {
             'nickname': {'read_only': True},
@@ -109,7 +115,21 @@ class TinyUserSerializers(serializers.ModelSerializer):
         pick=user.pick
         return pick.idol_profile if pick else None
     
-    
+    def validate_pick(self, value):
+        # 사용자가 최소 1일(필요에 따라 timedelta를 조정하세요) 이상 "pick"을 변경한 경우만 업데이트를 허용합니다.
+        selected_time = self.instance.selected_time
+        if selected_time:
+            # min_update_day = 1
+            min_update_time = selected_time + timedelta(minutes=2) #timedelta(days=min_update_day)
+            if timezone.now() < min_update_time:
+                raise ValidationError("최소 2분이 지나야 'pick'을 업데이트할 수 있습니다.")
+        return value
+
+    def update(self, instance, validated_data):
+        # "pick"을 업데이트하기 전에 "last_pick_change_time"을 최신으로 갱신합니다.
+        instance.selected_time = timezone.now()
+        instance.save()
+        return super().update(instance, validated_data)
     
 
 # 회원가입 시 사용하는 정보

@@ -6,6 +6,7 @@ from django.contrib.auth.models import (
 from datetime import datetime
 from .manager import CustomUserManager
 from common.models import CommonModel
+
 # superuser
 # myfavor@gmail.com / myfavor
 class User(AbstractUser):
@@ -63,7 +64,8 @@ class User(AbstractUser):
         blank=True,
         related_name="users",
     )
-
+    selected_time = models.DateTimeField(default=datetime.now)#스케쥴 일자 
+    
     def str(self):
         return self.name
     

@@ -29,7 +29,8 @@ class CustomUserAdmin(UserAdmin):
                     "pick",
                     "age",
                     "is_admin",
-                    "is_active"
+                    "is_active",
+                    "selected_time"
                 ),
                 "classes": ("wide",),
             },
