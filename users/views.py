@@ -254,7 +254,6 @@ class MyReportDetail(APIView):
         
         if report.is_enroll:
             return Response("이 제보는 등록되었습니다.!", status=HTTP_400_BAD_REQUEST)
-        
         serializer=ReportDetailSerializer(
             report, 
             data=request.data, 
@@ -262,10 +261,13 @@ class MyReportDetail(APIView):
             
         )
         if serializer.is_valid():
-            updated_report=serializer.save()
-            return Response(
-                ReportDetailSerializer(updated_report).data, status=HTTP_202_ACCEPTED
+            updated_report=serializer.save(
+                ScheduleType=request.data.get("ScheduleType"),
+                whoes=request.data.get("whoes"),
+                # location=request.data.get("location")
             )
+            serializer=ReportDetailSerializer(updated_report)
+            return Response(serializer.data, status=HTTP_202_ACCEPTED)
         else:
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
     """

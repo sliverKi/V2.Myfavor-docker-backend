@@ -257,7 +257,7 @@ class ReportDetailSerializer(serializers.ModelSerializer):
         instance.save()
 
         if ScheduleType_data:
-            print("2", ScheduleType_data)
+            print("3", ScheduleType_data)
             for i in Board.objects.all():
                 print(i.type)
             updated_type=Board.objects.filter(type=ScheduleType_data).first()
@@ -293,7 +293,11 @@ create-data
 }
 
 update-data
-
+{   "ScheduleTitle": "오늘 너무 더워",
+    "ScheduleType": "event",
+    "location": "Incheon",
+    "when": "2023-07-21T15:30:00"
+}
 """
     
     
