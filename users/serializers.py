@@ -14,21 +14,12 @@ from django.db.models import Q
 
 # pick 수정~> 유효시간 설정하기 
 class PickSerializer(serializers.ModelSerializer):
-    idol_name = serializers.SerializerMethodField(read_only=True)
-    idol_profile = serializers.SerializerMethodField(source="pick.idol_profile", read_only=True)
+    
     class Meta:
         model = User
-        fields = ("pick","idol_name", "idol_profile")
+        fields = ("pick",)
     
-    def get_idol_name(self, user):
-        pick=user.pick
-        if pick:
-            return f"{pick.idol_name_kr} ({pick.idol_name_en})"
-        return None
-     
-    def get_idol_profile(self, user):
-        pick=user.pick
-        return pick.idol_profile if pick else None
+   
     
     def update(self, instance, validated_data):
         current_pick = instance.pick
@@ -84,10 +75,13 @@ class SimpleUserSerializers(serializers.ModelSerializer):
 # admin 조회 용
 class TinyUserSerializers(serializers.ModelSerializer):
   
+    idol_name = serializers.SerializerMethodField(read_only=True)
+    idol_profile = serializers.SerializerMethodField(source="pick.idol_profile", read_only=True)
+    
     def get_object(self, user):
         request = self.context["request"]
         return Idol.objects.filter(user=request.user, user__pk=user.pk).exists()
-
+    
     class Meta:
         model = User
         fields = (
@@ -95,12 +89,22 @@ class TinyUserSerializers(serializers.ModelSerializer):
             "nickname",
             "email",
             "pick",
+            "idol_name",
+            "idol_profile",
             "phone",
             "is_admin",
             "profileImg",
         )
 
-
+    def get_idol_name(self, user):
+        pick=user.pick
+        if pick:
+            return f"{pick.idol_name_kr} ({pick.idol_name_en})"
+        return None
+     
+    def get_idol_profile(self, user):
+        pick=user.pick
+        return pick.idol_profile if pick else None
 # 회원가입 시 사용하는 정보
 class PrivateUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -172,12 +176,7 @@ class UserSerializer(serializers.ModelSerializer):
         return user.is_admin == request.user.is_admin
 
 
-class ReportSerializer(serializers.ModelSerializer):
-    ScheduleType = BoardSerializer(read_only=True)
 
-    class Meta:
-        model=Report
-        fields=("pk", "owner", "whoes", "ScheduleTitle", "ScheduleType","location", "when", "is_enroll")
 
 
 class ReportDetailSerializer(serializers.ModelSerializer):

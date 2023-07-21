@@ -28,7 +28,6 @@ from .serializers import (
     SimpleUserSerializers,
     TinyUserSerializers,
     PrivateUserSerializer,
-    ReportSerializer,
     ReportDetailSerializer,
     UserSerializer,
     PickSerializer,
