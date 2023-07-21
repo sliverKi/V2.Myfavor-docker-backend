@@ -195,6 +195,8 @@ class ReportDetail(APIView):
         serializer = ReportDetailSerializer(report)
         return Response(serializer.data, status=HTTP_200_OK)
 
+    
+
     def put(self, request, pk):
         if not request.user.is_admin:
             raise PermissionDenied("권한 없음")
@@ -253,30 +255,22 @@ class MyReportDetail(APIView):
         report=self.get_object(pk)
         
         if report.is_enroll:
-            return Response("이 제보는 등록되었습니다.!", status=HTTP_400_BAD_REQUEST)
+            return Response({"message":"이 제보는 등록되었습니다.!"}, status=HTTP_400_BAD_REQUEST)
+        
         serializer=ReportDetailSerializer(
             report, 
             data=request.data, 
-            partial=True,
-            
+            partial=True, 
         )
         if serializer.is_valid():
             updated_report=serializer.save(
                 ScheduleType=request.data.get("ScheduleType"),
-                whoes=request.data.get("whoes"),
-                # location=request.data.get("location")
+                whoes=request.data.get("whoes")
             )
             serializer=ReportDetailSerializer(updated_report)
             return Response(serializer.data, status=HTTP_202_ACCEPTED)
         else:
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-    """
-    {
-    "title": "Billboard Show Case4",
-    "location": "turkey",
-    "time": "2023-07-29T06:34:03"
-    } "whoes field 변경 불가"
-    """
     
     def delete(self, request, pk):
         reports = self.get_object(pk)

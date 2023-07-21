@@ -14,9 +14,21 @@ from django.db.models import Q
 
 # pick 수정~> 유효시간 설정하기 
 class PickSerializer(serializers.ModelSerializer):
+    idol_name = serializers.SerializerMethodField(read_only=True)
+    idol_profile = serializers.SerializerMethodField(source="pick.idol_profile", read_only=True)
     class Meta:
         model = User
-        fields = ("pick",)
+        fields = ("pick","idol_name", "idol_profile")
+    
+    def get_idol_name(self, user):
+        pick=user.pick
+        if pick:
+            return f"{pick.idol_name_kr} ({pick.idol_name_en})"
+        return None
+     
+    def get_idol_profile(self, user):
+        pick=user.pick
+        return pick.idol_profile if pick else None
     
     def update(self, instance, validated_data):
         current_pick = instance.pick
