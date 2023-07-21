@@ -95,6 +95,9 @@ class TinyUserSerializers(serializers.ModelSerializer):
             "is_admin",
             "profileImg",
         )
+        extra_kwargs = {
+            'nickname': {'read_only': True},
+        }
 
     def get_idol_name(self, user):
         pick=user.pick
@@ -105,6 +108,10 @@ class TinyUserSerializers(serializers.ModelSerializer):
     def get_idol_profile(self, user):
         pick=user.pick
         return pick.idol_profile if pick else None
+    
+    
+    
+
 # 회원가입 시 사용하는 정보
 class PrivateUserSerializer(serializers.ModelSerializer):
     class Meta:
