@@ -9,9 +9,9 @@ from idols.models import Idol
 from idols.serializers import TinyIdolSerializer, SimpleIdolInfoSerializer
 
 class getGroup:
-    def get_object(self, groupname):
+    def get_group(self, groupname):
         try:
-            return Group.objects.get(groupname=groupname)
+            return Group.objects.prefetch_related('member').get(groupname=groupname)
         except Group.DoesNotExist:
             raise NotFound
 
@@ -46,12 +46,12 @@ class GroupList(APIView):#[OK]
 class GroupDetail(getGroup, APIView):#[OK]
             
     def get(self, request, groupname):
-        group=self.get_object(groupname)
+        group=self.get_group(groupname)
         serializer=groupDetailSerializer(group)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def put(self, request, groupname):
-        group=self.get_object(groupname)
+        group=self.get_group(groupname)
         if not request.user.is_admin:
             raise PermissionError
         print(group)
@@ -72,7 +72,7 @@ class GroupDetail(getGroup, APIView):#[OK]
         
         
     def delete(self, request, groupname):
-        group=self.get_object(groupname)
+        group=self.get_group(groupname)
         if not request.user.is_admin:
             raise PermissionError
         group.delete()
@@ -88,7 +88,7 @@ class GroupIdol(getGroup, APIView):
             raise NotFound
         
     def get(self, request, groupname, idol_name_en):
-        group=self.get_object(groupname)
+        group=self.get_group(groupname)
         try:
             idol = self.get_idol(group, idol_name_en)
         except NotFound:

@@ -39,6 +39,7 @@ class groupDetailSerializer(ModelSerializer):
         )
     def create(self, validated_data):#아이돌 생일도 받을것 
         members_data=validated_data.pop("member",None)
+        idols_to_create=[]
         try:
             with transaction.atomic():#roll-back
                 group=Group.objects.create(**validated_data)
@@ -52,14 +53,29 @@ class groupDetailSerializer(ModelSerializer):
                             profile=info.get("profile")
                             idol_birthday=info.get("idol_birthday")
                             print(12)
-                            idol, created = Idol.objects.get_or_create(
-                                idol_name_kr=idol_name_kr,
+                            # idol, created = Idol.objects.get_or_create(
+                            #     idol_name_kr=idol_name_kr,
+                            #     idol_name_en=idol_name_en,
+                            #     idol_profile=profile,
+                            #     idol_birthday=idol_birthday,
+                            # )
+                            # group.member.add(idol)
+                            # idol.group.add(group)
+                            idols_to_create.append(
+                                Idol(
                                 idol_name_en=idol_name_en,
+                                idol_name_kr=idol_name_kr,
                                 idol_profile=profile,
                                 idol_birthday=idol_birthday,
+                                )
                             )
-                            group.member.add(idol)
-                            idol.group.add(group)
+                    if idols_to_create:
+                        idols=Idol.objects.bulk_create(idols_to_create)  
+                        print("45:", idols)  
+                        group.member.add(*idols)
+                        group.save()
+                        [idol.group.add(group) for idol in idols]
+                            
                 else:
                     print(2)
                     name, info = members_data.items()[0]
@@ -96,7 +112,8 @@ class groupDetailSerializer(ModelSerializer):
         instance.save()
 
         print("members:", members_data)
-        if members_data:    
+        if members_data:   
+            
             for name, info in members_data.items():   
                 name=name.split("(")
                 idol_name_kr=name[0].strip()                    
@@ -136,7 +153,7 @@ class groupDetailSerializer(ModelSerializer):
 'update method input data'
 ( 그룹에 새로운 멤버 추가 또는 기존의 멤버 수정 )
 {
-    "groupname": "BLACKPINK",
+    "groupname": "BLACKPINK",(필수)
     "member": {
         "리사(Lisa)": {
             "profile": "https://i.namu.wiki/i/iOatgawg2prYRPY8xJPV5H7rwv2aFJWKWCyNTJOu314mQIVWTBCiHiCC_0Tsa60CkJpmV7giNS2KGEpnnR1dibh8eGflBdp4Vg-CnHoDf720giCGK4GjLgzsP4jqFvGM6HSOPcbz7mqlKx4IBpG5EA.webp",
