@@ -36,7 +36,7 @@ class Idols(APIView): #[수정OK]
     
     def get(self, request):
 
-        all_idols = Idol.objects.all().order_by("pk")
+        all_idols = Idol.objects.prefetch_related().order_by("pk")
         serializer = IdolsListSerializer(all_idols, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
 
