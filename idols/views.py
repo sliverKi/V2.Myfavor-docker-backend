@@ -23,11 +23,20 @@ from medias.serializers import PhotoSerializer
 from groups.models import Group
 from datetime import datetime
 from django.utils.dateformat import DateFormat
+
+
+class getIdol:
+    def get_idol(self, idol_name_en): 
+        try:
+            return Idol.objects.get(idol_name_en=idol_name_en)
+        except Idol.DoesNotExist:
+            raise NotFound
+        
 class Idols(APIView): #[수정OK]
     
     def get(self, request):
 
-        all_idols = Idol.objects.all().order_by("pk")
+        all_idols = Idol.objects.prefetch_related().order_by("pk")
         serializer = IdolsListSerializer(all_idols, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
 
@@ -56,16 +65,16 @@ class Idols(APIView): #[수정OK]
 
 
 
-class IdolDetail(APIView): #[수정OK]
+class IdolDetail(getIdol, APIView): #[수정OK]
 
-    def get_object(self, idol_name_en): 
-        try:
-            return Idol.objects.get(idol_name_en=idol_name_en)
-        except Idol.DoesNotExist:
-            raise NotFound
+    # def get_object(self, idol_name_en): 
+    #     try:
+    #         return Idol.objects.get(idol_name_en=idol_name_en)
+    #     except Idol.DoesNotExist:
+    #         raise NotFound
 
     def get(self, request, idol_name_en): 
-        idol = self.get_object(idol_name_en)
+        idol = self.get_idol(idol_name_en)
        
         serializer = IdolDetailSerializer(
             idol,
@@ -77,7 +86,7 @@ class IdolDetail(APIView): #[수정OK]
         if not request.user.is_admin:
             raise PermissionDenied
 
-        idol=self.get_object(idol_name_en)
+        idol=self.get_idol(idol_name_en)
         if request.user.is_admin:
             serializer=IdolDetailSerializer(
                 idol,  # user-data
@@ -127,7 +136,7 @@ class IdolDetail(APIView): #[수정OK]
         """
 
     def delete(self, request, idol_name_en): 
-        idol=self.get_object(idol_name_en)
+        idol=self.get_idol(idol_name_en)
        
         if request.user.is_admin==False: 
             raise PermissionDenied
@@ -135,18 +144,18 @@ class IdolDetail(APIView): #[수정OK]
         if idol.DoesNotExist:
             return Response(status=HTTP_204_NO_CONTENT)    
 
-class IdolSchedule(APIView): #수정[OK]
+class IdolSchedule(getIdol, APIView): #수정[OK]
 
-    def get_object(self, idol_name_en):
+    # def get_object(self, idol_name_en):
 
-        try:
-            return Idol.objects.get(idol_name_en=idol_name_en)
-        except Idol.DoesNotExist:
-            raise NotFound
+    #     try:
+    #         return Idol.objects.get(idol_name_en=idol_name_en)
+    #     except Idol.DoesNotExist:
+    #         raise NotFound
 
     def get(self, request, idol_name_en):
 
-        idol = self.get_object(idol_name_en)
+        idol = self.get_idol(idol_name_en)
         serializer = ScheduleSerializer(
             
             idol.idol_schedules.all(),
@@ -157,7 +166,7 @@ class IdolSchedule(APIView): #수정[OK]
     
     def post(self, request, idol_name_en):
         #아이돌 스케줄이 등록되면 hasSchedule을 false에서 true로 변경 할 것 (participant 에 있는 아이들도 같이 바꿀것 )
-        idol=self.get_object(idol_name_en)
+        idol=self.get_idol(idol_name_en)
         serializer=ScheduleSerializer(data=request.data)
         
         if not request.user.is_admin:
