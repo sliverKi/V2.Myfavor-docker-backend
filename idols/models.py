@@ -6,9 +6,10 @@ from django.core.exceptions import ValidationError
 from common.models import CommonModel
 import datetime
 from prizes.models import Prize
-# from times.models import TimeModel
+
 class Idol(models.Model):
     """Idol Model Definition"""
+    
     idol_name_kr = models.CharField(max_length=100, default="")
     idol_name_en = models.CharField(max_length=100, default="")
 
