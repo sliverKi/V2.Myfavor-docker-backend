@@ -8,6 +8,13 @@ from .serializers import groupSerializer, groupDetailSerializer
 from idols.models import Idol
 from idols.serializers import TinyIdolSerializer, SimpleIdolInfoSerializer
 
+class getGroup:
+    def get_object(self, groupname):
+        try:
+            return Group.objects.get(groupname=groupname)
+        except Group.DoesNotExist:
+            raise NotFound
+
 class GroupList(APIView):#[OK]
     
     def get(self, request):
@@ -36,12 +43,7 @@ class GroupList(APIView):#[OK]
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-class GroupDetail(APIView):#[OK]
-    def get_object(self, groupname):
-        try:
-            return Group.objects.get(groupname=groupname)
-        except Group.DoesNotExist:
-            raise NotFound
+class GroupDetail(getGroup, APIView):#[OK]
             
     def get(self, request, groupname):
         group=self.get_object(groupname)
@@ -77,12 +79,7 @@ class GroupDetail(APIView):#[OK]
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     
-class GroupIdol(APIView):
-    def get_group(self, groupname):
-        try:
-            return Group.objects.get(groupname=groupname)
-        except Group.DoesNotExist:
-            raise NotFound
+class GroupIdol(getGroup, APIView):
     
     def get_idol(self, group,idol_name_en):
         try:
@@ -91,11 +88,9 @@ class GroupIdol(APIView):
             raise NotFound
         
     def get(self, request, groupname, idol_name_en):
-        group=self.get_group(groupname)
+        group=self.get_object(groupname)
         try:
             idol = self.get_idol(group, idol_name_en)
-            # idol.viewCount+=1
-            # idol.save()
         except NotFound:
             return Response({"message": "Idol not found in the group."}, status=status.HTTP_400_BAD_REQUEST)
         serializer = TinyIdolSerializer(idol)

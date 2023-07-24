@@ -136,7 +136,7 @@ class groupDetailSerializer(ModelSerializer):
 'update method input data'
 ( 그룹에 새로운 멤버 추가 또는 기존의 멤버 수정 )
 {
-    "groupname": "BLACKPINK",(필수)
+    "groupname": "BLACKPINK",
     "member": {
         "리사(Lisa)": {
             "profile": "https://i.namu.wiki/i/iOatgawg2prYRPY8xJPV5H7rwv2aFJWKWCyNTJOu314mQIVWTBCiHiCC_0Tsa60CkJpmV7giNS2KGEpnnR1dibh8eGflBdp4Vg-CnHoDf720giCGK4GjLgzsP4jqFvGM6HSOPcbz7mqlKx4IBpG5EA.webp",
@@ -185,7 +185,7 @@ class groupDetailSerializer(ModelSerializer):
 """
 {
 "enter":"S2" ,       
-"groupname": "KIss of Life",
+"groupname": "Kiss of Life",
         "group_profile": "https://image.kpopmap.com/2023/06/kiss_of_life_profile_s_0622.jpg",
         "group_debut": "2023-07-05",
         "group_insta": "https://www.instagram.com/kissoflife_s2/",
@@ -219,3 +219,39 @@ class groupDetailSerializer(ModelSerializer):
     }
 """
 
+"""
+{
+"enter":"S2" ,       
+"groupname": "KIss of Life",
+        "group_profile": "https://image.kpopmap.com/2023/06/kiss_of_life_profile_s_0622.jpg",
+        "group_debut": "2023-07-05",
+        "group_insta": "https://www.instagram.com/kissoflife_s2/",
+        "group_youtube": "https://www.youtube.com/@KISSOFLIFE_official",
+ "member": [
+        {
+            "나나(NaNa)": {
+                "profile": "https://image.kpopmap.com/2020/04/natty_profile_s_0621.jpg",
+                "idol_birthday": "2002-05-30"
+            }
+        },
+       {
+           "벨(Bell)":{
+               "profile":"https://image.kpopmap.com/2023/06/belle_profile_s_0621.jpg",
+               "idol_birthday":"2004-05-20"
+             }
+        },
+       {
+         "줄리(July)":{
+          "profile":"https://image.kpopmap.com/2023/06/jullie_profile_s_0622.jpg",
+         "idol_birthday":"2000-05-29"
+            }
+        },
+        {
+         "원(One)":{
+          "profile":"https://image.kpopmap.com/2023/06/haneul_profile_S_0621.jpg",
+         "idol_birthday":"2005-05-25"
+            }
+        }
+     ]
+    }
+"""
