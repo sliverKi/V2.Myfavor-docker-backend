@@ -16,6 +16,7 @@ class getGroupName:
             return Group.objects.get(groupname=groupname)
         except Group.DoesNotExist:
             raise NotFound
+        
 class GroupAlbum(getGroupName, APIView):
     # def get_object(self, groupname):
     #     try: 
@@ -25,13 +26,10 @@ class GroupAlbum(getGroupName, APIView):
     
     def get(self, request,groupname):
         group=self.get_groupName(groupname)
-        albums=group.albums_group.all().order_by("-release_date")
-        serializer=AlbumSerializer(albums, many=True)
-        data={
-            "artists":group.groupname,
-            "albums":serializer.data
-        }
-        return Response(data, status=status.HTTP_200_OK)
+        albums=group.albums_group.prefetch_related('group_artists').order_by("-release_date")
+        serializer = AlbumSerializer(albums, many=True)  # AlbumSerializer를 사용하여 앨범 정보를 직렬화
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     def post(self, request, groupname):
         if not request.user.is_admin:

@@ -17,7 +17,6 @@ class AlbumSerializer(ModelSerializer):
         fields=("pk", "album_name", "album_cover")
     
 class GroupAlbumSerializer(ModelSerializer):
-    # groupname=serializers.CharField(source="group_artists.groupname", read_only=True)
     class Meta:
         model=Album
         fields=("pk","album_name", "release_date", "album_cover")

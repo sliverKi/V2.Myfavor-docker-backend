@@ -144,7 +144,7 @@ class IdolDetail(getIdol, APIView): #[수정OK]
         if idol.DoesNotExist:
             return Response(status=HTTP_204_NO_CONTENT)    
 
-class IdolSchedule(getIdol, APIView): #수정[OK]
+class IdolSchedule(getIdol, APIView): #수정[pagenation]:10개 적용할 것
 
     # def get_object(self, idol_name_en):
 
