@@ -210,7 +210,7 @@ class ReportDetailSerializer(serializers.ModelSerializer):
     owner = serializers.CharField(source='owner.nickname', read_only=True)
     whoes = serializers.SerializerMethodField()
     ScheduleType = BoardSerializer(read_only=True)
-
+    
     class Meta:
         model = Report
         fields = (
@@ -235,49 +235,25 @@ class ReportDetailSerializer(serializers.ModelSerializer):
         owner_nickname = validated_data.pop('owner')
         print("3", owner_nickname)
         ScheduleType_data = validated_data.pop('ScheduleType', None)
-        whoes=validated_data.pop("whoes", [])
-
         print("1", ScheduleType_data)
         try:
             with transaction.atomic():
                 owner = User.objects.get(nickname=owner_nickname)
+                whoes_data = [owner.pick]
+                print("4-1", whoes_data)
                 print("4", owner)
                 report=Report.objects.create(owner=owner, **validated_data)
+                report.whoes.set(whoes_data)
                 if ScheduleType_data:
                     print("2",ScheduleType_data)
                     ScheduleType=Board.objects.filter(type=ScheduleType_data).first()
                     report.ScheduleType=ScheduleType
                     report.save()
-                print(5)
-                if not whoes:
-                    raise ParseError("제보할 아이돌을 알려 주세요.")
-                if len(set(whoes)) != 1:
-                    raise ParseError("한명의 아이돌만 제보가 가능합니다.")
-                print(7)
-                if not any(
-                    owner.pick.idol_name_kr in whoes_item or
-                    owner.pick.idol_name_en in whoes_item
-                    for whoes_item in whoes
-                    ):
-                    raise ParseError("참여자는 본인의 아이돌만 선택 가능합니다.")
-                if not isinstance(whoes, list):
-                    if whoes:
-                        raise ParseError("who_pk must be a list")
-                    else:
-                        raise ParseError(
-                            "whoes report? Who should be required. not null"
-                        )
-                idol_name = whoes[0].split("(")[0].strip()
-               
-                try:
-                    idol = Idol.objects.get(Q(idol_name_kr=idol_name) | Q(idol_name_en=idol_name))
-                    report.whoes.add(idol)
-
-                except Idol.DoesNotExist:
-                    raise ParseError("선택하신 아이돌이 없어요.")
+                return report
         except Exception as e:
-            raise ValidationError({"error":str(e)})
-        return report
+            raise serializers.ValidationError({"error": str(e)})
+
+          
     
     def update(self, instance, validated_data):
         ScheduleType_data=validated_data.pop("ScheduleType", instance.ScheduleType)
@@ -321,13 +297,12 @@ class ReportDetailSerializer(serializers.ModelSerializer):
 
 
 """
-create-data
+user-report create-data
 {
-    "whoes": ["LA"],
     "ScheduleType": "broadcast",
     "ScheduleTitle": "post test create function",
     "location": "USA",
-    "when": "2023-03-12T15:34:03+09:00"
+    "when": "2023-07-25T15:34:03+09:00"
 }
 
 update-data

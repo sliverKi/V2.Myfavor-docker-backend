@@ -41,7 +41,7 @@ class ScheduleSerializer(ModelSerializer):
 
 class ScheduleDetailSerializer(ModelSerializer):
     ScheduleType = BoardSerializer(read_only=True)
-    participant = soloSerializer(many=True, read_only=True) #읽기 전용 필드 
+    # participant = soloSerializer(many=True, read_only=True) #읽기 전용 필드 
     class Meta:
         model=Schedule
         fields=(
@@ -88,7 +88,7 @@ class ScheduleDetailSerializer(ModelSerializer):
     def update(self, instance, validated_data):
         ScheduleType_data=validated_data.pop("ScheduleType", instance.ScheduleType)
         print("1", ScheduleType_data)
-        participant_data=validated_data.pop("participant", instance.participant)
+        # participant_data=validated_data.pop("participant", instance.participant)
         ScheduleTitle=validated_data.pop("ScheduleTitle", instance.ScheduleTitle)
         location=validated_data.pop("location", instance.location)
         when=validated_data.pop("when", instance.when)
@@ -107,21 +107,21 @@ class ScheduleDetailSerializer(ModelSerializer):
             instance.ScheduleType = updated_type
             instance.save()
 
-        if participant_data:
-            instance.participant.clear()
-            if isinstance(participant_data, list):
-                for participant in participant_data:
-                    participant=get_object_or_404(Idol, idol_name_kr=participant)
-                    instance.participant.add(participant)
-                    participant.has_schedules=True
-                    participant.idol_schedules.add(instance)
-                    participant.save()
-            else:
-                participant=get_object_or_404(Idol, idol_name_kr=participant)
-                instance.participant.add(participant)
-                participant.has_schedules=True
-                participant.idol_schedules.add(instance)
-                participant.save()
+        # if participant_data:
+        #     instance.participant.clear()
+        #     if isinstance(participant_data, list):
+        #         for participant in participant_data:
+        #             participant=get_object_or_404(Idol, idol_name_kr=participant)
+        #             instance.participant.add(participant)
+        #             participant.has_schedules=True
+        #             participant.idol_schedules.add(instance)
+        #             participant.save()
+        #     else:
+        #         participant=get_object_or_404(Idol, idol_name_kr=participant)
+        #         instance.participant.add(participant)
+        #         participant.has_schedules=True
+        #         participant.idol_schedules.add(instance)
+        #         participant.save()
         instance.save()
         return instance
 

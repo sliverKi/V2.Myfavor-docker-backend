@@ -163,15 +163,15 @@ class AllReport(APIView):
 
     def post(self,request):#[수정 ok]
         user=request.user
-
+        print("0",user.pick)
         serializer = ReportDetailSerializer(
             data=request.data,  
         )
         if serializer.is_valid():
             report=serializer.save(
                 owner=user.nickname,
+                
                 ScheduleType=request.data.get("ScheduleType"),
-                whoes = request.data.get("whoes")
             )
             serializer=ReportDetailSerializer(
                 report, 

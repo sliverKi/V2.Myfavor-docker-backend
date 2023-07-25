@@ -164,7 +164,7 @@ class IdolSchedule(getIdol, APIView): #수정[pagenation]:10개 적용할 것
         return Response(serializer.data, status=HTTP_200_OK)
 
     
-    def post(self, request, idol_name_en):
+    def post(self, request, idol_name_en):#관리자가 아이돌 스케쥴을 등록하려는 경우 사용되어짐. 
         #아이돌 스케줄이 등록되면 hasSchedule을 false에서 true로 변경 할 것 (participant 에 있는 아이들도 같이 바꿀것 )
         idol=self.get_idol(idol_name_en)
         serializer=ScheduleSerializer(data=request.data)
