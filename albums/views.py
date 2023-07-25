@@ -7,16 +7,24 @@ from albums.models import Album
 from groups.models import Group
 from solos.models import Solo
 from .serializers import AlbumSerializer, GroupAlbumSerializer, SoloAlbumSerializer
+from django.core.cache import cache
 
-class GroupAlbum(APIView):
-    def get_object(self, groupname):
-        try: 
+
+class getGroupName:
+    def get_groupName(self, groupname):
+        try:
             return Group.objects.get(groupname=groupname)
         except Group.DoesNotExist:
             raise NotFound
+class GroupAlbum(getGroupName, APIView):
+    # def get_object(self, groupname):
+    #     try: 
+    #         return Group.objects.get(groupname=groupname)
+    #     except Group.DoesNotExist:
+    #         raise NotFound
     
     def get(self, request,groupname):
-        group=self.get_object(groupname)
+        group=self.get_groupName(groupname)
         albums=group.albums_group.all().order_by("-release_date")
         serializer=AlbumSerializer(albums, many=True)
         data={
@@ -28,7 +36,7 @@ class GroupAlbum(APIView):
     def post(self, request, groupname):
         if not request.user.is_admin:
             raise PermissionError
-        group=self.get_object(groupname=groupname)
+        group=self.get_groupName(groupname=groupname)
         # print("group",group)
         
         serializer = GroupAlbumSerializer(
@@ -44,12 +52,12 @@ class GroupAlbum(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-class GroupAlbumDetail(APIView):
-    def get_groupname(self, groupname):
-        try:
-            return Group.objects.get(groupname=groupname)
-        except Group.DoesNotExist:
-            raise NotFound
+class GroupAlbumDetail(getGroupName, APIView):
+    # def get_groupname(self, groupname):
+    #     try:
+    #         return Group.objects.get(groupname=groupname)
+    #     except Group.DoesNotExist:
+    #         raise NotFound
     
     def get_album(self, groupname, pk):
         try:
@@ -58,7 +66,7 @@ class GroupAlbumDetail(APIView):
             raise NotFound
         
     def get(self, request, groupname, pk):
-        group=self.get_groupname(groupname)
+        group=self.get_groupName(groupname)
         try:
             album = self.get_album(group, pk).order_by("-release_date")
         except NotFound:
@@ -67,7 +75,7 @@ class GroupAlbumDetail(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def put(self, request,groupname, pk):
-        group=self.get_groupname(groupname)
+        group=self.get_groupName(groupname)
         album=self.get_album(group, pk)
         
         if not request.user.is_admin:
@@ -95,18 +103,24 @@ class GroupAlbumDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
         
 
-        
-
-
-class SoloAlbum(APIView):
-    def get_object(self, idol_name_en):
+class getSoloIdol:
+    def get_soloIdol(self, idol_name_en):
         try:
             return Solo.objects.get(member__idol_name_en=idol_name_en)
         except Solo.DoesNotExist:
             raise NotFound
+                
+
+
+class SoloAlbum(getSoloIdol, APIView):
+    # def get_object(self, idol_name_en):
+    #     try:
+    #         return Solo.objects.get(member__idol_name_en=idol_name_en)
+    #     except Solo.DoesNotExist:
+    #         raise NotFound
         
     def get(self, request, idol_name_en):
-        solo=self.get_object(idol_name_en)
+        solo=self.get_soloIdol(idol_name_en)
         print("1",solo)
         albums=solo.albums_solo.all().order_by("-release_date")
         serializer=AlbumSerializer(albums, many=True)
@@ -119,7 +133,7 @@ class SoloAlbum(APIView):
     def post(self, request, idol_name_en):
         if not request.user.is_admin:
             raise PermissionDenied
-        solo = self.get_object(idol_name_en)
+        solo = self.get_soloIdol(idol_name_en)
         serializer = SoloAlbumSerializer(
             data=request.data,
             context={'solo': solo}
@@ -130,13 +144,13 @@ class SoloAlbum(APIView):
             return Response(serialized_album.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class SoloAlbumDetail(APIView):
+class SoloAlbumDetail(getSoloIdol, APIView):
     
-    def get_solo(self, idol_name_en):
-        try:
-            return Solo.objects.get(member__idol_name_en=idol_name_en)
-        except Solo.DoesNotExist:
-            raise NotFound
+    # def get_solo(self, idol_name_en):
+    #     try:
+    #         return Solo.objects.get(member__idol_name_en=idol_name_en)
+    #     except Solo.DoesNotExist:
+    #         raise NotFound
     
     def get_album(self, solo, pk):
         try:
@@ -145,14 +159,14 @@ class SoloAlbumDetail(APIView):
             raise NotFound
     
     def get(self, request, idol_name_en, pk):
-        solo = self.get_solo(idol_name_en)
+        solo = self.get_soloIdol(idol_name_en)
         album = self.get_album(solo, pk).order_by("-release_date")
         serializer = SoloAlbumSerializer(album)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     
     def put(self, request,idol_name_en, pk):
-        solo=self.get_solo(idol_name_en)
+        solo=self.get_soloIdol(idol_name_en)
         album=self.get_album(solo, pk)
         
         if not request.user.is_admin:
@@ -173,7 +187,7 @@ class SoloAlbumDetail(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, idol_name_en, pk):
-        solo=self.get_solo(idol_name_en)
+        solo=self.get_soloIdol(idol_name_en)
         album = self.get_album(solo, pk)
         if not request.user.is_admin: 
             raise PermissionDenied
