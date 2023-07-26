@@ -324,14 +324,4 @@ update-data
     
     
         
-class enrollReportSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=Report
-        fields=(
-            "owner",
-            "ScheduleType",
-            "ScheduleTitle",
-            "location",
-            "when",
-            "whoes"
-        )
+
