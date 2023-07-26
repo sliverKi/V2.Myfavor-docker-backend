@@ -25,9 +25,9 @@ class slideScheduleSerializer(ModelSerializer):
         )
         
 
-class ScheduleSerializer(ModelSerializer):
+class ScheduleSerializer(ModelSerializer):#admin user가 user's report 등록시 사용 
 
-    ScheduleType = BoardSerializer(read_only=True)
+    ScheduleType = BoardSerializer(read_only=True, )
 
     class Meta:
         model = Schedule

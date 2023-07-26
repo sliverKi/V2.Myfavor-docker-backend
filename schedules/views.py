@@ -96,7 +96,7 @@ class ScheduleDetail(APIView):
                     ScheduleType=request.data.get("ScheduleType"),
                     location=request.data.get("location"),
                     when=request.data.get("when"),
-                    participant=request.data.get("participant")
+                    # participant=request.data.get("participant")
                 )
                 return Response(ScheduleDetailSerializer(updated_schedule).data, status=HTTP_202_ACCEPTED)
             else:

@@ -164,161 +164,56 @@ class IdolSchedule(getIdol, APIView): #수정[pagenation]:10개 적용할 것
         return Response(serializer.data, status=HTTP_200_OK)
 
     
+    
     def post(self, request, idol_name_en):#관리자가 아이돌 스케쥴을 등록하려는 경우 사용되어짐. 
         #아이돌 스케줄이 등록되면 hasSchedule을 false에서 true로 변경 할 것 (participant 에 있는 아이들도 같이 바꿀것 )
         idol=self.get_idol(idol_name_en)
-        serializer=ScheduleSerializer(data=request.data)
-        
         if not request.user.is_admin:
             raise PermissionDenied
-        
-        else:
-            serializer = ScheduleSerializer(data=request.data)
-            if serializer.is_valid():
-                schedule = serializer.save()
-        # 1. ScheduleType 에 있는 필드가 Category에 없는 경우, 유저가 입력한 내용을 새롭게 db에 생성(ok)     
-                try: 
-                    ScheduleType_data=request.data.get("ScheduleType")
-                    schedule_type=Board.objects.get(type=ScheduleType_data)
+        serializer=ScheduleSerializer(data=request.data)
+        print("re", request.data)
+        if serializer.is_valid():
+            schedule = serializer.save()  
+            try: 
+                ScheduleType_data=request.data.get("ScheduleType")
+                schedule_type=Board.objects.get(type=ScheduleType_data)
+                print("1", schedule_type)
+                schedule.ScheduleType = schedule_type
+                schedule.participant.add(idol)
+                schedule.save()
+                idol.idol_schedules.add(schedule)
+                if idol.idol_schedules:
+                    idol.has_schedules=True  
+                    idol.save()
+            except Board.DoesNotExist:
+                category_serializer=BoardSerializer(data=ScheduleType_data)
                     
-                    if not schedule_content:
-                        schedule_content=Board.objects.create(type=ScheduleType_data)
-                    schedule.ScheduleType = schedule_type
-                    schedule.ScheduleContent = schedule_content
-                    schedule.save()
-                    
-                    # idol.idol_schedules.add(schedule)
-                except Board.DoesNotExist:
-                    category_serializer=BoardSerializer(data=ScheduleType_data)
-                    
-                    if category_serializer.is_valid():
-                        schedule_type=category_serializer.save()
-                    else:
-                        return Response(category_serializer.errors, status=HTTP_400_BAD_REQUEST)
-                    schedule.ScheduleType=schedule_type
-                    schedule.save()    
+                if category_serializer.is_valid():
+                    schedule_type=category_serializer.save()
+                else:
+                    return Response(category_serializer.errors, status=HTTP_400_BAD_REQUEST)
+                schedule.ScheduleType=schedule_type
+                schedule.save()    
                 
                 idol.idol_schedules.add(schedule)
                 if idol.idol_schedules:
                     idol.has_schedules=True  
                     idol.save()
-        
-        # 2. participant 에 있는 idol의 idol_schedules 필드에 자동으로 schedule추가(OK)
-        # 3. particioant에 아이돌 이름을 입력하면, 해당하는 아이돌들이 participant field에  자동으로 선택되어 질 것(ok)
-                for participant_data in request.data.get("participant"):
-                    try:
-                        
-                        idol_name_en=participant_data.get("idol_name_en")
-                        idol=Idol.objects.get(idol_name_en=idol_name_en)
-                        schedule.participant.add(idol)
-                        
-                    except Idol.DoesNotExist:
-                        idol_serializer=IdolDetailSerializer(data=participant_data)
-                        if idol_serializer.is_valid():
-                            idol=idol_serializer.save()
-                        else:
-                            return Response(idol_serializer.errors, status=HTTP_400_BAD_REQUEST)
-                    idol.idol_schedules.add(schedule)
-                    if idol.idol_schedules:
-                        idol.has_schedules=True  
-                        idol.save()
                 return Response(ScheduleSerializer(schedule).data, status=HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-    """
-  {
-
-        "ScheduleTitle": "아는 형님 녹화",
-        "ScheduleType": {
-            "type": "broadcast"
-        },
-        "location": "여의도 일산",
-        "when": "2023-06-30T18:00:00",
-        "participant": [
-            {
-                "idol_name_kr": "닝닝",
-                "idol_name_en": "Ning Ning"
-            },
-            {
-                "idol_name_kr": "카리나",
-                "idol_name_en": "Karina"
-            }
-        ]
-    }
-
-    {
-        "ScheduleTitle": "Music Bank 녹화",
-        "ScheduleType": {
-            "type": "broadcast"
-          },
-        "location": "여의도 일산",
-        "when": "2023-07-13T18:00:00",
-        "participant": [
-            {
-                "idol_name_kr": "혜원",
-                "idol_name_en": "Belle"
-            },
-            {
-                "idol_name_kr": "줄리 한",
-                "idol_name_en": "Julie"
-            },
-            {
-                "idol_name_kr": "원 하늘",
-                "idol_name_en": "Ha Neul"
-            },
-           {
-                "idol_name_kr": "나띠",
-                "idol_name_en": "Natty"
-            }
-        ]
-    }
-    """
-
+       
 """
-class IdolSchedulesCategories(APIView):#[수정(OK)]
-    
-    # def get(self, request, idol_name_kr, categories):
-    def post(self, request, idol_name_kr):
-        # category_list = categories.split(",")  # 다중 카테고리를 콤마로 분리
-        
-        all_categories = ["broadcast", "event", "release", "buy", "congrats"]
-        category_list = request.data.get("categories", all_categories)
-        when= request.data.get("when")
-        print("when", when)
-        year, month =when.split("-")
-        
-        print("year:",type(year), "month:",type(month))
-
-        #client에서 아무런 카테고리를 선택하지 않은경우 ~> 모든 카테고리 활성상태
-        # print(category_list)
-        
-        if len(category_list)==0:#아아돌이 참여하는 모든 스케쥴 받아옴
-            schedules = Schedule.objects.filter(
-                participant__idol_name_kr=idol_name_kr,
-                when__year=year,
-                when__month=month
-            )
-        else:#검색
-            schedules = Schedule.objects.filter(
-                ScheduleType__type__in=category_list,
-                participant__idol_name_kr=idol_name_kr,
-                when__year=year,
-                when__month=month
-            )
-        if not schedules.exists():#참여하고 있는 스케줄이 없는 경우 
-            return Response([], status=HTTP_404_NOT_FOUND)
-        
-        serializer = ScheduleSerializer(schedules, many=True)
-
-        return Response(serializer.data, status=HTTP_200_OK)
-
-
 {
-  "categories": ["congrats", "broadcast"],
-  "when":"2023-07"
-} or
-{"categories":[]}
+    "ScheduleTitle": "test8",
+    "ScheduleType": "broadcast",
+    "location": "여의도 일산",
+    "when": "2023-08-30T18:00:00"
+}
+
 """
+
+
 
 class ScheduleDate(APIView):
     def post(self, request, idol_name_en):
@@ -374,7 +269,7 @@ class ScheduleDate(APIView):
   "when":"2023-07-16" or "2023-07"
 } 
 """
-class UpcomingSchedules(APIView):
+class UpcomingSchedules(APIView):#다가올 스케쥴
     def get(self, request, idol_name_en):
         today = datetime.today()
         try:
