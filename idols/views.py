@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound,PermissionDenied,ParseError
@@ -23,8 +23,8 @@ from medias.serializers import PhotoSerializer
 from groups.models import Group
 from datetime import datetime
 from django.utils.dateformat import DateFormat
-
-
+from users.serializers import enrollReportSerializer
+from users.models import User
 class getIdol:
     def get_idol(self, idol_name_en): 
         try:
@@ -144,7 +144,7 @@ class IdolDetail(getIdol, APIView): #[수정OK]
         if idol.DoesNotExist:
             return Response(status=HTTP_204_NO_CONTENT)    
 
-class IdolSchedule(getIdol, APIView): #수정[pagenation]:10개 적용할 것
+class IdolSchedule(getIdol, APIView): #[페기]
 
     # def get_object(self, idol_name_en):
 
@@ -167,9 +167,11 @@ class IdolSchedule(getIdol, APIView): #수정[pagenation]:10개 적용할 것
     
     def post(self, request, idol_name_en):#관리자가 아이돌 스케쥴을 등록하려는 경우 사용되어짐. 
         #아이돌 스케줄이 등록되면 hasSchedule을 false에서 true로 변경 할 것 (participant 에 있는 아이들도 같이 바꿀것 )
+        
         idol=self.get_idol(idol_name_en)
         if not request.user.is_admin:
             raise PermissionDenied
+        
         serializer=ScheduleSerializer(data=request.data)
         print("re", request.data)
         if serializer.is_valid():
@@ -203,17 +205,6 @@ class IdolSchedule(getIdol, APIView): #수정[pagenation]:10개 적용할 것
             else:
                 return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
        
-"""
-{
-    "ScheduleTitle": "test8",
-    "ScheduleType": "broadcast",
-    "location": "여의도 일산",
-    "when": "2023-08-30T18:00:00"
-}
-
-"""
-
-
 
 class ScheduleDate(APIView):
     def post(self, request, idol_name_en):
@@ -283,7 +274,7 @@ class UpcomingSchedules(APIView):#다가올 스케쥴
         return Response(serializer.data, status=HTTP_200_OK)
 
 
-class TopIdols(APIView):
+class TopIdols(APIView):#get
     def get(self, request):
         top_idols = Idol.objects.order_by('-pickCount')[:6]# 상위 6명의 아이돌을 pickCount 기준으로 내림차순으로 정렬하여 가져옴
         # 상위 6명의 아이돌의 pickCount를 가져와서 리스트에 저장
@@ -313,3 +304,75 @@ class IdolPhotos(APIView):
             return Response(serializer.data, status=HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+        
+class enrollIdolSchedule(getIdol, APIView):
+    
+    def get(self, request, idol_name_en):
+
+        idol = self.get_idol(idol_name_en)
+        serializer = ScheduleSerializer(
+            
+            idol.idol_schedules.all(),
+            many=True,
+        )
+        return Response(serializer.data, status=HTTP_200_OK)
+    
+    def post(self, request, idol_name_en):
+        if not request.user.is_admin:
+            return Response({"error":"관리자만이 아이돌 스케쥴 등록 가능"}, status=HTTP_403_FORBIDDEN)
+        
+        idol = get_object_or_404(Idol, idol_name_en=idol_name_en)
+        print("1", idol)
+        serializer=ScheduleSerializer(data=request.data)
+        owner_name=request.data.get("owner")
+        schedule_type=request.data.get("ScheduleType")
+        print("owner", owner_name, "schedule_type", schedule_type)
+        
+        try:
+            owner=User.objects.get(name=owner_name)
+            schedule_type=Board.objects.get(type=schedule_type)
+            print("1", schedule_type, owner.nickname)
+        except User.DoesNotExist:
+            return Response({"error":"제보 작성자가 존재하지 않음."}, status=HTTP_404_NOT_FOUND)
+        except Board.DoesNotExist:
+            return Response({"error":"schedule_type이 유효하지 않음."}, status=HTTP_404_NOT_FOUND)
+
+        
+        participant = request.data.get("participant")
+        print("participant", participant[0])
+
+        if not Idol.objects.filter(idol_name_en=participant[0]).exists():
+            print("x")
+            return Response(
+                {"error": f"The following idols in 'participant' field are invalid: {', '.join(participant)}"},
+                status=HTTP_400_BAD_REQUEST
+            )
+        print("O")
+        if serializer.is_valid():
+            schedule=Schedule.objects.create(
+                owner=owner,
+                ScheduleType=schedule_type,
+                ScheduleTitle=request.data.get("ScheduleTitle"),
+                location=request.data.get("location"),
+                when=request.data.get("when")
+            )
+            schedule.participant.add(idol)
+            idol.idol_schedules.add(schedule)
+            schedule.save()
+            idol.save()
+            return Response(ScheduleSerializer(schedule).data, status=HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+
+        
+""" 
+{
+    "owner":"관리자",
+    "ScheduleType": "broadcast",
+    "ScheduleTitle": "report test2 ",
+    "location": "Seoul",
+    "when": "2023-07-25T06:34:03+09:00",
+    "participant":["JENNY"]
+}
+"""

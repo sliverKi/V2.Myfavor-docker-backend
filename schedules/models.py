@@ -3,7 +3,13 @@ from common.models import CommonModel
 # from categories.models import Category
 class Schedule(CommonModel):
     """Schedule Model Definition"""
-
+    owner = models.ForeignKey(  
+        "users.User",
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="schedules",
+    )
     ScheduleTitle = models.CharField(
         max_length=150,
         default="",

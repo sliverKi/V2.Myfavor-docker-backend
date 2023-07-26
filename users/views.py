@@ -154,14 +154,14 @@ class EditPick(APIView):
 
 
 
-class AllReport(APIView):
-    def get(self, request):#[수정 ok]
+class AllReport(APIView):#all user
+    def get(self, request):
 
         all_reports = Report.objects.all()
         serializer = ReportDetailSerializer(all_reports, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
 
-    def post(self,request):#[수정 ok]
+    def post(self,request):
         user=request.user
         print("0",user.pick)
         serializer = ReportDetailSerializer(
@@ -170,7 +170,6 @@ class AllReport(APIView):
         if serializer.is_valid():
             report=serializer.save(
                 owner=user.nickname,
-                
                 ScheduleType=request.data.get("ScheduleType"),
             )
             serializer=ReportDetailSerializer(
@@ -182,7 +181,7 @@ class AllReport(APIView):
             return Response(serializer.errors, HTTP_400_BAD_REQUEST)
 
 
-class ReportDetail(APIView):
+class ReportDetail(APIView): #only admin user 
     def get_object(self, pk):
         try:
             return Report.objects.get(pk=pk)
@@ -194,7 +193,6 @@ class ReportDetail(APIView):
         serializer = ReportDetailSerializer(report)
         return Response(serializer.data, status=HTTP_200_OK)
 
-    
 
     def put(self, request, pk):
         if not request.user.is_admin:

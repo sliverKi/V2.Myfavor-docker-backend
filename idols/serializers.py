@@ -46,10 +46,6 @@ class IdolsListSerializer(ModelSerializer):
             "has_schedules"
         )
 
-
-
-   
-
 class IdolDetailSerializer(ModelSerializer):
     # fullname=serializers.SerializerMethodField()
     group=serializers.SerializerMethodField()

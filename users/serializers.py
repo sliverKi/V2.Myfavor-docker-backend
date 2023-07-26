@@ -306,12 +306,32 @@ user-report create-data
 }
 
 update-data
-{   "ScheduleTitle": "오늘 너무 더워",
+
+{   "ScheduleTitle": "post test in July",
     "ScheduleType": "event",
     "location": "Incheon",
-    "when": "2023-07-21T15:30:00"
+    "when": "2023-07-26T15:30:00"
+}
+
+{
+    "ScheduleTitle": "post test in July",
+    "ScheduleType": "event",
+    "location": "Incheon",
+    "when": "2023-07-26T15:30:00",
+    "whoes": ["지수(Jisu)"]#관리자가 보고대상에대해 수정할때 
 }
 """
     
     
         
+class enrollReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Report
+        fields=(
+            "owner",
+            "ScheduleType",
+            "ScheduleTitle",
+            "location",
+            "when",
+            "whoes"
+        )

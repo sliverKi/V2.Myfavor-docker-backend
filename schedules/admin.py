@@ -5,15 +5,16 @@ from .models import Schedule
 class ScheduleAdmin(admin.ModelAdmin):
     list_display = (
         "pk",
+        "owner",
         "ScheduleTitle",
         "ScheduleType",
         "when",
     )
     list_display_links = (
         "pk",
+        "owner",
         "ScheduleTitle",
         "ScheduleType"
-    
     )
 
     # readonly_fields = (
