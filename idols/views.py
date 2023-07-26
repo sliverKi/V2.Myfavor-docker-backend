@@ -23,7 +23,6 @@ from medias.serializers import PhotoSerializer
 from groups.models import Group
 from datetime import datetime
 from django.utils.dateformat import DateFormat
-from users.serializers import enrollReportSerializer
 from users.models import User
 class getIdol:
     def get_idol(self, idol_name_en): 
