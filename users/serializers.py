@@ -177,6 +177,12 @@ class PrivateUserSerializer(serializers.ModelSerializer):
         if not phone.match(data):
             raise serializers.ValidationError("유효한 형식을 입력하세요.")
         return data
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        user = User(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
 
 
 # admin이 유저 정보를 조회할 때 사용하는 정보

@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.core.mail import send_mail
+from django.http import HttpResponseRedirect
 from django.conf import settings
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.http import HttpResponse
 from django.contrib.auth.tokens import default_token_generator
 from rest_framework import status 
@@ -25,62 +26,94 @@ from django.contrib.auth import get_user_model
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 import re
-class SignUP(APIView):#회원가입
+class step1_SignUP(APIView):#회원가입
     def get(self, request):
-        return Response({"email, password, nickname, name, age, pick, phone 을 입력해주세요."})
+        return Response({"email을 입력해주세요."})
 
     def post(self, request):#[수정필요]
         
-        password = request.data.get("password")
-        if not password:
-            raise ParseError
+        email=request.data.get("email")
+        if not email:
+            raise AuthenticationFailed({"error":"유효한 이메일 형식을 입력해 주세요."}, status=status.HTTP_403_FORBIDDEN)
         
-        serializer = PrivateUserSerializer(data=request.data)
-        print(password)
-
-        if serializer.is_valid():
-            user = serializer.save()
-            user.set_password(password)
-            
-            token = default_token_generator.make_token(user)
-            email_vertification_token = EmailVerificationToken.objects.create(
+        user=User.objects.create(email=email)
+        token = default_token_generator.make_token(user)
+        email_vertification_token = EmailVerificationToken.objects.create(
             user=user,
             token=token,
-            )
-            print("2", user, token)
-            reset_url = request.build_absolute_uri(
-            reverse_lazy("email_verification", kwargs={"pk": user.pk, "token": email_vertification_token})
-            )#send mail 성공시
-            
-            subject="Account Activation"
-            message = f"Please click the link below to activate account:\n\n{reset_url}"
-            # Send email
-            send_mail(
-                subject,
-                message,
-                "myfavor86@gmail.com",
-                [user.email],
-                fail_silently=False,
-            )
-            user.is_active=False#아직 이메일 인증을 하지 않음.
-            user.save()
-            
-            serializer = PrivateUserSerializer(user)
-            pick=request.data.get("pick")
-            print(pick)
-            if pick:
-                try:
-                    picked_idol=Idol.objects.get(pk=pick)
-                    user.pick=picked_idol
-                    user.save()
-                    picked_idol.pickCount+=1
-                    picked_idol.save()
-                except Idol.DoesNotExist:
-                    return Response({"error":"Pick한 아이돌이 없습니다!"}, status=status.HTTP_400_BAD_REQUEST)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        )
+        print("2", user, token)
+        reset_url = request.build_absolute_uri(
+        reverse_lazy("email_verification", kwargs={"pk": user.pk, "token": email_vertification_token})
+        )#send mail 성공시
         
+        subject="Account Activation"
+        message = f"Please click the link below to activate account:\n\n{reset_url}"
+        # Send email
+        send_mail(
+            subject,
+            message,
+            "myfavor86@gmail.com",
+            [user.email],
+            fail_silently=False,
+        )
+        user.is_active=False#아직 이메일 인증을 하지 않음.
+        user.save()
+        return Response({"message":"해당 이메일 주소로 인증링크 전송 완료!"}, status=status.HTTP_200_OK)
+
+class step2_SignUp(APIView):
+    def get(self, request, pk, token):
+        try:
+            user = User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise NotFound("User not found.")
+        print("3", user,token)
+        if not user.is_active:
+            user.is_active=True
+            user.save()
+            return Response({"detail": "Email 인증을 완료."}, status=status.HTTP_200_OK)
+        else:
+            return Response({"detail": "이미 인증한 email입니다."}, status=status.HTTP_400_BAD_REQUEST)
+    
+    def post(self, request, pk, token):
+        try:
+            user = User.objects.get(pk=pk)
+            print("user", user)
+            if not user.is_active:
+                return Response({"detail": "Email 인증을 완료해 주세요."}, status=status.HTTP_200_OK)
+        
+            # password = request.data.get("password")
+            # if not password:
+            #     raise ParseError
+    
+            serializer = PrivateUserSerializer(
+                user,
+                data=request.data,
+                partial=True 
+            )
+
+            if serializer.is_valid():
+                user = serializer.save()
+                # user.set_password(password)
+                # serializer = PrivateUserSerializer(user)
+                pick=request.data.get("pick")
+                print(pick)
+                if pick:
+                    try:
+                        picked_idol=Idol.objects.get(pk=pick)
+                        user.pick=picked_idol
+                        user.save()
+                        picked_idol.pickCount+=1
+                        picked_idol.save()
+                        user.is_active=True
+                        user.save()
+                    except Idol.DoesNotExist:
+                        return Response({"error":"Pick한 아이돌이 없습니다!"}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except User.DoesNotExist:
+            raise NotFound("User not found.")
 
 """
 {"email":"lovee3578@naver.com", "password":"eungi123@E", "nickname":"엄지지", "name":"엄지공주", "age":20, "phone":"01012341234", "pick":4}
@@ -96,9 +129,8 @@ class EmailVerification(APIView):
             raise NotFound("User not found.")
         print("3", user,token)
         if not user.is_active:
-            user.is_active = True
-            user.save()
-            return Response({"detail": "Email verification successful."}, status=status.HTTP_200_OK)
+            return HttpResponseRedirect(reverse("email_signUp_step2", args=[pk, token]))
+            # return Response({"detail": "Email verification successful."}, status=status.HTTP_200_OK)
         else:
             return Response({"detail": "Invalid verification link."}, status=status.HTTP_400_BAD_REQUEST)
 
