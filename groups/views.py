@@ -11,7 +11,7 @@ from idols.serializers import TinyIdolSerializer, SimpleIdolInfoSerializer
 class getGroup:
     def get_group(self, groupname):
         try:
-            return Group.objects.prefetch_related('member').get(groupname=groupname)
+            return Group.objects.prefetch_related('member').get(groupname=groupname).order_by("pk")
         except Group.DoesNotExist:
             raise NotFound
 
