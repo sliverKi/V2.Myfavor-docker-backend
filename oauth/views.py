@@ -51,28 +51,28 @@ class step1_SignUP(APIView):#회원가입
             print("3")
             user=User.objects.create(email=email)
             print("new user", user)
-        token = default_token_generator.make_token(user)
-        email_vertification_token = EmailVerificationToken.objects.create(
-            user=user,
-            token=token,
-        )
-        print("2", user, token)#이메일 인증 링크 url 커스텀하기
-        reset_url = request.build_absolute_uri(
-        reverse_lazy("email_verification", kwargs={"pk": user.pk, "token": email_vertification_token})
-        )#send mail 성공시
-        
-        subject="Account Activation"
-        message = f"Please click the link below to activate account:\n\n{reset_url}"
-        # Send email
-        send_mail(
-            subject,
-            message,
-            "myfavor86@gmail.com",
-            [user.email],
-            fail_silently=False,
-        )
-        user.is_active=False#아직 이메일 인증을 하지 않음.
-        user.save()
+            token = default_token_generator.make_token(user)
+            email_vertification_token = EmailVerificationToken.objects.create(
+                user=user,
+                token=token,
+            )
+            print("2", user, token)#이메일 인증 링크 url 커스텀하기
+            reset_url = request.build_absolute_uri(
+            reverse_lazy("email_verification", kwargs={"pk": user.pk, "token": email_vertification_token})
+            )#send mail 성공시
+            
+            subject="Account Activation"
+            message = f"Please click the link below to activate account:\n\n{reset_url}"
+            # Send email
+            send_mail(
+                subject,
+                message,
+                "myfavor86@gmail.com",
+                [user.email],
+                fail_silently=False,
+            )
+            user.is_active=False#아직 이메일 인증을 하지 않음.
+            user.save()
         return Response({"message":"해당 이메일 주소로 인증링크 전송 완료!"}, status=status.HTTP_200_OK)
 
 class step2_SignUp(APIView):
