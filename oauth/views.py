@@ -28,15 +28,26 @@ from django.utils.encoding import force_str
 import re
 class step1_SignUP(APIView):#회원가입
     def get(self, request):
-        return Response({"email을 입력해주세요."})
+        return Response({"email을 입력해주세요."}, status=status.HTTP_200_OK)
 
     def post(self, request):#[수정필요]
         
         email=request.data.get("email")
+        
         if not email:
             raise AuthenticationFailed({"error":"유효한 이메일 형식을 입력해 주세요."}, status=status.HTTP_403_FORBIDDEN)
+        try:
+            user=User.objects.get(email=email)
+            print("해당 이메일 주소가 db에 존재함.")
+            if not user.pick:
+                user.delete()
+                return Response({"message":"중복된 이메일이 존재하여, 회원가입 절차를 완료하지 않은 동일 email을 갖는 user를 삭제함."}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({"messgae":"이미 회원가입 절차를 완료한 사용자 입니다."}, status=status.HTTP_202_ACCEPTED)
         
-        user=User.objects.create(email=email)
+        except User.DoesNotExist:
+            user=User.objects.create(email=email)
+            print("new user", user)
         token = default_token_generator.make_token(user)
         email_vertification_token = EmailVerificationToken.objects.create(
             user=user,
@@ -71,16 +82,16 @@ class step2_SignUp(APIView):
         if not user.is_active:
             user.is_active=True
             user.save()
-            return Response({"detail": "Email 인증을 완료."}, status=status.HTTP_200_OK)
+            return Response({"message": "E-mail 인증을 완료."}, status=status.HTTP_200_OK)
         else:
-            return Response({"detail": "이미 인증한 email입니다."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "이미 인증한 E-mail 입니다."}, status=status.HTTP_400_BAD_REQUEST)
     
     def post(self, request, pk, token):
         try:
             user = User.objects.get(pk=pk)
             print("user", user)
             if not user.is_active:
-                return Response({"detail": "Email 인증을 완료해 주세요."}, status=status.HTTP_200_OK)
+                return Response({"detail": "E-mail 인증을 완료해 주세요."}, status=status.HTTP_403_FORBIDDEN)
         
             # password = request.data.get("password")
             # if not password:
