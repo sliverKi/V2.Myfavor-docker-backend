@@ -40,12 +40,15 @@ class step1_SignUP(APIView):#회원가입
             user=User.objects.get(email=email)
             print("해당 이메일 주소가 db에 존재함.")
             if not user.pick:
+                print("1")
                 user.delete()
                 return Response({"message":"중복된 이메일이 존재하여, 회원가입 절차를 완료하지 않은 동일 email을 갖는 user를 삭제함."}, status=status.HTTP_400_BAD_REQUEST)
             else:
+                print("2")
                 return Response({"messgae":"이미 회원가입 절차를 완료한 사용자 입니다."}, status=status.HTTP_202_ACCEPTED)
         
         except User.DoesNotExist:
+            print("3")
             user=User.objects.create(email=email)
             print("new user", user)
         token = default_token_generator.make_token(user)
@@ -53,7 +56,7 @@ class step1_SignUP(APIView):#회원가입
             user=user,
             token=token,
         )
-        print("2", user, token)
+        print("2", user, token)#이메일 인증 링크 url 커스텀하기
         reset_url = request.build_absolute_uri(
         reverse_lazy("email_verification", kwargs={"pk": user.pk, "token": email_vertification_token})
         )#send mail 성공시
