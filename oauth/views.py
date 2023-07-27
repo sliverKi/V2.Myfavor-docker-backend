@@ -33,7 +33,7 @@ class step1_SignUP(APIView):#회원가입
     def post(self, request):#[수정필요]
         
         email=request.data.get("email")
-        
+        print("email", email)
         if not email:
             raise AuthenticationFailed({"error":"유효한 이메일 형식을 입력해 주세요."}, status=status.HTTP_403_FORBIDDEN)
         try:
