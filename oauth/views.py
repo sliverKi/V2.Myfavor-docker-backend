@@ -49,7 +49,7 @@ class step1_SignUP(APIView):#회원가입
         
         try:
             user, created=User.objects.get_or_create(email=email)
-            if created:
+            if created:#error
                 print("New user:", user)
                 token = default_token_generator.make_token(user)
                 email_vertification_token = EmailVerificationToken.objects.create(
