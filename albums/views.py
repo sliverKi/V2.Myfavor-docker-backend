@@ -123,7 +123,7 @@ class SoloAlbum(getSoloIdol, APIView):
         albums=solo.albums_solo.all().order_by("-release_date")
         serializer=AlbumSerializer(albums, many=True)
         data={
-            "artists":solo.member.idol_name_en,
+            # "artists":solo.member.idol_name_en,
             "albums":serializer.data
         }
         return Response(data, status=status.HTTP_200_OK)
