@@ -184,6 +184,9 @@ class Login(APIView):  #is_active 검사
             email = email,
             password = password,
             )
+            if not user:
+                raise AuthenticationFailed({"error": "이메일 또는 비밀번호가 올바르지 않습니다."})
+
             print("login try user, email vertify completed.: ", user)    
             
         except User.DoesNotExist:
