@@ -143,7 +143,7 @@ class PrivateUserSerializer(serializers.ModelSerializer):
             "email",
             "phone",
             "age",
-            "password"
+            # "password"
         )
 
     def validate_age(self, age):

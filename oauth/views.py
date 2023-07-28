@@ -37,13 +37,7 @@ class step1_SignUP(APIView):#회원가입
         if not email:
             raise AuthenticationFailed({"error":"유효한 이메일 형식을 입력해 주세요."}, status=status.HTTP_403_FORBIDDEN)
         
-         
-        # find_user=User.objects.filter(email=email).exists()
-        # if find_user:
-        #     user=User.objects.get(email=email)
-        #     print(user.pick)
-        #     print("find_user", find_user)
-        #     return Response({"message":"해당 email이 이미 존재함"}, status=status.HTTP_403_FORBIDDEN)
+        
         try:
             user=User.objects.get(email=email)
             print("해당 이메일 주소가 db에 존재함.")
@@ -113,9 +107,9 @@ class step2_SignUp(APIView):
             if not user.is_active:
                 return Response({"detail": "E-mail 인증을 완료해 주세요."}, status=status.HTTP_403_FORBIDDEN)
         
-            # password = request.data.get("password")
-            # if not password:
-            #     raise ParseError
+            password = request.data.get("password")
+            if not password:
+                raise ParseError
     
             serializer = PrivateUserSerializer(
                 user,
@@ -125,8 +119,8 @@ class step2_SignUp(APIView):
 
             if serializer.is_valid():
                 user = serializer.save()
-                # user.set_password(password)
-                # serializer = PrivateUserSerializer(user)
+                user.set_password(password)
+                serializer = PrivateUserSerializer(user)
                 pick=request.data.get("pick")
                 print(pick)
                 if pick:
@@ -147,7 +141,7 @@ class step2_SignUp(APIView):
             raise NotFound("User not found.")
 
 """
-{"email":"lovee3578@naver.com", "password":"eungi123@E", "nickname":"엄지지", "name":"엄지공주", "age":20, "phone":"01012341234", "pick":4}
+{"email":"lovee2756@gmail.com", "password":"eungi123@E", "nickname":"엄지지", "name":"엄지공주", "age":20, "phone":"01012341234", "pick":4}
 """
 
 
