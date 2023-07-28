@@ -175,7 +175,7 @@ class Login(APIView):  #is_active 검사
             raise ParseError("잘못된 정보를 입력하였습니다.")
         try:
             user = User.objects.get(email=email)
-            print("user", user)
+            print("login try user: ", user)
             if not user.is_active:
                 raise ParseError({"error":"Email 인증을 완료해 주세요!"})
             
@@ -184,7 +184,7 @@ class Login(APIView):  #is_active 검사
             email = email,
             password = password,
             )
-            print("user2", user)    
+            print("login try user, email vertify completed.: ", user)    
             
         except User.DoesNotExist:
             raise NotFound
