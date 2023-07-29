@@ -12,7 +12,7 @@ from rest_framework.status import (
     HTTP_202_ACCEPTED,
     HTTP_204_NO_CONTENT,
     HTTP_400_BAD_REQUEST,
-    
+    HTTP_404_NOT_FOUND
 )
 from rest_framework.exceptions import (
     NotFound,
@@ -34,7 +34,7 @@ from .serializers import (
 )
 from medias.serializers import UserProfileSerializer
 from idols.models import Idol
-
+from schedules.models import Schedule
 
 class LoginUser(APIView):
     permission_classes = [IsAuthenticated]
@@ -224,6 +224,64 @@ class ReportDetail(APIView): #only admin user
         reports.delete()
 
         return Response(status=HTTP_204_NO_CONTENT)
+    
+
+
+class ReportRegister(APIView):
+    def post(self, request):
+        report_pk=request.data.get("report_pk")
+        if not report_pk:
+            return Response({"error":"등록하고자 하는 report가 존재하지 않음."}, status=HTTP_400_BAD_REQUEST)
+        try:
+            # Try to find the report by the provided primary key
+            report = Report.objects.get(pk=report_pk)
+            print(report)
+        except Report.DoesNotExist:
+            return Response(
+                {"error": f"Report with pk {report_pk} does not exist."},
+                status=HTTP_404_NOT_FOUND
+            )
+        serializer = ReportDetailSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        if report.is_enroll:
+            return Response({"error": "이미 등록된 report입니다."},status=HTTP_400_BAD_REQUEST)
+        
+        report_data = serializer.validated_data
+        report.owner=report_data.get("owner", report.owner)
+        report.ScheduleTitle = report_data.get("ScheduleTitle", report.ScheduleTitle)
+        report.ScheduleType = report_data.get("ScheduleType", report.ScheduleType)
+        report.location = report_data.get("location", report.location)
+        report.when = report_data.get("when", report.when)
+        report.whoes.set(report_data.get("whoes", report.whoes.all())) # ManyToManyField needs to be updated this way
+        
+        idols=report.whoes.all().get()
+        print("idols:", idols)
+        
+        # print("idol_name_en", idols[1])
+        # for idol in report.whoes.all().get():
+        if Idol.objects.filter(id=idols.id).exists():
+            print("0")
+            schedule = idols.idol_schedules.create(
+                owner=report.owner,
+                ScheduleTitle=report.ScheduleTitle,
+                ScheduleType=report.ScheduleType,
+                location=report.location,
+                when=report.when
+            )
+            schedule.participant.add(*report.whoes.all())
+            idols.idol_schedules.add(schedule)
+        print("test1: schedule create" )
+                
+        report.is_enroll = True
+        report.save()
+
+        return Response(
+            {"success": f"Report with pk {report.pk} has been successfully enrolled."},
+            status=HTTP_200_OK
+        )
+"""{"report_pk":5}"""
+
 
 class MyReport(APIView):#내가 제보한 글
     permission_classes = [IsAuthenticated]

@@ -13,7 +13,9 @@ urlpatterns = [
     path("edit/pick/", views.EditPick.as_view()),  
     
     path("reports/", views.AllReport.as_view()),#[get, post] :user can report idol schedule.
-    path("reports/<int:pk>/", views.ReportDetail.as_view()),#[get, put, delete] # admin user modified or register user's report.
+    path("reports/<int:pk>/", views.ReportDetail.as_view()),#[get, put, delete] # admin user modified user's report.
+    
+    path("register/", views.ReportRegister.as_view()),
     
     path("mypage/myreport/", views.MyReport.as_view()), # get
     path("mypage/myreport/<int:pk>", views.MyReportDetail.as_view()),#get,put,delete : user
