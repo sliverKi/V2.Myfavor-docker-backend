@@ -174,7 +174,7 @@ CORS_ALLOWED_ORIGINS_ALL = True#모든 호스트 허용
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000", 
     "http://localhost:3000", 
-    "https://www.choeaein.click/"
+    "https://www.choeaein.click"
     # "https://myfavor-next-1iujudbu1-chhw130.vercel.app/?vercelToolbarCode=CDYspgC1GVYmHXx",
     ]
 CORS_ALLOW_HEADERS = [
