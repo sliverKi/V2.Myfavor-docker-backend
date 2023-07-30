@@ -195,8 +195,14 @@ CSRF_TRUSTED_ORIGINS =[
     "http://localhost:3000",
     "https://choeaein.click"
     # "https://myfavor-next-1iujudbu1-chhw130.vercel.app/?vercelToolbarCode=CDYspgC1GVYmHXx",
-
 ]
+
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SAMESITE = "Lax"
+SESSION_COOKIE_HTTPONLY = False
+CSRF_COOKIE_HTTPONLY = False
 
 ACCOUNT_PASSWORD_INPUT_RENDER_VALUE = True  
 ACCOUNT_SESSION_REMEMBER = True  
