@@ -102,16 +102,7 @@ if DEBUG:#개발 환경에서의 설정
                      'NAME': BASE_DIR/ 'db.sqlite3',
                  }
          }
-    # DATABASES = {
-    #     'default': {
-    #             'ENGINE': 'django.db.backends.postgresql',
-    #             'NAME': 'v2test',
-    #             'USER': 'postgres',
-    #             'PASSWORD': 'admin1234',
-    #             'HOST': 'localhost',
-    #             'PORT':'5432',
-    #         }
-    #      }
+    
 else:#베포환경에서의 설정
     # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -155,9 +146,8 @@ USE_I18N = False
 USE_TZ = True
 
 STATIC_URL = "/static/"
-if not DEBUG:
-    STATIC_ROOT=os.path.join(BASE_DIR, 'staticfiles')
-    STATICFILES_STORAGE="whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
 
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -175,7 +165,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000", 
     "http://localhost:3000", 
     "https://www.choeaein.click"
-    # "https://myfavor-next-1iujudbu1-chhw130.vercel.app/?vercelToolbarCode=CDYspgC1GVYmHXx",
+    
     ]
 CORS_ALLOW_HEADERS = [
     'accept',
@@ -189,18 +179,28 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
     'Set-Cookie',
 ]
-AUTH_COOKIE_DOMAIN=".backend.choeaein.click"
+
+
+
 CSRF_TRUSTED_ORIGINS =[
     "http://127.0.0.1:3000", 
     "http://localhost:3000",
     "https://www.choeaein.click"
-    # "https://myfavor-next-1iujudbu1-chhw130.vercel.app/?vercelToolbarCode=CDYspgC1GVYmHXx",
+    
 ]
 
+
+AUTH_COOKIE_DOMAIN=".backend.choeaein.click"
+SESSION_COOKIE_DOMAIN=".backend.choeaein.click"
+CSRF_COOKIE_DOMAIN=".backend.choeaein.click"
+
+AUTH_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
+
 SESSION_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_SAMESITE = "Lax"
+
 SESSION_COOKIE_HTTPONLY = False
 CSRF_COOKIE_HTTPONLY = False
 
@@ -209,17 +209,9 @@ ACCOUNT_SESSION_REMEMBER = True
 SESSION_COOKIE_AGE = 3600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
-AUTH_COOKIE_DOMAIN="127.0.0.1"
-CSRF_COOKIE_SECURE=False
-AUTH_COOKIE_SECURE = True
-# CSRF_USE_SESSIONS = True #csrf token을 session을 이용하여 관리 
-CSRF_COOKIE_SAMESITE = "Lax"#모든 사이트와의 요청에서 쿠키가 전송되도록 허용
 
 
-# SESSION_COOKIE_SAMESITE = "Lax"#모든 사이트와의 요청에서 세션 쿠키가 전송되도록 허용
-# SESSION_COOKIE_DOMAIN="."
-# SESSION_COOKIE_SECURE = True
-#SESSION_COOKIE_SECURE, AUTH_COOKIE_SECURE 쿠키가 HTTP와 HTTPS 연결 모두에서 전송되도록 허용[주의 : 개발 환경에서만 사용할 것.]
+
 
 
 
@@ -246,8 +238,7 @@ CACHES={
         'LOCATION':'redis://127.0.0.1:6379',
     }
 }
-# SESSION_COOKIE_DOMAIN="127.0.0.1"
-# CSRF_COOKIE_DOMAIN="127.0.0.1"
+
 
 #gmail SMTP
 EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
