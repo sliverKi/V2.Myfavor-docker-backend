@@ -190,9 +190,9 @@ CSRF_TRUSTED_ORIGINS =[
 ]
 
 
-AUTH_COOKIE_DOMAIN=".backend.choeaein.click"
-SESSION_COOKIE_DOMAIN=".backend.choeaein.click"
-CSRF_COOKIE_DOMAIN=".backend.choeaein.click"
+AUTH_COOKIE_DOMAIN=".choeaein.click"
+SESSION_COOKIE_DOMAIN=".choeaein.click"
+CSRF_COOKIE_DOMAIN=".choeaein.click"
 
 AUTH_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = False
