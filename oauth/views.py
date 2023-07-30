@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import authenticate, login, logout
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
@@ -26,6 +27,8 @@ from django.contrib.auth import get_user_model
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 import re
+
+from config.settings import FRONTEND_URL
 class step1_SignUP(APIView):#회원가입
     def get(self, request):
         return Response({"email을 입력해주세요."}, status=status.HTTP_200_OK)
@@ -65,12 +68,23 @@ class step1_SignUP(APIView):#회원가입
                 token=token,
             )
             print("2", user, token)#이메일 인증 링크 url 커스텀하기
-            reset_url = request.build_absolute_uri(
-            reverse_lazy("email_verification", kwargs={"pk": user.pk, "token": email_vertification_token})
-            )#send mail 성공시
+            # reset_url = request.build_absolute_uri(
+            # reverse_lazy("email_verification", kwargs={"pk": user.pk, "token": email_vertification_token})
+            # )#send mail 성공시
             
+            
+            
+            reset_url = f"{settings.FRONTEND_URL}/verify/{user.pk}/{email_vertification_token}/"
+            #  {"email":"lovee2756@gmail.com"}
             subject="Account Activation"
             message = f"Please click the link below to activate account:\n\n{reset_url}"
+            print("url1", reset_url)
+            
+            current_site = get_current_site(request) 
+            print("test2", current_site)
+
+            # reset_url = f"{current_site}/verify/{user.pk}/{email_verification_token}/"
+            
             # Send email
             send_mail(
                 subject,
