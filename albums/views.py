@@ -122,11 +122,11 @@ class SoloAlbum(getSoloIdol, APIView):
         print("1",solo)
         albums=solo.albums_solo.all().order_by("-release_date")
         serializer=AlbumSerializer(albums, many=True)
-        data={
-            # "artists":solo.member.idol_name_en,
-            "albums":serializer.data
-        }
-        return Response(data, status=status.HTTP_200_OK)
+        # data={
+        #     # "artists":solo.member.idol_name_en,
+        #     "albums":serializer.data
+        # }
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     def post(self, request, idol_name_en):
         if not request.user.is_admin:

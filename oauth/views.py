@@ -40,7 +40,6 @@ class step1_SignUP(APIView):#회원가입
         if not email:
             raise AuthenticationFailed({"error":"유효한 이메일 형식을 입력해 주세요."}, status=status.HTTP_403_FORBIDDEN)
         
-        
         try:
             user=User.objects.get(email=email)
             print("해당 이메일 주소가 db에 존재함.")
