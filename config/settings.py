@@ -187,8 +187,9 @@ CORS_ALLOW_HEADERS = [
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
+    'Set-Cookie',
 ]
-
+AUTH_COOKIE_DOMAIN=".choeaein.click"
 CSRF_TRUSTED_ORIGINS =[
     "http://127.0.0.1:3000", 
     "http://localhost:3000",
