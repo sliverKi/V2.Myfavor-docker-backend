@@ -275,7 +275,7 @@ class UpcomingSchedules(APIView):#다가올 스케쥴
 
 class TopIdols(APIView):#get
     def get(self, request):
-        top_idols = Idol.objects.order_by('-pickCount')[:6]# 상위 6명의 아이돌을 pickCount 기준으로 내림차순으로 정렬하여 가져옴
+        top_idols = Idol.objects.order_by('-pickCount')[:4]# 상위 6명의 아이돌을 pickCount 기준으로 내림차순으로 정렬하여 가져옴
         # 상위 6명의 아이돌의 pickCount를 가져와서 리스트에 저장
         top_idols_info=[PickIdolSerializer(idol).data for idol in top_idols]
         return Response(top_idols_info, status=HTTP_200_OK)
