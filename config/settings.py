@@ -12,7 +12,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 SECRET_KEY = env("SECRET_KEY")
 
-ALLOWED_HOSTS = ["127.0.0.1", ".choeaein.click"]
+ALLOWED_HOSTS = ["localhost","127.0.0.1", ".choeaein.click", "www.choeaein.click"]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
@@ -185,9 +185,11 @@ CSRF_TRUSTED_ORIGINS =[
 ]
 
 
-AUTH_COOKIE_DOMAIN = ".choeaein.click"
-SESSION_COOKIE_DOMAIN = ".choeaein.click"
-CSRF_COOKIE_DOMAIN = ".choeaein.click"
+# AUTH_COOKIE_DOMAIN = ".choeaein.click"
+# SESSION_COOKIE_DOMAIN = ".choeaein.click"
+# CSRF_COOKIE_DOMAIN = ".choeaein.click"
+
+AUTH_COOKIE_DOMAIN = "127.0.0.1"
 
 AUTH_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = False
