@@ -12,7 +12,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 SECRET_KEY = env("SECRET_KEY")
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["127.0.0.1", ".choeaein.click"]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
@@ -103,12 +103,7 @@ if DEBUG:#개발 환경에서의 설정
          }
     
 else:#베포환경에서의 설정
-    ALLOWED_HOSTS = [".choeaein.click"]
-
-    AUTH_COOKIE_DOMAIN = ".choeaein.click"
-    SESSION_COOKIE_DOMAIN = ".choeaein.click"
-    CSRF_COOKIE_DOMAIN = ".choeaein.click"
-
+    
     DATABASES = {
         'default': dj_database_url.config(
             conn_max_age=600,
@@ -190,9 +185,9 @@ CSRF_TRUSTED_ORIGINS =[
 ]
 
 
-AUTH_COOKIE_DOMAIN=".127.0.0.1"
-SESSION_COOKIE_DOMAIN=".127.0.0.1"
-CSRF_COOKIE_DOMAIN=".127.0.0.1"
+AUTH_COOKIE_DOMAIN = ".choeaein.click"
+SESSION_COOKIE_DOMAIN = ".choeaein.click"
+CSRF_COOKIE_DOMAIN = ".choeaein.click"
 
 AUTH_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = False
@@ -208,12 +203,6 @@ ACCOUNT_PASSWORD_INPUT_RENDER_VALUE = True
 ACCOUNT_SESSION_REMEMBER = True  
 SESSION_COOKIE_AGE = 3600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-
-
-
-
-
-
 
 CF_TOKEN=env("CF_TOKEN")
 CF_ID=env("CF_ID")
@@ -231,14 +220,6 @@ REST_FRAMEWORK = {
 INTERNAL_IPS=[
     '127.0.0.1',
 ]
-
-CACHES={
-    'default':{
-        'BACKEND':'django.core.cache.backends.redis.RedisCache',
-        'LOCATION':'redis://127.0.0.1:6379',
-    }
-}
-
 
 #gmail SMTP
 EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
