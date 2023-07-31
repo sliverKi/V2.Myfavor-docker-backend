@@ -4,7 +4,6 @@ import os
 import environ
 import dj_database_url
 
-#test1: tsets addmin pages login
 env = environ.Env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -14,7 +13,6 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 SECRET_KEY = env("SECRET_KEY")
 
 ALLOWED_HOSTS = ["*"]
-# ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
@@ -93,6 +91,7 @@ DEBUG = 'RENDER' not in os.environ  #딕셔너리 key에 RENDER라는 환경변�
 # DEBUG = True
 
 if DEBUG:#개발 환경에서의 설정
+
     STATIC_ROOT=os.path.join(BASE_DIR,'static')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
@@ -104,8 +103,11 @@ if DEBUG:#개발 환경에서의 설정
          }
     
 else:#베포환경에서의 설정
-    # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-    # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    ALLOWED_HOSTS = [".choeaein.click"]
+
+    AUTH_COOKIE_DOMAIN = ".choeaein.click"
+    SESSION_COOKIE_DOMAIN = ".choeaein.click"
+    CSRF_COOKIE_DOMAIN = ".choeaein.click"
 
     DATABASES = {
         'default': dj_database_url.config(
@@ -116,6 +118,7 @@ else:#베포환경에서의 설정
 if not DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -146,9 +149,6 @@ USE_I18N = False
 USE_TZ = True
 
 STATIC_URL = "/static/"
-
-
-
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "users.User"
@@ -190,9 +190,9 @@ CSRF_TRUSTED_ORIGINS =[
 ]
 
 
-AUTH_COOKIE_DOMAIN=".choeaein.click"
-SESSION_COOKIE_DOMAIN=".choeaein.click"
-CSRF_COOKIE_DOMAIN=".choeaein.click"
+AUTH_COOKIE_DOMAIN=".127.0.0.1"
+SESSION_COOKIE_DOMAIN=".127.0.0.1"
+CSRF_COOKIE_DOMAIN=".127.0.0.1"
 
 AUTH_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = False
