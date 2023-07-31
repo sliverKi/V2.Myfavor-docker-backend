@@ -11,8 +11,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 SECRET_KEY = env("SECRET_KEY")
-# ALLOWED_HOSTS =['*']
-ALLOWED_HOSTS = ["localhost:3000","127.0.0.1:3000", ".choeaein.click", "www.choeaein.click"]
+ALLOWED_HOSTS =['*']
+# ALLOWED_HOSTS = ["localhost:3000","127.0.0.1:3000", ".choeaein.click", "www.choeaein.click"]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
@@ -193,10 +193,10 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 # SESSION_COOKIE_DOMAIN = ".choeaein.click"
 # CSRF_COOKIE_DOMAIN = ".choeaein.click"
 
-AUTH_COOKIE_DOMAIN = "127.0.0.1"
-CSRF_COOKIE_SECURE = False
-AUTH_COOKIE_SECURE = True
-CSRF_COOKIE_SAMESITE = "Lax"
+# AUTH_COOKIE_DOMAIN = "127.0.0.1"
+# CSRF_COOKIE_SECURE = False
+# AUTH_COOKIE_SECURE = True
+# CSRF_COOKIE_SAMESITE = "Lax"
 # SESSION_COOKIE_SAMESITE = "Lax"
 # SESSION_COOKIE_HTTPONLY = False
 # CSRF_COOKIE_HTTPONLY = False
