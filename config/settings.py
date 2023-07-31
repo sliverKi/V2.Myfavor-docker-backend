@@ -185,11 +185,11 @@ CSRF_TRUSTED_ORIGINS =[
 ]
 
 
-AUTH_COOKIE_DOMAIN = ".choeaein.click"
-SESSION_COOKIE_DOMAIN = ".choeaein.click"
-CSRF_COOKIE_DOMAIN = ".choeaein.click"
+# AUTH_COOKIE_DOMAIN = ".choeaein.click"
+# SESSION_COOKIE_DOMAIN = ".choeaein.click"
+# CSRF_COOKIE_DOMAIN = ".choeaein.click"
 
-# AUTH_COOKIE_DOMAIN = "127.0.0.1"
+AUTH_COOKIE_DOMAIN = "127.0.0.1"
 # SESSION_COOKIE_DOMAIN = "127.0.0.1"
 # CSRF_COOKIE_DOMAIN = "127.0.0.1"
 AUTH_COOKIE_SECURE = True
