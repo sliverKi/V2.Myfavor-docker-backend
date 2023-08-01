@@ -174,7 +174,7 @@ CORS_ALLOW_HEADERS = [
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
-    'Set-Cookie',
+    # 'Set-Cookie',
 ]
 
 CSRF_TRUSTED_ORIGINS =[
@@ -188,7 +188,7 @@ ACCOUNT_SESSION_REMEMBER = True
 SESSION_COOKIE_AGE = 3600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
-AUTH_COOKIE_DOMAIN = "127.0.0.1"
+AUTH_COOKIE_DOMAIN = ".onrender.com"
 CSRF_COOKIE_SECURE = False
 AUTH_COOKIE_SECURE = False
 
