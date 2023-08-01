@@ -158,24 +158,11 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW = True
 CORS_ALLOWED_ORIGINS_ALL = True#모든 호스트 허용
 
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:3000", 
-    "http://localhost:3000", 
-    "https://www.choeaein.click" 
-]
-
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-    'Set-Cookie',
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://127.0.0.1:3000", 
+#     "http://localhost:3000", 
+#     "https://www.choeaein.click" 
+# ]
 
 CSRF_TRUSTED_ORIGINS =[
     "http://127.0.0.1:3000", 
@@ -187,6 +174,8 @@ ACCOUNT_PASSWORD_INPUT_RENDER_VALUE = True
 ACCOUNT_SESSION_REMEMBER = True  
 SESSION_COOKIE_AGE = 3600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_DOMAIN="127.0.0.1"
+SESSION_COOKIE_PATH="127.0.0.1"
 
 CF_TOKEN=env("CF_TOKEN")
 CF_ID=env("CF_ID")
