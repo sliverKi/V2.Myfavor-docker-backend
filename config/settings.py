@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 SECRET_KEY = env("SECRET_KEY")
-ALLOWED_HOSTS =['*']
+ALLOWED_HOSTS =["localhost", "127.0.0.1"]
 # ALLOWED_HOSTS = ["localhost:3000","127.0.0.1:3000", ".choeaein.click", "www.choeaein.click"]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
@@ -174,7 +174,7 @@ CORS_ALLOW_HEADERS = [
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
-    # 'Set-Cookie',
+    'Set-Cookie',
 ]
 
 CSRF_TRUSTED_ORIGINS =[
@@ -188,13 +188,12 @@ ACCOUNT_SESSION_REMEMBER = True
 SESSION_COOKIE_AGE = 3600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
-AUTH_COOKIE_DOMAIN = ".onrender.com"
+AUTH_COOKIE_DOMAIN = "127.0.0.1"
 CSRF_COOKIE_SECURE = False
 AUTH_COOKIE_SECURE = False
-
 CSRF_COOKIE_SAMESITE = "Lax"
-SESSION_COOKIE_SAMESITE = "Lax"
-
+SESSION_COOKIE_SAMESITE="Lax"
+SESSION_COOKIE_SECURE=False
 
 CF_TOKEN=env("CF_TOKEN")
 CF_ID=env("CF_ID")
