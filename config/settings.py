@@ -4,6 +4,8 @@ import os
 import environ
 import dj_database_url
 
+#devlop@gmail.com-develop
+
 env = environ.Env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -159,9 +161,9 @@ CORS_ALLOWED_ORIGINS_ALL = True#모든 호스트 허용
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000", 
     "http://localhost:3000", 
-    "https://www.choeaein.click"
-    
-    ]
+    "https://www.choeaein.click" 
+]
+
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
@@ -175,13 +177,10 @@ CORS_ALLOW_HEADERS = [
     'Set-Cookie',
 ]
 
-
-
 CSRF_TRUSTED_ORIGINS =[
     "http://127.0.0.1:3000", 
     "http://localhost:3000",
-    "https://www.choeaein.click"
-    
+    "https://www.choeaein.click" 
 ]
 
 ACCOUNT_PASSWORD_INPUT_RENDER_VALUE = True  
@@ -189,19 +188,13 @@ ACCOUNT_SESSION_REMEMBER = True
 SESSION_COOKIE_AGE = 3600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
-# AUTH_COOKIE_DOMAIN = ".choeaein.click"
-# SESSION_COOKIE_DOMAIN = ".choeaein.click"
-# CSRF_COOKIE_DOMAIN = ".choeaein.click"
-
 AUTH_COOKIE_DOMAIN = "127.0.0.1"
 CSRF_COOKIE_SECURE = False
-AUTH_COOKIE_SECURE = True
+AUTH_COOKIE_SECURE = False
 
 CSRF_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SAMESITE = "Lax"
 
-SESSION_COOKIE_HTTPONLY = False
-CSRF_COOKIE_HTTPONLY = False
 
 CF_TOKEN=env("CF_TOKEN")
 CF_ID=env("CF_ID")
@@ -251,8 +244,6 @@ FRONTEND_URL='http://127.0.0.1:3000/signup/user'
 # DEFAULT_FILE_STORAGE = 'config.utils.CustomS3Boto3Storage'
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'path/to/store/my/files/')
-
-
 
 CACHE_TTL=15
 CACHES={
