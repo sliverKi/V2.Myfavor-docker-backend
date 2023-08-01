@@ -11,8 +11,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 SECRET_KEY = env("SECRET_KEY")
-ALLOWED_HOSTS =['*']
-# ALLOWED_HOSTS = ["localhost:3000","127.0.0.1:3000", ".choeaein.click", "www.choeaein.click"]
+
+ALLOWED_HOSTS = ["localhost","127.0.0.1", ".choeaein.click", "www.choeaein.click"]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
