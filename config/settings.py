@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 SECRET_KEY = env("SECRET_KEY")
-ALLOWED_HOSTS =["localhost", "127.0.0.1"]
+ALLOWED_HOSTS =["*"]
 # ALLOWED_HOSTS = ["localhost:3000","127.0.0.1:3000", ".choeaein.click", "www.choeaein.click"]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
@@ -156,13 +156,13 @@ MEDIA_URL = "user-uploads/"
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW = True
-# CORS_ALLOWED_ORIGINS_ALL = True#모든 호스트 허용
+CORS_ALLOWED_ORIGINS_ALL = True#모든 호스트 허용
 
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:3000", 
-    "http://localhost:3000", 
-    "https://www.choeaein.click" 
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://127.0.0.1:3000", 
+#     "http://localhost:3000", 
+#     "https://www.choeaein.click" 
+# ]
 
 CORS_ALLOW_HEADERS = [
     'accept',
@@ -188,8 +188,14 @@ ACCOUNT_SESSION_REMEMBER = True
 SESSION_COOKIE_AGE = 3600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
-SESSION_COOKIE_DOMAIN="127.0.0.1"
-SESSION_COOKIE_PATH="127.0.0.1"
+CSRF_COOKIE_SECURE=False
+SESSION_COOKIE_SECURE=False
+
+CSRF_COOKIE_SAMESITE='Lax'
+SESSION_COOKIE_SAMESITE='Lax'
+
+SESSION_COOKIE_HTTPONLY = False
+CSRF_COOKIE_HTTPONLY = False
 
 CF_TOKEN=env("CF_TOKEN")
 CF_ID=env("CF_ID")
