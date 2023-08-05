@@ -158,12 +158,6 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW = True
 CORS_ALLOWED_ORIGINS_ALL = True#모든 호스트 허용
 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://127.0.0.1:3000", 
-#     "http://localhost:3000", 
-#     "https://www.choeaein.click" 
-# ]
-
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
@@ -190,6 +184,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 CSRF_COOKIE_SECURE=False
 SESSION_COOKIE_SECURE=False
+
 
 CSRF_COOKIE_SAMESITE='Lax'
 SESSION_COOKIE_SAMESITE='Lax'
