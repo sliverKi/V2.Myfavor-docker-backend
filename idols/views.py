@@ -11,19 +11,17 @@ from rest_framework.status import (
     HTTP_403_FORBIDDEN, 
     HTTP_404_NOT_FOUND 
 )
-from rest_framework.filters import SearchFilter
-
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from .models import Idol
-from .serializers import  TinyIdolSerializer, IdolsListSerializer, IdolDetailSerializer, PickIdolSerializer
+from .serializers import  IdolsListSerializer, IdolDetailSerializer, PickIdolSerializer
 from boards.models import Board
 from boards.serializers import BoardSerializer
 from schedules.serializers import ScheduleSerializer
 from schedules.models import Schedule
 from medias.serializers import PhotoSerializer
 from groups.models import Group
-from datetime import datetime
-from django.utils.dateformat import DateFormat
 from users.models import User
+from datetime import datetime
 class getIdol:
     def get_idol(self, idol_name_en): 
         try:
@@ -31,20 +29,17 @@ class getIdol:
         except Idol.DoesNotExist:
             raise NotFound
         
-class Idols(APIView): #[수정OK]
-    
+class Idols(APIView): #[수정OK, testOK]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     def get(self, request):
-
         all_idols = Idol.objects.prefetch_related().order_by("pk")
         serializer = IdolsListSerializer(all_idols, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
 
     def post(self, request):  
-        
         if not request.user.is_admin: 
             raise PermissionDenied
         serializer = IdolDetailSerializer(data=request.data)
-        
         if serializer.is_valid():
             idol = serializer.save()
             return Response(IdolsListSerializer(idol).data, status=HTTP_201_CREATED)
@@ -65,16 +60,9 @@ class Idols(APIView): #[수정OK]
 
 
 class IdolDetail(getIdol, APIView): #[수정OK]
-
-    # def get_object(self, idol_name_en): 
-    #     try:
-    #         return Idol.objects.get(idol_name_en=idol_name_en)
-    #     except Idol.DoesNotExist:
-    #         raise NotFound
-
+    permission_classes = [IsAuthenticatedOrReadOnly]
     def get(self, request, idol_name_en): 
         idol = self.get_idol(idol_name_en)
-       
         serializer = IdolDetailSerializer(
             idol,
             context={"request": request},
@@ -84,7 +72,6 @@ class IdolDetail(getIdol, APIView): #[수정OK]
     def put(self, request, idol_name_en): 
         if not request.user.is_admin:
             raise PermissionDenied
-
         idol=self.get_idol(idol_name_en)
         if request.user.is_admin:
             serializer=IdolDetailSerializer(
@@ -136,7 +123,6 @@ class IdolDetail(getIdol, APIView): #[수정OK]
 
     def delete(self, request, idol_name_en): 
         idol=self.get_idol(idol_name_en)
-       
         if request.user.is_admin==False: 
             raise PermissionDenied
         idol.delete()
@@ -145,32 +131,19 @@ class IdolDetail(getIdol, APIView): #[수정OK]
 
 class IdolSchedule(getIdol, APIView): #[페기]
 
-    # def get_object(self, idol_name_en):
-
-    #     try:
-    #         return Idol.objects.get(idol_name_en=idol_name_en)
-    #     except Idol.DoesNotExist:
-    #         raise NotFound
-
     def get(self, request, idol_name_en):
-
         idol = self.get_idol(idol_name_en)
         serializer = ScheduleSerializer(
-            
             idol.idol_schedules.all(),
             many=True,
         )
         return Response(serializer.data, status=HTTP_200_OK)
 
-    
-    
     def post(self, request, idol_name_en):#관리자가 아이돌 스케쥴을 등록하려는 경우 사용되어짐. 
         #아이돌 스케줄이 등록되면 hasSchedule을 false에서 true로 변경 할 것 (participant 에 있는 아이들도 같이 바꿀것 )
-        
         idol=self.get_idol(idol_name_en)
         if not request.user.is_admin:
             raise PermissionDenied
-        
         serializer=ScheduleSerializer(data=request.data)
         print("re", request.data)
         if serializer.is_valid():
@@ -207,9 +180,7 @@ class IdolSchedule(getIdol, APIView): #[페기]
 
 class ScheduleDate(APIView):
     def post(self, request, idol_name_en):
-           
         # category_list = categories.split(",")  # 다중 카테고리를 콤마로 분리
-        
         all_categories = ["broadcast", "event", "release", "buy", "congrats"]
         category_list = request.data.get("categories", all_categories)
         when= request.data.get("when")
@@ -248,9 +219,7 @@ class ScheduleDate(APIView):
         
         if not schedules.exists():#참여하고 있는 스케줄이 없는 경우 
             return Response([], status=HTTP_200_OK)
-        
         serializer = ScheduleSerializer(schedules, many=True)
-
         return Response(serializer.data, status=HTTP_200_OK)
 
 """
@@ -285,14 +254,11 @@ class TopIdols(APIView):#get
 class IdolPhotos(APIView):
 
     def get_object(self, pk):
-
         try:
             return Idol.objects.get(pk=pk)    
         except Idol.DoesNotExist:
             raise NotFound
-        
     def post(self, request, pk):
-
         idol =self.get_object(pk)
         if not request.user.is_admin:   
             raise PermissionDenied
@@ -307,7 +273,6 @@ class IdolPhotos(APIView):
 class enrollIdolSchedule(getIdol, APIView):
     
     def get(self, request, idol_name_en):
-
         idol = self.get_idol(idol_name_en)
         serializer = ScheduleSerializer(
             
@@ -319,14 +284,12 @@ class enrollIdolSchedule(getIdol, APIView):
     def post(self, request, idol_name_en):
         if not request.user.is_admin:
             return Response({"error":"관리자만이 아이돌 스케쥴 등록 가능"}, status=HTTP_403_FORBIDDEN)
-        
         idol = get_object_or_404(Idol, idol_name_en=idol_name_en)
         print("1", idol)
         serializer=ScheduleSerializer(data=request.data)
         owner_name=request.data.get("owner")
         schedule_type=request.data.get("ScheduleType")
         print("owner", owner_name, "schedule_type", schedule_type)
-        
         try:
             owner=User.objects.get(name=owner_name)
             schedule_type=Board.objects.get(type=schedule_type)
@@ -335,8 +298,6 @@ class enrollIdolSchedule(getIdol, APIView):
             return Response({"error":"제보 작성자가 존재하지 않음."}, status=HTTP_404_NOT_FOUND)
         except Board.DoesNotExist:
             return Response({"error":"schedule_type이 유효하지 않음."}, status=HTTP_404_NOT_FOUND)
-
-        
         participant = request.data.get("participant")
         print("participant", participant[0])
 
