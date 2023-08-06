@@ -33,3 +33,12 @@ class IdolAPITestCase(APITestCase):
             "pickCount": 10,
         }
         self.idol = Idol.objects.create(**self.idol_data)
+
+    def test_idol_creation(self):
+        print("idol_name_en:", self.idol.idol_name_en)
+        print("idol_name_kr:", self.idol.idol_name_kr)
+        print("idol_profile:", self.idol.idol_profile)
+        print("is_solo:", self.idol.is_solo)
+        print("idol_birthday:", self.idol.idol_birthday)
+        print("has_schedules:", self.idol.has_schedules)
+        print("pickCount:", self.idol.pickCount)
