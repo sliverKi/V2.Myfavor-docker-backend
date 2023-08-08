@@ -22,6 +22,9 @@ from medias.serializers import PhotoSerializer
 from groups.models import Group
 from users.models import User
 from datetime import datetime
+from django.core.cache import cache
+import logging
+
 class getIdol:
     def get_idol(self, idol_name_en): 
         try:
@@ -32,8 +35,17 @@ class getIdol:
 class Idols(APIView): #[수정OK, testOK]
     permission_classes = [IsAuthenticatedOrReadOnly]
     def get(self, request):
+        cache_key="idols-List"
+        cached_data=cache.get(cache_key)
+        #Cache Hit
+        if cached_data:
+            logger=logging.getLogger(__name__)
+            logger.info(f"Cache HIT for idol key :{cache_key}")
+            return Response(cached_data, status=HTTP_200_OK)
+        #Cache Miss
         all_idols = Idol.objects.prefetch_related().order_by("pk")
         serializer = IdolsListSerializer(all_idols, many=True)
+        cache.set(cache_key, serializer.data, 60 * 30)  #Cache Keep
         return Response(serializer.data, status=HTTP_200_OK)
 
     def post(self, request):  
@@ -42,6 +54,9 @@ class Idols(APIView): #[수정OK, testOK]
         serializer = IdolDetailSerializer(data=request.data)
         if serializer.is_valid():
             idol = serializer.save()
+            # Delete the existing cache, if new idol is successfully saved
+            cache_key = "idols-List"
+            cache.delete(cache_key)
             return Response(IdolsListSerializer(idol).data, status=HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
