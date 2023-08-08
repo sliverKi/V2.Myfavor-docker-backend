@@ -35,17 +35,17 @@ class getIdol:
 class Idols(APIView): #[수정OK, testOK]
     permission_classes = [IsAuthenticatedOrReadOnly]
     def get(self, request):
-        cache_key="idols-List"
-        cached_data=cache.get(cache_key)
+        # cache_key="idols-List"
+        # cached_data=cache.get(cache_key)
         #Cache Hit
-        if cached_data:
-            logger=logging.getLogger(__name__)
-            logger.info(f"Cache HIT for idol key :{cache_key}")
-            return Response(cached_data, status=HTTP_200_OK)
+        # if cached_data:
+        #     logger=logging.getLogger(__name__)
+        #     logger.info(f"Cache HIT for idol key :{cache_key}")
+        #     return Response(cached_data, status=HTTP_200_OK)
         #Cache Miss
         all_idols = Idol.objects.prefetch_related().order_by("pk")
         serializer = IdolsListSerializer(all_idols, many=True)
-        cache.set(cache_key, serializer.data, 60 * 30)  #Cache Keep
+        # cache.set(cache_key, serializer.data, 60 * 30)  #Cache Keep
         return Response(serializer.data, status=HTTP_200_OK)
 
     def post(self, request):  
