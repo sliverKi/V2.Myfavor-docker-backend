@@ -8,14 +8,14 @@ from django.core.cache import cache
 import logging
 from config.settings import DEBUG
 
-if not DEBUG:#개발환경인 경우
+if not DEBUG:#개발서버 베포인 경우
     class BoardType(APIView):
         def get(self, request):  # 일정 종류에 맞는 일정 조회
             all_boardType = Board.objects.all()
             serializer = BoardSerializer(all_boardType, many=True)
             return Response(serializer.data,status=status.HTTP_200_OK)
 
-else:#개발서버 베포인 경우
+else:#개발환경인 경우
     class BoardType(APIView):
         def get(self, request):  # 일정 종류에 맞는 일정 조회
             cache_key = "board_cache"
