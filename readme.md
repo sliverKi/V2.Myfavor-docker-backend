@@ -1,11 +1,13 @@
-v2.MyFavor-docker-backend
+## v2.MyFavor-docker-backend
 
-+) v1.Myfavor-backend를 개선시킨 버전입니다.
+deploy: https://www.choeaein.click/
 
+---
 프로젝트 구성인원 : FE1 + BE1 <br>
 역할 : Backend 개발 <br>
 기간 : 3월 ~ 4월 / 5월 ~ 8월 <br>
 
+---
 
 > 주요기능
 
