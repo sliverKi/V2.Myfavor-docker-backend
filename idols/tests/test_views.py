@@ -5,7 +5,8 @@ from idols.models import Idol
 from users.models import User
 from boards.models import Board
 from schedules.models import Schedule
-from datetime import datetime
+from datetime import datetime, timedelta
+
 class IdolsGet(IdolAPITestCase):
     URL="/api/v2/idols/"
     def setUp(self):
@@ -175,7 +176,46 @@ class ScheduleDateTest(IdolAPITestCase):
 class UpcomingSchedules(IdolAPITestCase):
     Base_URL="/api/v2/idols/"
     def setUp(self):
-        pass
+        super().setUp() 
+        today = datetime.today()
+        upcoming_date = today + timedelta(days=7)  # 7일 후 날짜 계산
+        print("upcoming_date", upcoming_date)
+        self.cataegory_event=Board.objects.create(type=Board.BoardKinddChoices.EVENT)
+        self.cataegory_broadcast=Board.objects.create(type=Board.BoardKinddChoices.BROADCAST)
+
+        self.schedule1=Schedule.objects.create(
+            ScheduleTitle="test-case schedule1",
+            ScheduleType=self.cataegory_event,
+            location="Korea",
+            when=upcoming_date
+        )
+        self.schedule1.participant.add(self.idol)
+
+        self.schedule2=Schedule.objects.create(
+            ScheduleTitle="test-case schedule2",
+            ScheduleType=self.cataegory_broadcast,
+            location="Seoul",
+            when=upcoming_date
+        )
+        self.schedule2.participant.add(self.idol)
+
+    # 다른 아이돌 데이터도 추가 가능
+        
+    def test_get_upcoming_schedules(self):
+        url=f"{self.Base_URL}{self.idol.idol_name_en}/upcoming/"
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)  # 생성한 스케줄 데이터 수에 따라 변경 가능
+        
+        # 응답 데이터의 when이 오름차순으로 정렬되어 있는지 확인
+        prev_when = response.data[0]["when"]
+        for schedule_info in response.data[1:]:
+            current_when = schedule_info["when"]
+            self.assertTrue(prev_when <= current_when)
+            prev_when = current_when
+
+
 
 class TopIdols(IdolAPITestCase):
     URL="/api/v2/idols/rank/"
