@@ -51,9 +51,11 @@ class Idols(APIView): #[수정OK, testOK]
     def post(self, request):  
         if not request.user.is_admin: 
             raise PermissionDenied
+        is_solo = request.data.get('is_solo') 
+        print("is_solo", is_solo)
         serializer = IdolDetailSerializer(data=request.data)
         if serializer.is_valid():
-            idol = serializer.save()
+            idol = serializer.save(is_solo=is_solo)
             # Delete the existing cache, if new idol is successfully saved
             cache_key = "idols-List"
             cache.delete(cache_key)
@@ -64,11 +66,11 @@ class Idols(APIView): #[수정OK, testOK]
     """
     post input data
         {
-            "idol_name_kr":"카리나",
-            "idol_name_en":"Karina",
+            "idol_name_kr":"선미",
+            "idol_name_en":"SunMi",
             "idol_profile":"https://i.namu.wiki/i/OsLvNXbYOYIMIe8ttpDZn1jLL0JL3RFZmZcmAWXMvcg7hYvHtX8Np4njdPC5SVlugrL6fjRyLZd_Prk-h9BB2v13y-dtP7eQKaKkcWTXNq21M6m2D0rpYLTfW1NsYhVXFB5fyOF4XdqMtU4UWwxCiQ.webp",
-            "idol_birthday":"2000-04-11",
-            "idol_debut":"2020-11-17"
+            "idol_birthday":"1992-05-02",
+            "is_solo":"True"
         }
     """
 
