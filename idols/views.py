@@ -44,7 +44,7 @@ class Idols(APIView): #[수정OK, testOK]
                 logger=logging.getLogger(__name__)
                 logger.info(f"Cache HIT for idol key :{cache_key}")
                 return Response(cached_data, status=HTTP_200_OK)
-             #Cache Miss or non-active debug.
+             #Cache Miss
             all_idols = Idol.objects.prefetch_related().order_by("pk")
             serializer = IdolsListSerializer(all_idols, many=True)
             cache.set(cache_key, serializer.data, 60 * 30)  #Cache Keep
@@ -63,8 +63,8 @@ class Idols(APIView): #[수정OK, testOK]
         if serializer.is_valid():
             idol = serializer.save(is_solo=is_solo)
             # Delete the existing cache, if new idol is successfully saved
-            # cache_key = "idols-List"
-            # cache.delete(cache_key)
+            cache_key = "idols-List"
+            cache.delete(cache_key)
             return Response(IdolsListSerializer(idol).data, status=HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
