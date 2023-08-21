@@ -3,6 +3,7 @@ from pathlib import Path
 import os
 import environ
 import dj_database_url
+#git merge origin/main
 
 env = environ.Env()
 
