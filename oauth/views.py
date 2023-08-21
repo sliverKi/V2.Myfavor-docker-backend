@@ -75,7 +75,7 @@ class step1_SignUP(APIView):#회원가입
             
             
             
-            signup_url = f"{settings.FRONTEND_URL}/vertify/{user.pk}/{email_vertification_token}/"
+            signup_url = f"{settings.FRONTEND_URL}/{user.pk}/{email_vertification_token}/"
             #  {"email":"lovee2756@gmail.com"}
             subject="Account Activation"
             message = render_to_string('email_vertify.html', {'auth_url': signup_url})
@@ -85,9 +85,10 @@ class step1_SignUP(APIView):#회원가입
             # Send email
             send_mail(
                 subject,
-                message,
+                plain_message,
                 "myfavor86@gmail.com",
                 [user.email],
+                html_message=message,
                 fail_silently=False,
             )
             user.is_active=False#아직 이메일 인증을 하지 않음.
