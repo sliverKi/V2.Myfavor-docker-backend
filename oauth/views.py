@@ -74,7 +74,7 @@ class step1_SignUP(APIView):#회원가입
             reverse_lazy("email_verification", kwargs={"pk": user.pk, "token": email_vertification_token})
             )#send mail 성공시
             
-            # signup_url = f"{settings.FRONTEND_URL}/verify/{user.pk}/{email_vertification_token}/"
+            signup_url = f"{settings.FRONTEND_URL}/vertify/{user.pk}/{email_vertification_token}/"
             #  {"email":"lovee2756@gmail.com"}
             subject="Account Activation"
             message = render_to_string('email_vertify.html', {'auth_url': test_url})
