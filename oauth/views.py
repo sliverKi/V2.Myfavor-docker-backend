@@ -29,6 +29,8 @@ from django.utils.encoding import force_str
 import re
 
 from config.settings import FRONTEND_URL
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 class step1_SignUP(APIView):#회원가입
     def get(self, request):
         return Response({"email을 입력해주세요."}, status=status.HTTP_200_OK)
@@ -73,17 +75,13 @@ class step1_SignUP(APIView):#회원가입
             
             
             
-            reset_url = f"{settings.FRONTEND_URL}/verify/{user.pk}/{email_vertification_token}/"
+            signup_url = f"{settings.FRONTEND_URL}/vertify/{user.pk}/{email_vertification_token}/"
             #  {"email":"lovee2756@gmail.com"}
             subject="Account Activation"
-            message = f"Please click the link below to activate account:\n\n{reset_url}"
-            print("url1", reset_url)
-            
-            current_site = get_current_site(request) 
-            print("test2", current_site)
-
-            # reset_url = f"{current_site}/verify/{user.pk}/{email_verification_token}/"
-            
+            message = render_to_string('email_vertify.html', {'auth_url': signup_url})
+            plain_message = strip_tags(message)
+            # message = f"Please click the link below to activate account:\n\n{signup_url}"
+            print("url1", signup_url)
             # Send email
             send_mail(
                 subject,
