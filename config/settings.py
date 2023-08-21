@@ -220,7 +220,7 @@ DEFAULT_FROM_EMAIL=EMAIL_HOST_USER
 PASSWORD_RESET_CONFIRM_URL = 'password_reset_confirm'
 
 # FRONTEND_URL='127.0.0.1:3000/signup/user'
-FRONTEND_URL='https://v2-myfavor-back.onrender.com/127.0.0.1:3000/signup/user'
+FRONTEND_URL='v2-myfavor-back.onrender.com/signup/user'
 
 #ACCOUNT_EMAIL_VERIFICATION = 'mandatory'(email인증을 하지 않으면 로그인 할 수 없음.)
 #ACCOUNT_CONFIRM_EMIAL_ON_GET = True (인증 링크를 누르면 바로 확인이 되게 함 )
