@@ -70,17 +70,18 @@ class step1_SignUP(APIView):#회원가입
             )
             print("2", user, token)#이메일 인증 링크 url 커스텀하기
             
-            test_url = request.build_absolute_uri(
-            reverse_lazy("email_verification", kwargs={"pk": user.pk, "token": email_vertification_token})
-            )#send mail 성공시
+            # test_url = request.build_absolute_uri(
+            # reverse_lazy("email_verification", kwargs={"pk": user.pk, "token": email_vertification_token})
+            # )
+            # #send mail 성공시
             
             signup_url = f"{settings.FRONTEND_URL}/vertify/{user.pk}/{email_vertification_token}/"
             #  {"email":"lovee2756@gmail.com"}
             subject="Account Activation"
-            message = render_to_string('email_vertify.html', {'auth_url': test_url})
+            message = render_to_string('email_vertify.html', {'auth_url': signup_url})
             plain_message = strip_tags(message)
             # message = f"Please click the link below to activate account:\n\n{signup_url}"
-            print("url1", test_url)
+            print("url1", signup_url)
             
             
             # Send email
