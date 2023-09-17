@@ -204,13 +204,22 @@ class IdolSchedule(getIdol, APIView): #[페기]
 class ScheduleDate(APIView):
     def post(self, request, idol_name_en):
         # category_list = categories.split(",")  # 다중 카테고리를 콤마로 분리
+        
         all_categories = ["broadcast", "event", "release", "buy", "congrats"]
         category_list = request.data.get("categories", all_categories)
         when= request.data.get("when")
         year, month, day = None, None, None
-        
-        if when:
-            cnt=when.count("-")
+ 
+
+        invalid_categories = [category for category in category_list if category not in all_categories]
+        if invalid_categories:
+            return Response({"detail": f"유효하지 않은 카테고리: {', '.join(invalid_categories)}."}, status=HTTP_400_BAD_REQUEST)
+
+        if not when:
+            return Response({"detail": "Date is required."}, status=HTTP_400_BAD_REQUEST)
+
+        cnt = when.count("-")
+        try:
             if cnt==2:
                 date=datetime.strptime(when, "%Y-%m-%d")
                 year=date.year
@@ -223,8 +232,10 @@ class ScheduleDate(APIView):
                 year=date.year
                 month=date.month
                 print("year", year, "month", month)            
-        
-        if len(category_list)==0:#아아돌이 참여하는 모든 스케쥴 받아옴
+        except ValueError:
+            return Response({"detail": "Invalid date format."}, status=HTTP_400_BAD_REQUEST)
+
+        if len(category_list)==0:#아이돌이 참여하는 모든 스케쥴 받아옴
             schedules = Schedule.objects.filter(
                 participant__idol_name_en=idol_name_en,
                 when__year=year,

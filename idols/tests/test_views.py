@@ -6,7 +6,7 @@ from users.models import User
 from boards.models import Board
 from schedules.models import Schedule
 from datetime import datetime, timedelta
-
+import json
 class IdolsGet(IdolAPITestCase):
     URL="/api/v2/idols/"
     def setUp(self):
@@ -144,17 +144,17 @@ class ScheduleDateTest(IdolAPITestCase):
     def test_get_all_schedules(self):
         url=f"{self.Base_URL}{self.idol.idol_name_en}/schedule/"
         response = self.client.post(url, data={})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 0)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(len(response.data), 1)
 
-    def test_get_schedules_with_specific_categories(self):
+    def test_get_schedules_with_invalid_categories(self):
         url=f"{self.Base_URL}{self.idol.idol_name_en}/schedule/"
-        data = {
-            "categories": ["broadcast", "release"],
-            "when": "2023-08"
+        invalid_data = {
+            "categories": ["invalid_category1", "invalid_category2"],
+            "when": "2023-09",
         }
-        response = self.client.post(url, data=data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.client.post(url, data=invalid_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)  
     
     def test_get_schedules_with_no_categories(self):
         url=f"{self.Base_URL}{self.idol.idol_name_en}/schedule/"
@@ -163,15 +163,42 @@ class ScheduleDateTest(IdolAPITestCase):
         }
         response = self.client.post(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        
+    
+    def test_get_schedules_with_specific_categories(self):
+        url=f"{self.Base_URL}{self.idol.idol_name_en}/schedule/"
+        data = {
+            "categories": ["broadcast", "release"],
+            "when": "2023-08"
+        }
+        response = self.client.post(url, data=json.dumps(data), content_type='application/json')
+        print("ㄷㄴㅅ", response.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    
     def test_get_schedules_depth_day(self):
         url=f"{self.Base_URL}{self.idol.idol_name_en}/schedule/"
         invalid_data = {
             "when": "2023-09-01",
         }
         response = self.client.post(url, data=invalid_data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)    
+        self.assertEqual(response.status_code, status.HTTP_200_OK)   
+    
+    def test_get_schedules_with_missing_when(self):
+        url=f"{self.Base_URL}{self.idol.idol_name_en}/schedule/"
+        data = {
+            "categories": ["broadcast", "release"],
+        }
+        response = self.client.post(url, data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_get_schedules_with_invalid_when(self):
+        url=f"{self.Base_URL}{self.idol.idol_name_en}/schedule/"
+        invalid_data = {
+            "when": "2023/09/01",  # 잘못된 형식
+        }
+        response = self.client.post(url, data=invalid_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    
     
 class UpcomingSchedules(IdolAPITestCase):
     Base_URL="/api/v2/idols/"
