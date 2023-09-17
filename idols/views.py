@@ -265,18 +265,15 @@ class ScheduleDate(APIView):
 class UpcomingSchedules(APIView):#다가올 스케쥴
     def get(self, request, idol_name_en):
         today = datetime.today()
-        try:
-            schedules = Schedule.objects.filter(
-            participant__idol_name_en=idol_name_en,
-            when__gte=today
-            ).order_by("when")[:3]
-            serializer = ScheduleSerializer(schedules, many=True)
-        except schedules.DoesNotExist:
-            return Response([], status=HTTP_200_OK)
+        schedules = Schedule.objects.filter(
+        participant__idol_name_en=idol_name_en,
+        when__gte=today
+        ).order_by("when")[:3]
+        serializer = ScheduleSerializer(schedules, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
 
 
-class TopIdols(APIView):#get
+class TopIdols(APIView):#[수정완료]
     def get(self, request):
         top_idols = Idol.objects.order_by('-pickCount')[:4]# 상위 6명의 아이돌을 pickCount 기준으로 내림차순으로 정렬하여 가져옴
         # 상위 6명의 아이돌의 pickCount를 가져와서 리스트에 저장
@@ -285,7 +282,7 @@ class TopIdols(APIView):#get
 
 
 
-class IdolPhotos(APIView):
+class IdolPhotos(APIView):#[폐기]
 
     def get_object(self, pk):
         try:
