@@ -8,7 +8,7 @@ from django.core.cache import cache
 import logging
 from config.settings import DEBUG
 
-if not DEBUG:#개발서버 베포인 경우
+if not DEBUG:#서버 베포인 경우
     class BoardType(APIView):
         def get(self, request):  # 일정 종류에 맞는 일정 조회
             all_boardType = Board.objects.all()
