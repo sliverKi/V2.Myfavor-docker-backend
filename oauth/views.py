@@ -48,10 +48,11 @@ class step1_SignUP(APIView):#회원가입
             if not user.pick:
                 print("1")
                 user.delete()
-                return Response({"message":"회원가입 절차를 완료하지 않은 동일 email을 갖는 user를 삭제함."}, status=status.HTTP_204_NO_CONTENT)
+                return Response({"message":"회원가입 절차를 완료하지 않은 동일 email을 갖는 user를 삭제함."}, 
+                                status=status.HTTP_204_NO_CONTENT)
             else:
                 print("2")
-                return Response({"message":"이미 회원가입 절차를 완료한 사용자 입니다."}, status=status.HTTP_202_ACCEPTED)
+                return Response({"message":"이미 회원가입 절차를 완료한 사용자 입니다."}, status=status.HTTP_400_BAD_REQUEST)
         
         except:
             print("4")
@@ -75,19 +76,20 @@ class step1_SignUP(APIView):#회원가입
             # )
             # #send mail 성공시
             
-            signup_url = f"{settings.FRONTEND_URL}/{user.pk}/{email_vertification_token}/"
+
+#             signup_url = f"{settings.FRONTEND_URL}/{user.pk}/{email_vertification_token}/"
+
+            signup_url = f"{settings.FRONTEND_URL}/verify/{user.pk}/{email_vertification_token}/"
             #  {"email":"lovee2756@gmail.com"}
             subject="Account Activation"
-            message = render_to_string('email_vertify.html', {'auth_url': signup_url})
+            message = render_to_string('email_verify.html', {'auth_url': signup_url})
             plain_message = strip_tags(message)
             # message = f"Please click the link below to activate account:\n\n{signup_url}"
             print("url1", signup_url)
-            
-            
             # Send email
             send_mail(
                 subject,
-                plain_message, 
+                plain_message,
                 "myfavor86@gmail.com",
                 [user.email],
                 html_message=message,

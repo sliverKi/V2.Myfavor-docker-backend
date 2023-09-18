@@ -3,6 +3,7 @@ from pathlib import Path
 import os
 import environ
 import dj_database_url
+#git merge origin/main
 
 #devlop@gmail.com-develop
 
@@ -13,8 +14,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 SECRET_KEY = env("SECRET_KEY")
-ALLOWED_HOSTS =["*"]
 # ALLOWED_HOSTS = ["localhost:3000","127.0.0.1:3000", ".choeaein.click", "www.choeaein.click"]
+ALLOWED_HOSTS = ["localhost","127.0.0.1", ".choeaein.click", "www.choeaein.click"]
+
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
@@ -219,8 +221,8 @@ EMAIL_USE_TLS=True
 DEFAULT_FROM_EMAIL=EMAIL_HOST_USER
 PASSWORD_RESET_CONFIRM_URL = 'password_reset_confirm'
 
-FRONTEND_URL='127.0.0.1:3000/signup/user'
-
+# FRONTEND_URL='127.0.0.1:3000/signup/user'
+FRONTEND_URL='https://www.choeaein.click/signup/user'
 
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'#(email인증을 하지 않으면 로그인 할 수 없음.)
 ACCOUNT_CONFIRM_EMIAL_ON_GET = True #(인증 링크를 누르면 바로 확인이 되게 함 )
