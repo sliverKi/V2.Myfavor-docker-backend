@@ -170,11 +170,9 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW = True
 # CORS_ALLOWED_ORIGINS_ALL = True#모든 호스트 허용
 CORS_ORIGIN_WHITELIST = (
-    "https://www.choeaein.click"
-    "http://localhost:3000",
-    "http://127.0.0.1:3000"
+    "https://www.choeaein.click"  
 )
-CORS_ALLOW_HEADERS = [
+CORS_ALLOW_HEADERS = (
     'accept',
     'accept-encoding',
     'authorization',
@@ -185,7 +183,7 @@ CORS_ALLOW_HEADERS = [
     'x-csrftoken',
     'x-requested-with',
     'Set-Cookie',
-]
+)
 CORS_ALLOW_METHODS = (
     "DELETE",
     "GET",
@@ -194,11 +192,11 @@ CORS_ALLOW_METHODS = (
     "POST",
     "PUT",
 )
-CSRF_TRUSTED_ORIGINS =[
+CSRF_TRUSTED_ORIGINS =(
     "http://127.0.0.1:3000", 
     "http://localhost:3000",
     "https://www.choeaein.click"
-]
+)
 ACCOUNT_PASSWORD_INPUT_RENDER_VALUE = True  
 ACCOUNT_SESSION_REMEMBER = True  
 SESSION_COOKIE_AGE = 3600
