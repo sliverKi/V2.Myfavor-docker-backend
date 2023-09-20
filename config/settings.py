@@ -14,21 +14,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 SECRET_KEY = env("SECRET_KEY")
-# ALLOWED_HOSTS = ["*"]
+
 ALLOWED_HOSTS = [
-    "localhost:3000",
-    "127.0.0.1:3000", 
-    ".choeaein.click", 
-    "www.choeaein.click",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    ".choeaein.click", 
+    "www.choeaein.click",
     "https://www.choeaein.click", 
     "https://backend.choeaein.click",
     "13.228.225.19",
     "18.142.128.26",
     "54.254.162.138",
 ]
-# ALLOWED_HOSTS = ["localhost","127.0.0.1", ".choeaein.click", "www.choeaein.click"]
+
 
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
@@ -189,8 +187,7 @@ CORS_ALLOW_HEADERS = [
 CSRF_TRUSTED_ORIGINS =[
     "http://127.0.0.1:3000", 
     "http://localhost:3000",
-    "https://www.choeaein.click",
-    "https://backend.choeaein.click"
+    "https://www.choeaein.click"
 ]
 ACCOUNT_PASSWORD_INPUT_RENDER_VALUE = True  
 ACCOUNT_SESSION_REMEMBER = True  
