@@ -11,19 +11,20 @@ from rest_framework.status import (
     HTTP_403_FORBIDDEN, 
     HTTP_404_NOT_FOUND 
 )
-from rest_framework.filters import SearchFilter
-
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from .models import Idol
-from .serializers import  TinyIdolSerializer, IdolsListSerializer, IdolDetailSerializer, PickIdolSerializer
+from .serializers import  IdolsListSerializer, IdolDetailSerializer, PickIdolSerializer
 from boards.models import Board
 from boards.serializers import BoardSerializer
 from schedules.serializers import ScheduleSerializer
 from schedules.models import Schedule
 from medias.serializers import PhotoSerializer
 from groups.models import Group
-from datetime import datetime
-from django.utils.dateformat import DateFormat
 from users.models import User
+from datetime import datetime
+from django.core.cache import cache
+import logging
+from config.settings import DEBUG
 class getIdol:
     def get_idol(self, idol_name_en): 
         try:
@@ -31,22 +32,39 @@ class getIdol:
         except Idol.DoesNotExist:
             raise NotFound
         
-class Idols(APIView): #[수정OK]
+class Idols(APIView): #[수정OK, testOK]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     
     def get(self, request):
-
-        all_idols = Idol.objects.prefetch_related().order_by("pk")
-        serializer = IdolsListSerializer(all_idols, many=True)
-        return Response(serializer.data, status=HTTP_200_OK)
+        if DEBUG:
+            cache_key="idols-List"
+            cached_data=cache.get(cache_key)
+            #Cache Hit
+            if cached_data:
+                logger=logging.getLogger(__name__)
+                logger.info(f"Cache HIT for idol key :{cache_key}")
+                return Response(cached_data, status=HTTP_200_OK)
+             #Cache Miss
+            all_idols = Idol.objects.prefetch_related().order_by("pk")
+            serializer = IdolsListSerializer(all_idols, many=True)
+            cache.set(cache_key, serializer.data, 60 * 30)  #Cache Keep
+            return Response(serializer.data, status=HTTP_200_OK)
+        else:
+            all_idols = Idol.objects.prefetch_related().order_by("pk")
+            serializer = IdolsListSerializer(all_idols, many=True)
+            return Response(serializer.data, status=HTTP_200_OK)
 
     def post(self, request):  
-        
         if not request.user.is_admin: 
             raise PermissionDenied
+        is_solo = request.data.get('is_solo') 
+        print("is_solo", is_solo)
         serializer = IdolDetailSerializer(data=request.data)
-        
         if serializer.is_valid():
-            idol = serializer.save()
+            idol = serializer.save(is_solo=is_solo)
+            # Delete the existing cache, if new idol is successfully saved
+            cache_key = "idols-List"
+            cache.delete(cache_key)
             return Response(IdolsListSerializer(idol).data, status=HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
@@ -54,27 +72,20 @@ class Idols(APIView): #[수정OK]
     """
     post input data
         {
-            "idol_name_kr":"카리나",
-            "idol_name_en":"Karina",
+            "idol_name_kr":"선미",
+            "idol_name_en":"SunMi",
             "idol_profile":"https://i.namu.wiki/i/OsLvNXbYOYIMIe8ttpDZn1jLL0JL3RFZmZcmAWXMvcg7hYvHtX8Np4njdPC5SVlugrL6fjRyLZd_Prk-h9BB2v13y-dtP7eQKaKkcWTXNq21M6m2D0rpYLTfW1NsYhVXFB5fyOF4XdqMtU4UWwxCiQ.webp",
-            "idol_birthday":"2000-04-11",
-            "idol_debut":"2020-11-17"
+            "idol_birthday":"1992-05-02",
+            "is_solo":"True"
         }
     """
 
 
 
 class IdolDetail(getIdol, APIView): #[수정OK]
-
-    # def get_object(self, idol_name_en): 
-    #     try:
-    #         return Idol.objects.get(idol_name_en=idol_name_en)
-    #     except Idol.DoesNotExist:
-    #         raise NotFound
-
+    permission_classes = [IsAuthenticatedOrReadOnly]
     def get(self, request, idol_name_en): 
         idol = self.get_idol(idol_name_en)
-       
         serializer = IdolDetailSerializer(
             idol,
             context={"request": request},
@@ -84,7 +95,6 @@ class IdolDetail(getIdol, APIView): #[수정OK]
     def put(self, request, idol_name_en): 
         if not request.user.is_admin:
             raise PermissionDenied
-
         idol=self.get_idol(idol_name_en)
         if request.user.is_admin:
             serializer=IdolDetailSerializer(
@@ -136,7 +146,6 @@ class IdolDetail(getIdol, APIView): #[수정OK]
 
     def delete(self, request, idol_name_en): 
         idol=self.get_idol(idol_name_en)
-       
         if request.user.is_admin==False: 
             raise PermissionDenied
         idol.delete()
@@ -145,32 +154,19 @@ class IdolDetail(getIdol, APIView): #[수정OK]
 
 class IdolSchedule(getIdol, APIView): #[페기]
 
-    # def get_object(self, idol_name_en):
-
-    #     try:
-    #         return Idol.objects.get(idol_name_en=idol_name_en)
-    #     except Idol.DoesNotExist:
-    #         raise NotFound
-
     def get(self, request, idol_name_en):
-
         idol = self.get_idol(idol_name_en)
         serializer = ScheduleSerializer(
-            
             idol.idol_schedules.all(),
             many=True,
         )
         return Response(serializer.data, status=HTTP_200_OK)
 
-    
-    
     def post(self, request, idol_name_en):#관리자가 아이돌 스케쥴을 등록하려는 경우 사용되어짐. 
         #아이돌 스케줄이 등록되면 hasSchedule을 false에서 true로 변경 할 것 (participant 에 있는 아이들도 같이 바꿀것 )
-        
         idol=self.get_idol(idol_name_en)
         if not request.user.is_admin:
             raise PermissionDenied
-        
         serializer=ScheduleSerializer(data=request.data)
         print("re", request.data)
         if serializer.is_valid():
@@ -207,16 +203,23 @@ class IdolSchedule(getIdol, APIView): #[페기]
 
 class ScheduleDate(APIView):
     def post(self, request, idol_name_en):
-           
         # category_list = categories.split(",")  # 다중 카테고리를 콤마로 분리
         
         all_categories = ["broadcast", "event", "release", "buy", "congrats"]
         category_list = request.data.get("categories", all_categories)
         when= request.data.get("when")
         year, month, day = None, None, None
-        
-        if when:
-            cnt=when.count("-")
+ 
+
+        invalid_categories = [category for category in category_list if category not in all_categories]
+        if invalid_categories:
+            return Response({"detail": f"유효하지 않은 카테고리: {', '.join(invalid_categories)}."}, status=HTTP_400_BAD_REQUEST)
+
+        if not when:
+            return Response({"detail": "Date is required."}, status=HTTP_400_BAD_REQUEST)
+
+        cnt = when.count("-")
+        try:
             if cnt==2:
                 date=datetime.strptime(when, "%Y-%m-%d")
                 year=date.year
@@ -229,8 +232,10 @@ class ScheduleDate(APIView):
                 year=date.year
                 month=date.month
                 print("year", year, "month", month)            
-        
-        if len(category_list)==0:#아아돌이 참여하는 모든 스케쥴 받아옴
+        except ValueError:
+            return Response({"detail": "Invalid date format."}, status=HTTP_400_BAD_REQUEST)
+
+        if len(category_list)==0:#아이돌이 참여하는 모든 스케쥴 받아옴
             schedules = Schedule.objects.filter(
                 participant__idol_name_en=idol_name_en,
                 when__year=year,
@@ -248,9 +253,7 @@ class ScheduleDate(APIView):
         
         if not schedules.exists():#참여하고 있는 스케줄이 없는 경우 
             return Response([], status=HTTP_200_OK)
-        
         serializer = ScheduleSerializer(schedules, many=True)
-
         return Response(serializer.data, status=HTTP_200_OK)
 
 """
@@ -262,18 +265,15 @@ class ScheduleDate(APIView):
 class UpcomingSchedules(APIView):#다가올 스케쥴
     def get(self, request, idol_name_en):
         today = datetime.today()
-        try:
-            schedules = Schedule.objects.filter(
-            participant__idol_name_en=idol_name_en,
-            when__gte=today
-            ).order_by("when")[:3]
-            serializer = ScheduleSerializer(schedules, many=True)
-        except schedules.DoesNotExist:
-            return Response([], status=HTTP_200_OK)
+        schedules = Schedule.objects.filter(
+        participant__idol_name_en=idol_name_en,
+        when__gte=today
+        ).order_by("when")[:3]
+        serializer = ScheduleSerializer(schedules, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
 
 
-class TopIdols(APIView):#get
+class TopIdols(APIView):#[수정완료]
     def get(self, request):
         top_idols = Idol.objects.order_by('-pickCount')[:4]# 상위 6명의 아이돌을 pickCount 기준으로 내림차순으로 정렬하여 가져옴
         # 상위 6명의 아이돌의 pickCount를 가져와서 리스트에 저장
@@ -282,17 +282,14 @@ class TopIdols(APIView):#get
 
 
 
-class IdolPhotos(APIView):
+class IdolPhotos(APIView):#[폐기]
 
     def get_object(self, pk):
-
         try:
             return Idol.objects.get(pk=pk)    
         except Idol.DoesNotExist:
             raise NotFound
-        
     def post(self, request, pk):
-
         idol =self.get_object(pk)
         if not request.user.is_admin:   
             raise PermissionDenied
@@ -307,7 +304,6 @@ class IdolPhotos(APIView):
 class enrollIdolSchedule(getIdol, APIView):
     
     def get(self, request, idol_name_en):
-
         idol = self.get_idol(idol_name_en)
         serializer = ScheduleSerializer(
             
@@ -319,14 +315,12 @@ class enrollIdolSchedule(getIdol, APIView):
     def post(self, request, idol_name_en):
         if not request.user.is_admin:
             return Response({"error":"관리자만이 아이돌 스케쥴 등록 가능"}, status=HTTP_403_FORBIDDEN)
-        
         idol = get_object_or_404(Idol, idol_name_en=idol_name_en)
         print("1", idol)
         serializer=ScheduleSerializer(data=request.data)
         owner_name=request.data.get("owner")
         schedule_type=request.data.get("ScheduleType")
         print("owner", owner_name, "schedule_type", schedule_type)
-        
         try:
             owner=User.objects.get(name=owner_name)
             schedule_type=Board.objects.get(type=schedule_type)
@@ -335,8 +329,6 @@ class enrollIdolSchedule(getIdol, APIView):
             return Response({"error":"제보 작성자가 존재하지 않음."}, status=HTTP_404_NOT_FOUND)
         except Board.DoesNotExist:
             return Response({"error":"schedule_type이 유효하지 않음."}, status=HTTP_404_NOT_FOUND)
-
-        
         participant = request.data.get("participant")
         print("participant", participant[0])
 

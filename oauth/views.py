@@ -35,7 +35,7 @@ class step1_SignUP(APIView):#회원가입
     def get(self, request):
         return Response({"email을 입력해주세요."}, status=status.HTTP_200_OK)
 
-    def post(self, request):#[수정필요]
+    def post(self, request):#[수정필요 frontend 주소로 test]
         
         email=request.data.get("email")
         print("email", email)
@@ -70,12 +70,15 @@ class step1_SignUP(APIView):#회원가입
                 token=token,
             )
             print("2", user, token)#이메일 인증 링크 url 커스텀하기
-            # reset_url = request.build_absolute_uri(
+            
+            # test_url = request.build_absolute_uri(
             # reverse_lazy("email_verification", kwargs={"pk": user.pk, "token": email_vertification_token})
-            # )#send mail 성공시
+            # )
+            # #send mail 성공시
             
-            
-            
+
+#             signup_url = f"{settings.FRONTEND_URL}/{user.pk}/{email_vertification_token}/"
+
             signup_url = f"{settings.FRONTEND_URL}/verify/{user.pk}/{email_vertification_token}/"
             #  {"email":"lovee2756@gmail.com"}
             subject="Account Activation"

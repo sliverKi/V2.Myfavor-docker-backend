@@ -5,6 +5,8 @@ import environ
 import dj_database_url
 #git merge origin/main
 
+#devlop@gmail.com-develop
+
 env = environ.Env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -12,8 +14,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 SECRET_KEY = env("SECRET_KEY")
-
+# ALLOWED_HOSTS = ["localhost:3000","127.0.0.1:3000", ".choeaein.click", "www.choeaein.click"]
 ALLOWED_HOSTS = ["localhost","127.0.0.1", ".choeaein.click", "www.choeaein.click"]
+
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
@@ -157,12 +160,6 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW = True
 CORS_ALLOWED_ORIGINS_ALL = True#모든 호스트 허용
 
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:3000", 
-    "http://localhost:3000", 
-    "https://www.choeaein.click"
-    
-    ]
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
@@ -176,13 +173,10 @@ CORS_ALLOW_HEADERS = [
     'Set-Cookie',
 ]
 
-
-
 CSRF_TRUSTED_ORIGINS =[
     "http://127.0.0.1:3000", 
     "http://localhost:3000",
-    "https://www.choeaein.click"
-    
+    "https://www.choeaein.click" 
 ]
 
 ACCOUNT_PASSWORD_INPUT_RENDER_VALUE = True  
@@ -190,16 +184,12 @@ ACCOUNT_SESSION_REMEMBER = True
 SESSION_COOKIE_AGE = 3600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
-AUTH_COOKIE_DOMAIN = ".choeaein.click"
-SESSION_COOKIE_DOMAIN = ".choeaein.click"
-CSRF_COOKIE_DOMAIN = ".choeaein.click"
-
-CSRF_COOKIE_SECURE = False
-AUTH_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE=False
 SESSION_COOKIE_SECURE=False
 
-CSRF_COOKIE_SAMESITE = "Lax"
-SESSION_COOKIE_SAMESITE = "Lax"
+
+CSRF_COOKIE_SAMESITE='Lax'
+SESSION_COOKIE_SAMESITE='Lax'
 
 SESSION_COOKIE_HTTPONLY = False
 CSRF_COOKIE_HTTPONLY = False
@@ -230,6 +220,8 @@ EMAIL_HOST_PASSWORD=env("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS=True
 DEFAULT_FROM_EMAIL=EMAIL_HOST_USER
 PASSWORD_RESET_CONFIRM_URL = 'password_reset_confirm'
+
+# FRONTEND_URL='127.0.0.1:3000/signup/user'
 FRONTEND_URL='https://www.choeaein.click/signup/user'
 
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'#(email인증을 하지 않으면 로그인 할 수 없음.)
@@ -252,8 +244,6 @@ ACCOUNT_CONFIRM_EMIAL_ON_GET = True #(인증 링크를 누르면 바로 확인�
 # DEFAULT_FILE_STORAGE = 'config.utils.CustomS3Boto3Storage'
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'path/to/store/my/files/')
-
-
 
 CACHE_TTL=15
 CACHES={
