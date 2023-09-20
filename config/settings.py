@@ -185,9 +185,9 @@ ACCOUNT_SESSION_REMEMBER = True
 SESSION_COOKIE_AGE = 3600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
-# AUTH_COOKIE_DOMAIN = ".choeaein.click"
-# SESSION_COOKIE_DOMAIN = ".choeaein.click"
-# CSRF_COOKIE_DOMAIN = ".choeaein.click"
+AUTH_COOKIE_DOMAIN = ".choeaein.click"
+SESSION_COOKIE_DOMAIN = ".choeaein.click"
+CSRF_COOKIE_DOMAIN = ".choeaein.click"
 
 CSRF_COOKIE_SECURE = False
 AUTH_COOKIE_SECURE = True
