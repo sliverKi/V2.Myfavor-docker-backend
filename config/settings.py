@@ -4,9 +4,8 @@ import os
 import environ
 import dj_database_url
 #git merge origin/main
-
 #devlop@gmail.com-develop
-
+#repo Connection : v2-Myfavor-docker-backend 
 env = environ.Env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,10 +33,10 @@ if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 THIRD_PARTY_APPS = [
+    'corsheaders',
     "rest_framework",
     "rest_framework.authtoken",
     'storages',
-    "corsheaders",
     'debug_toolbar',
     'django_seed',
 ]
@@ -183,7 +182,14 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
     'Set-Cookie',
 ]
-
+CORS_ALLOW_METHODS = (
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+)
 CSRF_TRUSTED_ORIGINS =[
     "http://127.0.0.1:3000", 
     "http://localhost:3000",
