@@ -176,9 +176,11 @@ CORS_ALLOWED_ORIGINS_ALL = True#모든 호스트 허용
 CSRF_TRUSTED_ORIGINS =[
     "http://127.0.0.1:3000", 
     "http://localhost:3000",
-    "https://www.choeaein.click",
-    "https://backend.choeaein.click"
+    "https://www.choeaein.click"
 ]
+AUTH_COOKIE_DOMAIN = ".choeaein.click"
+SESSION_COOKIE_DOMAIN = ".choeaein.click"
+CSRF_COOKIE_DOMAIN = ".choeaein.click"
 
 ACCOUNT_PASSWORD_INPUT_RENDER_VALUE = True  
 ACCOUNT_SESSION_REMEMBER = True  
