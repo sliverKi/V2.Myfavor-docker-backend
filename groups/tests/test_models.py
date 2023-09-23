@@ -53,8 +53,13 @@ class GroupAPITestCase(APITestCase):
             group_youtube= "https://www.youtube.com/channel/UC9GtSLeksfK4yuJ_g1lgQbg"
         )
         self.group.member.add(self.idol1, self.idol2)
+    
     def test_group_creation(self):
         self.assertIsInstance(self.group, Group)
         self.assertEqual(str(self.group), "AESPA")
-        
+    
+    def test_count_group_member(self):
+        self.assertEqual(self.group.member.count(), 2)
+
+
 
