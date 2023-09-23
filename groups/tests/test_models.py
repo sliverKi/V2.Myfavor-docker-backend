@@ -33,14 +33,16 @@ class GroupAPITestCase(APITestCase):
             "pickCount": 10,
         }
         self.idol = Idol.objects.create(**self.idol_data)
+        self.group = Group.objects.create(
+
+            "enter": "SM",
+            "groupname": "ASEPA",
+            "igroup_profile": "https://image.kpopmap.com/2019/03/SunMi-063022.jpg",
+            "group_debut": "2001-11-17"
+            "group_insta": "https://image.kpopmap.com/2019/03/SunMi-063022.jpg",
+            "group_youtube": "1992-05-02"
+        )
 
     def test_group_creation(self):
-        print("idol_name_en:", self.idol.idol_name_en)
-        print("idol_name_kr:", self.idol.idol_name_kr)
-        print("idol_profile:", self.idol.idol_profile)
-        print("is_solo:", self.idol.is_solo)
-        print("idol_birthday:", self.idol.idol_birthday)
-        print("has_schedules:", self.idol.has_schedules)
-        print("pickCount:", self.idol.pickCount)
-
+        
 
