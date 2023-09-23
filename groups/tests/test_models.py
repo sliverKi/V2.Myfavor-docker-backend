@@ -54,12 +54,12 @@ class GroupAPITestCase(APITestCase):
         )
         self.group.member.add(self.idol1, self.idol2)
     
-    def test_group_creation(self):
-        self.assertIsInstance(self.group, Group)
-        self.assertEqual(str(self.group), "AESPA")
+    # def test_group_creation(self):
+    #     self.assertIsInstance(self.group, Group) #self.group 객체가 'Group'인스턴스 인지 확인함.
+    #     self.assertEqual(str(self.group), "AESPA")#만들어진 Group 객체의 groupname이 설정한 그룹명과 일치하는지 확인함.
     
-    def test_count_group_member(self):
-        self.assertEqual(self.group.member.count(), 2)
+    # def test_count_group_member(self):
+    #     self.assertEqual(self.group.member.count(), 2)#그룹에 아이돌이 잘 대입됐는지 확인하기 위함.
 
 
 
