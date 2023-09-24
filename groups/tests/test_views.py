@@ -94,5 +94,64 @@ class GroupPost(GroupAPITestCase):
         response = self.client.post(self.URL, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        
+class GroupDetail(GroupAPITestCase):
+    Base_URL="/api/v2/groups/"
+    def setUp(self):
+        super().setUp()
+    
+    def test_get_group_detail(self):
+        url=f"{self.Base_URL}{self.group.groupname}"
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["groupname"], self.group.groupname)
 
+    def test_update_group_detail_as_admin(self):
+        url=f"{self.Base_URL}{self.group.groupname}"
+        self.client.login(email="admin@gmail.com", password="admin")
+        new_data = {
+            
+            "groupname": "AESPA",
+            "member": {
+                "지젤(Giselle)": {
+                    "idol_profile": "https://image.kpopmap.com/2020/10/%ED%94%84%EB%A1%9C%ED%95%84-%EC%A7%80%EC%A0%A4.png",
+                    "idol_birthday": "2000-10-30",
+                    }
+                }
+        }
+        response = self.client.put(url, data=new_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+        self.assertEqual(self.group.groupname, new_data['groupname'])
+        self.client.logout()
+
+    def test_update_group_detail_as_non_admin(self):
+        url=f"{self.Base_URL}{self.group.groupname}"
+        self.client.force_authenticate(user=self.user)
+        new_data = {
+            
+            "groupname": "AESPA",
+            "member": {
+                "지젤(Giselle)": {
+                    "idol_profile": "https://image.kpopmap.com/2020/10/%ED%94%84%EB%A1%9C%ED%95%84-%EC%A7%80%EC%A0%A4.png",
+                    "idol_birthday": "2000-10-30",
+                    }
+                }
+        }
+        response = self.client.put(url, data=new_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)  
+    
+    def test_delete_group_as_admin(self):
+        url=f"{self.Base_URL}{self.group.groupname}"
+        self.client.login(email="admin@gmail.com", password="admin")
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Group.objects.filter(groupname="AESPA").exists())
+        self.client.logout()
+
+    def test_delete_group_as_non_admin(self):
+        url=f"{self.Base_URL}{self.group.groupname}"
+        self.client.force_authenticate(user=self.user)
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertTrue(Group.objects.filter(groupname="AESPA").exists())
+        self.client.logout()

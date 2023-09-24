@@ -53,7 +53,7 @@ class GroupDetail(getGroup, APIView):#[OK]
     def put(self, request, groupname):
         group=self.get_group(groupname)
         if not request.user.is_admin:
-            raise PermissionError
+            raise PermissionDenied
         print(group)
         serializer=groupDetailSerializer(
             group,
@@ -74,7 +74,7 @@ class GroupDetail(getGroup, APIView):#[OK]
     def delete(self, request, groupname):
         group=self.get_group(groupname)
         if not request.user.is_admin:
-            raise PermissionError
+            raise PermissionDenied
         group.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
