@@ -3,7 +3,8 @@ from idols.models import Idol
 from groups.models import Group 
 from users.models import User
 from .test_models import GroupAPITestCase
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, PermissionDenied
+import json
 class GroupGet(GroupAPITestCase):
     URL="/api/v2/groups/"
     def setUp(self):
@@ -39,6 +40,59 @@ class GroupGet(GroupAPITestCase):
                 self.assertEqual(self.group.member.count(), 1)
 
     def test_get_group_does_not_exist(self):
-        response = self.client.get(f"{self.URL}9999/")  # 존재하지 않는 ID
+        response = self.client.get(f"{self.URL}/9999/")  # 존재하지 않는 ID
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+class GroupPost(GroupAPITestCase):
+    URL="/api/v2/groups/"
+    def setUp(self):      
+        super().setUp()
+
+    
+    def test_create_new_group_as_admin(self):
+        self.client.login(email="admin@gmail.com", password="admin")
+        data={
+            "enter":"JYP",
+            "groupname":"ITZY",
+            "group_profile": "https://image.kpopmap.com/2019/01/itzy-profile.png",
+            "group_debut": "2019-02-12",
+            "group_insta": "https://www.instagram.com/itzy.all.in.us/?hl=ko",
+            "group_youtube": "https://www.youtube.com/channel/UCDhM2k2Cua-JdobAh5moMFg",
+            "member": [
+                {
+                "카리나(Karina)": {
+                    "idol_profile": self.idol2.idol_profile,
+                    "idol_birthday": self.idol2.idol_birthday,
+                    }
+                }
+            ]
+        }
+        response=self.client.post(self.URL, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['groupname'], 'ITZY')
+        self.client.logout
+    
+    def test_create_new_group_as_non_admin(self):       
+        self.client.force_authenticate(user=self.user)  # 관리자 계정으로 인증
+        
+        data={
+            "enter":"JYP",
+            "groupname":"ITZY",
+            "group_profile": "https://image.kpopmap.com/2019/01/itzy-profile.png",
+            "group_debut": "2019-02-12",
+            "group_insta": "https://www.instagram.com/itzy.all.in.us/?hl=ko",
+            "group_youtube": "https://www.youtube.com/channel/UCDhM2k2Cua-JdobAh5moMFg",
+            "member": [
+                {
+                "윈터(Winter)": {
+                    "idol_profile": self.idol2.idol_profile,
+                    "idol_birthday": self.idol2.idol_birthday,
+                    }
+                }
+            ]
+        }
+        response = self.client.post(self.URL, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        
 
