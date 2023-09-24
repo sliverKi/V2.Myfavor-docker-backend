@@ -155,3 +155,4 @@ class GroupDetail(GroupAPITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTrue(Group.objects.filter(groupname="AESPA").exists())
         self.client.logout()
+
