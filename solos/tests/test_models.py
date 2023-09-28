@@ -1,12 +1,30 @@
 from rest_framework.test import APITestCase
 from solos.models import Solo  
 from idols.models import Idol  
+from users.models import User
 import datetime
+ 
 
-class SoloModelTest(APITestCase):
+class SoloAPITestCase(APITestCase):
     
     def setUp(self):
         # Idol 인스턴스 생성
+        self.admin_user = User.objects.create_superuser(
+            email="admin@gmail.com", 
+            password="admin",
+            nickname="관리자",
+            name="관리자",
+            is_active=True,
+            is_admin=True
+        )
+        self.user=User.objects.create(
+            email="test@gmail.com",
+            password="test",
+            nickname="일반 사용자",
+            name="일반 사용자",
+            is_active=True,
+            is_admin=False,
+        )
         self.idol = Idol.objects.create(
             idol_name_en="Jeon So Mi",
             idol_name_kr="전소미",
