@@ -64,7 +64,7 @@ class SoloDetailTests(SoloAPITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['idol_name_en'], self.solo.member.idol_name_en)
     
-    def test_update_solo_detail(self):
+    def test_update_solo_detail_as_admin(self):
         url = f"{self.Base_URL}{self.solo.member.idol_name_en}/"
         self.client.login(email="admin@gmail.com", password="admin")
         new_data={
@@ -78,7 +78,19 @@ class SoloDetailTests(SoloAPITestCase):
         updated_solo = Solo.objects.get(pk=self.solo.pk)
         self.assertEqual(updated_solo.member.idol_name_en, new_data['idol_name_en'])
         self.client.logout()
-        
 
-       
-
+    def test_update_solo_detail_as_non_admin(self):
+        url = f"{self.Base_URL}{self.solo.member.idol_name_en}/"
+        self.client.force_authenticate(user=self.user)
+        new_data={
+            "idol_name_en":"jeon somi",
+            "idol_name_kr":"전소미", 
+            "enter":"YG Family"
+        }
+        response = self.client.put(url, data=new_data, format='json')
+        print("test3", response.data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        updated_solo = Solo.objects.get(pk=self.solo.pk)
+        self.assertEqual(updated_solo.member.idol_name_kr, new_data['idol_name_kr'])
+        self.client.logout()
+    

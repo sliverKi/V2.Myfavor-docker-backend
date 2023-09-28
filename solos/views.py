@@ -59,7 +59,7 @@ class SoloDetail(APIView):#ok
         print("solo", solo.member, "2", solo.member.idol_birthday, solo.member.idol_name_en)
         
         if not request.user.is_admin:
-            raise PermissionError
+            raise PermissionDenied
         serializer=soloDetailSerializer(
             solo,
             data=request.data,
