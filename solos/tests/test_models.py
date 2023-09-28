@@ -32,7 +32,8 @@ class SoloAPITestCase(APITestCase):
             idol_profile="https://image.kpopmap.com/2019/06/%EC%A0%84%EC%86%8C%EB%AF%B8.png",
             is_solo= True,
             has_schedules=False,
-            pickCount=10)
+            pickCount=10
+        )
 
         
         self.solo = Solo.objects.create(

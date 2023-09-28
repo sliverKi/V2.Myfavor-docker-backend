@@ -14,7 +14,7 @@ class SoloList(APIView):#ok
     
     def post(self, request):
         if not request.user.is_admin:
-            raise PermissionError
+            raise PermissionDenied
         serializer=soloDetailSerializer(data=request.data)
         print("re",request.data)
         if serializer.is_valid():
