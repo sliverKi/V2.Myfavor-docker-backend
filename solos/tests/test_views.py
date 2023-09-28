@@ -3,7 +3,7 @@ from rest_framework.test import APITestCase, APIClient
 from .test_models import SoloAPITestCase
 from solos.models import Solo
 from idols.models import Idol  
-
+import json
 class SoloListTests(SoloAPITestCase):
     URL = '/api/v2/solos/'
     def setUp(self):
@@ -60,11 +60,25 @@ class SoloDetailTests(SoloAPITestCase):
     
     def test_get_solo_detail(self):
         url = f"{self.Base_URL}{self.solo.member.idol_name_en}/"
-        print("URL", url)
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        print("ㅅㄷㄴㅅ",response.data)
         self.assertEqual(response.data['idol_name_en'], self.solo.member.idol_name_en)
+    
+    def test_update_solo_detail(self):
+        url = f"{self.Base_URL}{self.solo.member.idol_name_en}/"
+        self.client.login(email="admin@gmail.com", password="admin")
+        new_data={
+            "idol_name_en":"jeon somi",
+            "idol_name_kr":"라리사노반", 
+            "enter":"YG Family"
+        }
+        response = self.client.put(url, data=new_data, format='json')
+        print("test", response.data)
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+        updated_solo = Solo.objects.get(pk=self.solo.pk)
+        self.assertEqual(updated_solo.member.idol_name_en, new_data['idol_name_en'])
+        self.client.logout()
+        
 
        
 
