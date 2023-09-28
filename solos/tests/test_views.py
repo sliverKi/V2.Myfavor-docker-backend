@@ -51,3 +51,20 @@ class SoloListTests(SoloAPITestCase):
             }
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+class SoloDetailTests(SoloAPITestCase):
+    Base_URL = '/api/v2/solos/'
+    def setUp(self):
+        super().setUp()
+   
+    
+    def test_get_solo_detail(self):
+        url = f"{self.Base_URL}{self.solo.member.idol_name_en}/"
+        print("URL", url)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        print("ㅅㄷㄴㅅ",response.data)
+        self.assertEqual(response.data['idol_name_en'], self.solo.member.idol_name_en)
+
+       
+
