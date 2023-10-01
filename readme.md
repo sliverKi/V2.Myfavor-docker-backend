@@ -1,4 +1,4 @@
-## v2.MyFavor-docker-backend
+## v2.Choeaein(=MyFavor)-backend
 
 deploy: https://www.choeaein.click/
 
