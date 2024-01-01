@@ -5,7 +5,19 @@ deploy: https://www.choeaein.click/
 ---
 프로젝트 구성인원 : FE1 + BE1 <br>
 역할 : Backend 개발 <br>
-기간 : 3월 ~ 4월 / 5월 ~ 8월 <br>
+기간 : 3월 ~ 4월 / 5월 ~ 10월 <br>
+
+---
+
+## * :bulb: Architecture
+
+<img width="800" alt="스크린샷 2023-04-04 오후 2 16 55" 
+src="https://user-images.githubusercontent.com/121347506/229693783-22b5be1c-c88a-49c8-940d-37265e3bd72c.png">
+
+----
+## * :bulb: ERD 
+<img width="800" alt="스크린샷 2023-04-04 오후 2 44 08" 
+src="https://user-images.githubusercontent.com/121347506/229698529-fba4891f-77be-4afb-a4d6-bd726ff710d7.png">
 
 ---
 
